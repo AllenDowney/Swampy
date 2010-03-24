@@ -1,0 +1,1158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module TurmiteWorld</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>TurmiteWorld</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/downey/swampy/trunk/python2/TurmiteWorld.py">/home/downey/swampy/trunk/python2/TurmiteWorld.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="Tkinter.html">Tkinter</a><br>
+<a href="math.html">math</a><br>
+</td><td width="25%" valign=top><a href="random.html">random</a><br>
+<a href="sys.html">sys</a><br>
+</td><td width="25%" valign=top><a href="threading.html">threading</a><br>
+<a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="_tkinter.html">_tkinter</a><br>
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="CellWorld.html#CellWorld">CellWorld.CellWorld</a>(<a href="World.html#World">World.World</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="TurmiteWorld.html#TurmiteWorld">TurmiteWorld</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="World.html#Animal">World.Animal</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="TurmiteWorld.html#Turmite">Turmite</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Turmite">class <strong>Turmite</strong></a>(<a href="World.html#Animal">World.Animal</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>represents&nbsp;a&nbsp;<a href="#Turmite">Turmite</a>&nbsp;in&nbsp;<a href="#TurmiteWorld">TurmiteWorld</a><br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="TurmiteWorld.html#Turmite">Turmite</a></dd>
+<dd><a href="World.html#Animal">World.Animal</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Turmite-__init__"><strong>__init__</strong></a>(self, world)</dt></dl>
+
+<dl><dt><a name="Turmite-bk"><strong>bk</strong></a>(self, dist<font color="#909090">=1</font>)</dt><dd><tt>move&nbsp;back</tt></dd></dl>
+
+<dl><dt><a name="Turmite-draw"><strong>draw</strong></a>(self)</dt><dd><tt>draw&nbsp;the&nbsp;<a href="#Turmite">Turmite</a></tt></dd></dl>
+
+<dl><dt><a name="Turmite-fd"><strong>fd</strong></a>(self, dist<font color="#909090">=1</font>)</dt><dd><tt>move&nbsp;forward</tt></dd></dl>
+
+<dl><dt><a name="Turmite-get_cell"><strong>get_cell</strong></a>(self)</dt><dd><tt>get&nbsp;the&nbsp;cell&nbsp;this&nbsp;turmite&nbsp;is&nbsp;on&nbsp;(creating&nbsp;one&nbsp;if&nbsp;necessary)</tt></dd></dl>
+
+<dl><dt><a name="Turmite-lt"><strong>lt</strong></a>(self)</dt><dd><tt>turn&nbsp;left</tt></dd></dl>
+
+<dl><dt><a name="Turmite-rt"><strong>rt</strong></a>(self)</dt><dd><tt>turn&nbsp;right</tt></dd></dl>
+
+<dl><dt><a name="Turmite-step"><strong>step</strong></a>(self)</dt><dd><tt>this&nbsp;step&nbsp;function&nbsp;implements&nbsp;the&nbsp;rules&nbsp;for&nbsp;Langton's<br>
+Ant&nbsp;(see&nbsp;<a href="http://mathworld.wolfram.com/LangtonsAnt.html">http://mathworld.wolfram.com/LangtonsAnt.html</a>)</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="World.html#Animal">World.Animal</a>:<br>
+<dl><dt><a name="Turmite-die"><strong>die</strong></a>(self)</dt><dd><tt>remove&nbsp;this&nbsp;animal&nbsp;from&nbsp;the&nbsp;world&nbsp;and&nbsp;undraw&nbsp;it</tt></dd></dl>
+
+<dl><dt><a name="Turmite-polar"><strong>polar</strong></a>(self, x, y, r, theta)</dt><dd><tt>convert&nbsp;polar&nbsp;coordinates&nbsp;(r,&nbsp;theta)&nbsp;to&nbsp;cartesian<br>
+coordinates&nbsp;with&nbsp;the&nbsp;origin&nbsp;at&nbsp;(x,&nbsp;y).&nbsp;&nbsp;(theta&nbsp;is&nbsp;in&nbsp;degrees)</tt></dd></dl>
+
+<dl><dt><a name="Turmite-redraw"><strong>redraw</strong></a>(self)</dt><dd><tt>undraw&nbsp;and&nbsp;then&nbsp;redraw&nbsp;this&nbsp;animal</tt></dd></dl>
+
+<dl><dt><a name="Turmite-undraw"><strong>undraw</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Turmite-update"><strong>update</strong></a>(self)</dt><dd><tt>update&nbsp;the&nbsp;world&nbsp;and&nbsp;then&nbsp;sleep</tt></dd></dl>
+
+<hr>
+Data descriptors inherited from <a href="World.html#Animal">World.Animal</a>:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TurmiteWorld">class <strong>TurmiteWorld</strong></a>(<a href="CellWorld.html#CellWorld">CellWorld.CellWorld</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#TurmiteWorld">TurmiteWorld</a>&nbsp;provides&nbsp;a&nbsp;grid&nbsp;of&nbsp;cells&nbsp;that&nbsp;Turmites&nbsp;occupy<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="TurmiteWorld.html#TurmiteWorld">TurmiteWorld</a></dd>
+<dd><a href="CellWorld.html#CellWorld">CellWorld.CellWorld</a></dd>
+<dd><a href="World.html#World">World.World</a></dd>
+<dd><a href="Gui.html#Gui">Gui.Gui</a></dd>
+<dd><a href="Tkinter.html#Tk">Tkinter.Tk</a></dd>
+<dd><a href="Tkinter.html#Misc">Tkinter.Misc</a></dd>
+<dd><a href="Tkinter.html#Wm">Tkinter.Wm</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="TurmiteWorld-__init__"><strong>__init__</strong></a>(self, csize<font color="#909090">=5</font>)</dt></dl>
+
+<dl><dt><a name="TurmiteWorld-clear"><strong>clear</strong></a>(self)</dt><dd><tt>callback&nbsp;for&nbsp;the&nbsp;Clean&nbsp;button:&nbsp;remove&nbsp;all&nbsp;the&nbsp;animals&nbsp;and<br>
+all&nbsp;the&nbsp;cells</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-make_turmite"><strong>make_turmite</strong></a>(self)</dt><dd><tt>callback&nbsp;for&nbsp;the&nbsp;Make&nbsp;<a href="#Turmite">Turmite</a>&nbsp;button</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-setup"><strong>setup</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="CellWorld.html#CellWorld">CellWorld.CellWorld</a>:<br>
+<dl><dt><a name="TurmiteWorld-bind"><strong>bind</strong></a>(self)</dt><dd><tt>create&nbsp;bindings&nbsp;for&nbsp;the&nbsp;canvas</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-cell_bounds"><strong>cell_bounds</strong></a>(self, i, j)</dt><dd><tt>return&nbsp;the&nbsp;bounds&nbsp;of&nbsp;the&nbsp;cell&nbsp;with&nbsp;indices&nbsp;i,&nbsp;j</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-click"><strong>click</strong></a>(self, event)</dt><dd><tt>this&nbsp;event&nbsp;handler&nbsp;is&nbsp;executed&nbsp;when&nbsp;the&nbsp;user&nbsp;clicks&nbsp;or&nbsp;drags<br>
+on&nbsp;the&nbsp;canvas.&nbsp;&nbsp;It&nbsp;creates&nbsp;a&nbsp;new&nbsp;cell&nbsp;or&nbsp;toggles&nbsp;an&nbsp;existing&nbsp;cell.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-get_cell"><strong>get_cell</strong></a>(self, i, j, default<font color="#909090">=None</font>)</dt><dd><tt>get&nbsp;the&nbsp;cell&nbsp;at&nbsp;i,&nbsp;j&nbsp;or&nbsp;return&nbsp;(default)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-get_eight_neighbors"><strong>get_eight_neighbors</strong></a>(self, cell, default<font color="#909090">=None</font>)</dt><dd><tt>return&nbsp;the&nbsp;four&nbsp;Von&nbsp;Neumann&nbsp;neighbors&nbsp;of&nbsp;(cell)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-get_four_neighbors"><strong>get_four_neighbors</strong></a>(self, cell, default<font color="#909090">=None</font>)</dt><dd><tt>return&nbsp;the&nbsp;four&nbsp;Von&nbsp;Neumann&nbsp;neighbors&nbsp;of&nbsp;(cell)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-get_neighbors"><strong>get_neighbors</strong></a>(self, cell, default<font color="#909090">=None</font>, deltas<font color="#909090">=[(0, 0)]</font>)</dt><dd><tt>return&nbsp;the&nbsp;neighbors&nbsp;of&nbsp;(cell)&nbsp;as&nbsp;determined&nbsp;(deltas),&nbsp;which<br>
+is&nbsp;a&nbsp;list&nbsp;of&nbsp;tuple&nbsp;offsets.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-make_cell"><strong>make_cell</strong></a>(self, i, j)</dt><dd><tt>create&nbsp;and&nbsp;return&nbsp;a&nbsp;new&nbsp;cell&nbsp;at&nbsp;i,j.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-redraw"><strong>redraw</strong></a>(self)</dt><dd><tt>clear&nbsp;the&nbsp;canvas&nbsp;and&nbsp;redraw&nbsp;all&nbsp;cells&nbsp;and&nbsp;animals.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-rescale"><strong>rescale</strong></a>(self)</dt><dd><tt>this&nbsp;event&nbsp;handler&nbsp;reads&nbsp;the&nbsp;new&nbsp;scale&nbsp;from&nbsp;the&nbsp;GUI,<br>
+changes&nbsp;the&nbsp;canvas&nbsp;transform,&nbsp;and&nbsp;redraws&nbsp;the&nbsp;world.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-setup_scale"><strong>setup_scale</strong></a>(self, side<font color="#909090">='top'</font>)</dt><dd><tt>add&nbsp;GUI&nbsp;elements&nbsp;that&nbsp;allow&nbsp;the&nbsp;user&nbsp;to&nbsp;change&nbsp;the&nbsp;scale<br>
+(cell&nbsp;size)</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="CellWorld.html#CellWorld">CellWorld.CellWorld</a>:<br>
+<dl><dt><strong>eight_neighbors</strong> = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (1, -1), (-1, 1), (-1, -1)]</dl>
+
+<dl><dt><strong>four_neighbors</strong> = [(1, 0), (-1, 0), (0, 1), (0, -1)]</dl>
+
+<hr>
+Methods inherited from <a href="World.html#World">World.World</a>:<br>
+<dl><dt><a name="TurmiteWorld-map_animals"><strong>map_animals</strong></a>(self, callable)</dt><dd><tt>apply&nbsp;the&nbsp;given&nbsp;callable&nbsp;to&nbsp;all&nbsp;animals</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-quit"><strong>quit</strong></a>(self)</dt><dd><tt>shut&nbsp;down&nbsp;the&nbsp;World.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-register"><strong>register</strong></a>(self, animal)</dt><dd><tt>add&nbsp;a&nbsp;new&nbsp;animal&nbsp;to&nbsp;the&nbsp;world</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-run"><strong>run</strong></a>(self)</dt><dd><tt>invoke&nbsp;step&nbsp;intermittently&nbsp;until&nbsp;the&nbsp;user&nbsp;presses<br>
+Quit&nbsp;or&nbsp;Stop</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-run_file"><strong>run_file</strong></a>(self)</dt><dd><tt>read&nbsp;the&nbsp;code&nbsp;from&nbsp;the&nbsp;filename&nbsp;in&nbsp;the&nbsp;entry&nbsp;and&nbsp;run&nbsp;it.<br>
+&nbsp;<br>
+Precondition:&nbsp;self&nbsp;must&nbsp;have&nbsp;an&nbsp;Interpreter&nbsp;and&nbsp;a&nbsp;filename&nbsp;entry</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-run_text"><strong>run_text</strong></a>(self)</dt><dd><tt>get&nbsp;the&nbsp;code&nbsp;from&nbsp;the&nbsp;TextEntry&nbsp;widget&nbsp;in&nbsp;the&nbsp;control<br>
+panel,&nbsp;and&nbsp;execute&nbsp;it.<br>
+&nbsp;<br>
+Precondition:&nbsp;self&nbsp;must&nbsp;have&nbsp;an&nbsp;Interpreter&nbsp;and&nbsp;a&nbsp;text&nbsp;entry</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-step"><strong>step</strong></a>(self)</dt><dd><tt>invoke&nbsp;the&nbsp;step&nbsp;method&nbsp;on&nbsp;every&nbsp;animal</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-stop"><strong>stop</strong></a>(self)</dt><dd><tt>stop&nbsp;running</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-unregister"><strong>unregister</strong></a>(self, animal)</dt><dd><tt>remove&nbsp;an&nbsp;animal&nbsp;from&nbsp;the&nbsp;world</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="Gui.html#Gui">Gui.Gui</a>:<br>
+<dl><dt><a name="TurmiteWorld-bu"><strong>bu</strong></a>(self, text<font color="#909090">=''</font>, command<font color="#909090">=None</font>, **options)</dt><dd><tt>make&nbsp;a&nbsp;button</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-ca"><strong>ca</strong></a>(self, width<font color="#909090">=100</font>, height<font color="#909090">=100</font>, **options)</dt><dd><tt>make&nbsp;a&nbsp;canvas&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-cb"><strong>cb</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;checkbutton.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-col"><strong>col</strong></a>(self, weights<font color="#909090">=[]</font>, **options)</dt><dd><tt>create&nbsp;a&nbsp;frame&nbsp;that&nbsp;lays&nbsp;out&nbsp;widgets&nbsp;in&nbsp;a&nbsp;single&nbsp;column.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-colweight"><strong>colweight</strong></a>(self, i, weight)</dt><dd><tt>assign&nbsp;(weight)&nbsp;to&nbsp;column&nbsp;(i)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-colweights"><strong>colweights</strong></a>(self, weights)</dt><dd><tt>attach&nbsp;weights&nbsp;to&nbsp;the&nbsp;columns&nbsp;of&nbsp;the&nbsp;current&nbsp;grid.<br>
+(weights)&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;values,&nbsp;which&nbsp;are&nbsp;assigned&nbsp;to<br>
+columns&nbsp;starting&nbsp;with&nbsp;0.<br>
+&nbsp;<br>
+These&nbsp;weights&nbsp;control&nbsp;how&nbsp;the&nbsp;columns&nbsp;in&nbsp;the&nbsp;grid&nbsp;expand<br>
+when&nbsp;the&nbsp;grid&nbsp;expands.&nbsp;&nbsp;The&nbsp;default&nbsp;weight&nbsp;is&nbsp;0,&nbsp;which<br>
+means&nbsp;that&nbsp;the&nbsp;column&nbsp;doesn't&nbsp;expand.&nbsp;&nbsp;If&nbsp;only&nbsp;one<br>
+column&nbsp;has&nbsp;a&nbsp;value,&nbsp;it&nbsp;gets&nbsp;all&nbsp;the&nbsp;extra&nbsp;space.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-en"><strong>en</strong></a>(self, **options)</dt><dd><tt>make&nbsp;an&nbsp;entry&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-endcol"><strong>endcol</strong></a> = endfr(self)</dt><dd><tt>end&nbsp;the&nbsp;current&nbsp;frame&nbsp;(and&nbsp;return&nbsp;the&nbsp;new&nbsp;current&nbsp;frame)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-endfr"><strong>endfr</strong></a>(self)</dt><dd><tt>end&nbsp;the&nbsp;current&nbsp;frame&nbsp;(and&nbsp;return&nbsp;the&nbsp;new&nbsp;current&nbsp;frame)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-endgr"><strong>endgr</strong></a> = endfr(self)</dt><dd><tt>end&nbsp;the&nbsp;current&nbsp;frame&nbsp;(and&nbsp;return&nbsp;the&nbsp;new&nbsp;current&nbsp;frame)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-endrow"><strong>endrow</strong></a> = endfr(self)</dt><dd><tt>end&nbsp;the&nbsp;current&nbsp;frame&nbsp;(and&nbsp;return&nbsp;the&nbsp;new&nbsp;current&nbsp;frame)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-fr"><strong>fr</strong></a>(self, *args, **options)</dt><dd><tt>create&nbsp;a&nbsp;frame.<br>
+The&nbsp;new&nbsp;frame&nbsp;becomes&nbsp;the&nbsp;current&nbsp;frame.<br>
+By&nbsp;default,&nbsp;frames&nbsp;use&nbsp;the&nbsp;pack&nbsp;geometry&nbsp;manager,&nbsp;unless<br>
+self.<strong>gridding</strong>=True.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-gr"><strong>gr</strong></a>(self, cols, cweights<font color="#909090">=[]</font>, rweights<font color="#909090">=[]</font>, **options)</dt><dd><tt>create&nbsp;a&nbsp;frame&nbsp;and&nbsp;switch&nbsp;to&nbsp;grid&nbsp;mode.<br>
+&nbsp;<br>
+(cols)&nbsp;is&nbsp;the&nbsp;number&nbsp;of&nbsp;columns&nbsp;in&nbsp;the&nbsp;grid.<br>
+&nbsp;<br>
+(cweights)&nbsp;and&nbsp;(rweights)&nbsp;control&nbsp;how&nbsp;the&nbsp;widgets&nbsp;expand<br>
+if&nbsp;the&nbsp;frame&nbsp;expands&nbsp;(see&nbsp;colweights<br>
+and&nbsp;rowweights&nbsp;below).&nbsp;&nbsp;By&nbsp;default,&nbsp;the&nbsp;first&nbsp;8&nbsp;rows&nbsp;and<br>
+columns&nbsp;are&nbsp;set&nbsp;to&nbsp;expand.<br>
+&nbsp;<br>
+(options)&nbsp;is&nbsp;a&nbsp;dictionary&nbsp;that&nbsp;is&nbsp;underridden&nbsp;and&nbsp;passed&nbsp;along.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid"><strong>grid</strong></a>(self, widget, i<font color="#909090">=None</font>, j<font color="#909090">=None</font>, **options)</dt><dd><tt>pack&nbsp;the&nbsp;given&nbsp;widget&nbsp;in&nbsp;the&nbsp;current&nbsp;grid.<br>
+By&nbsp;default,&nbsp;the&nbsp;widget&nbsp;is&nbsp;packed&nbsp;in&nbsp;the&nbsp;next&nbsp;available<br>
+space,&nbsp;but&nbsp;parameters&nbsp;i&nbsp;and&nbsp;j&nbsp;can&nbsp;specify&nbsp;the&nbsp;row<br>
+and&nbsp;column&nbsp;explicitly.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-la"><strong>la</strong></a>(self, text<font color="#909090">=''</font>, **options)</dt><dd><tt>make&nbsp;a&nbsp;label&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-lb"><strong>lb</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;listbox.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-mb"><strong>mb</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;menubutton</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-mi"><strong>mi</strong></a>(self, mb, text<font color="#909090">=''</font>, **options)</dt><dd><tt>make&nbsp;a&nbsp;menu&nbsp;item</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-popfr"><strong>popfr</strong></a> = endfr(self)</dt><dd><tt>end&nbsp;the&nbsp;current&nbsp;frame&nbsp;(and&nbsp;return&nbsp;the&nbsp;new&nbsp;current&nbsp;frame)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-pushfr"><strong>pushfr</strong></a>(self, frame)</dt><dd><tt>push&nbsp;a&nbsp;frame&nbsp;onto&nbsp;the&nbsp;frame&nbsp;stack</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-rb"><strong>rb</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;radiobutton</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-row"><strong>row</strong></a>(self, weights<font color="#909090">=[]</font>, **options)</dt><dd><tt>create&nbsp;a&nbsp;frame&nbsp;that&nbsp;lays&nbsp;out&nbsp;widgets&nbsp;in&nbsp;a&nbsp;single&nbsp;row.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-rowweight"><strong>rowweight</strong></a>(self, i, weight)</dt><dd><tt>assign&nbsp;(weight)&nbsp;to&nbsp;row&nbsp;(i)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-rowweights"><strong>rowweights</strong></a>(self, weights)</dt><dd><tt>attach&nbsp;weights&nbsp;to&nbsp;the&nbsp;rows&nbsp;of&nbsp;the&nbsp;current&nbsp;grid.<br>
+(weights)&nbsp;is&nbsp;a&nbsp;list&nbsp;of&nbsp;values,&nbsp;which&nbsp;are&nbsp;assigned&nbsp;to<br>
+rows&nbsp;starting&nbsp;with&nbsp;0.<br>
+&nbsp;<br>
+These&nbsp;weights&nbsp;control&nbsp;how&nbsp;the&nbsp;rows&nbsp;in&nbsp;the&nbsp;grid&nbsp;expand<br>
+when&nbsp;the&nbsp;grid&nbsp;expands.&nbsp;&nbsp;The&nbsp;default&nbsp;weight&nbsp;is&nbsp;0,&nbsp;which<br>
+means&nbsp;that&nbsp;the&nbsp;row&nbsp;doesn't&nbsp;expand.&nbsp;&nbsp;If&nbsp;only&nbsp;one<br>
+row&nbsp;has&nbsp;a&nbsp;value,&nbsp;it&nbsp;gets&nbsp;all&nbsp;the&nbsp;extra&nbsp;space.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-sb"><strong>sb</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;text&nbsp;scrollbar</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-sc"><strong>sc</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;scrollable&nbsp;canvas.<br>
+The&nbsp;options&nbsp;provided&nbsp;&nbsp;apply&nbsp;to&nbsp;the&nbsp;frame&nbsp;only;<br>
+if&nbsp;you&nbsp;want&nbsp;to&nbsp;configure&nbsp;the&nbsp;other&nbsp;widgets,&nbsp;you&nbsp;have&nbsp;to&nbsp;do<br>
+it&nbsp;after&nbsp;invoking&nbsp;st</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-st"><strong>st</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;scrollable&nbsp;text&nbsp;entry</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-te"><strong>te</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;text&nbsp;entry</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tl"><strong>tl</strong></a>(self, **options)</dt><dd><tt>make&nbsp;a&nbsp;return&nbsp;a&nbsp;top&nbsp;level&nbsp;window.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-widget"><strong>widget</strong></a>(self, constructor, **options)</dt><dd><tt>this&nbsp;is&nbsp;the&nbsp;kernel&nbsp;of&nbsp;the&nbsp;widget&nbsp;constructors.<br>
+(constructor)&nbsp;is&nbsp;the&nbsp;function&nbsp;that&nbsp;will<br>
+be&nbsp;called&nbsp;to&nbsp;build&nbsp;the&nbsp;new&nbsp;widget.&nbsp;(args)&nbsp;is&nbsp;rolled<br>
+into&nbsp;(options),&nbsp;and&nbsp;then&nbsp;(options)&nbsp;is&nbsp;split&nbsp;into&nbsp;widget<br>
+options,&nbsp;pack&nbsp;options&nbsp;and&nbsp;grid&nbsp;options</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="Gui.html#Gui">Gui.Gui</a>:<br>
+<dl><dt><strong>ScrollableCanvas</strong> = &lt;class 'Gui.ScrollableCanvas'&gt;<dd><tt>a&nbsp;compound&nbsp;widget&nbsp;with&nbsp;a&nbsp;grid&nbsp;that&nbsp;contains&nbsp;a&nbsp;canvas<br>
+and&nbsp;two&nbsp;scrollbars</tt></dl>
+
+<dl><dt><strong>ScrollableText</strong> = &lt;class 'Gui.ScrollableText'&gt;<dd><tt>a&nbsp;scrollable&nbsp;text&nbsp;entry&nbsp;is&nbsp;a<br>
+compound&nbsp;widget&nbsp;with&nbsp;a&nbsp;frame&nbsp;that&nbsp;contains&nbsp;a<br>
+text&nbsp;entry&nbsp;on&nbsp;the&nbsp;left&nbsp;and&nbsp;a&nbsp;scrollbar&nbsp;on&nbsp;the&nbsp;right.</tt></dl>
+
+<hr>
+Methods inherited from <a href="Tkinter.html#Tk">Tkinter.Tk</a>:<br>
+<dl><dt><a name="TurmiteWorld-__getattr__"><strong>__getattr__</strong></a>(self, attr)</dt><dd><tt>Delegate&nbsp;attribute&nbsp;access&nbsp;to&nbsp;the&nbsp;interpreter&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-destroy"><strong>destroy</strong></a>(self)</dt><dd><tt>Destroy&nbsp;this&nbsp;and&nbsp;all&nbsp;descendants&nbsp;widgets.&nbsp;This&nbsp;will<br>
+end&nbsp;the&nbsp;application&nbsp;of&nbsp;this&nbsp;Tcl&nbsp;interpreter.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-loadtk"><strong>loadtk</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="TurmiteWorld-readprofile"><strong>readprofile</strong></a>(self, baseName, className)</dt><dd><tt>Internal&nbsp;function.&nbsp;It&nbsp;reads&nbsp;BASENAME.tcl&nbsp;and&nbsp;CLASSNAME.tcl&nbsp;into<br>
+the&nbsp;Tcl&nbsp;Interpreter&nbsp;and&nbsp;calls&nbsp;execfile&nbsp;on&nbsp;BASENAME.py&nbsp;and&nbsp;CLASSNAME.py&nbsp;if<br>
+such&nbsp;a&nbsp;file&nbsp;exists&nbsp;in&nbsp;the&nbsp;home&nbsp;directory.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-report_callback_exception"><strong>report_callback_exception</strong></a>(self, exc, val, tb)</dt><dd><tt>Internal&nbsp;function.&nbsp;It&nbsp;reports&nbsp;exception&nbsp;on&nbsp;sys.stderr.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="Tkinter.html#Misc">Tkinter.Misc</a>:<br>
+<dl><dt><a name="TurmiteWorld-__contains__"><strong>__contains__</strong></a>(self, key)</dt></dl>
+
+<dl><dt><a name="TurmiteWorld-__getitem__"><strong>__getitem__</strong></a> = cget(self, key)</dt><dd><tt>Return&nbsp;the&nbsp;resource&nbsp;value&nbsp;for&nbsp;a&nbsp;KEY&nbsp;given&nbsp;as&nbsp;string.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-__setitem__"><strong>__setitem__</strong></a>(self, key, value)</dt></dl>
+
+<dl><dt><a name="TurmiteWorld-__str__"><strong>__str__</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;window&nbsp;path&nbsp;name&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-after"><strong>after</strong></a>(self, ms, func<font color="#909090">=None</font>, *args)</dt><dd><tt>Call&nbsp;function&nbsp;once&nbsp;after&nbsp;given&nbsp;time.<br>
+&nbsp;<br>
+MS&nbsp;specifies&nbsp;the&nbsp;time&nbsp;in&nbsp;milliseconds.&nbsp;FUNC&nbsp;gives&nbsp;the<br>
+function&nbsp;which&nbsp;shall&nbsp;be&nbsp;called.&nbsp;Additional&nbsp;parameters<br>
+are&nbsp;given&nbsp;as&nbsp;parameters&nbsp;to&nbsp;the&nbsp;function&nbsp;call.&nbsp;&nbsp;Return<br>
+identifier&nbsp;to&nbsp;cancel&nbsp;scheduling&nbsp;with&nbsp;after_cancel.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-after_cancel"><strong>after_cancel</strong></a>(self, id)</dt><dd><tt>Cancel&nbsp;scheduling&nbsp;of&nbsp;function&nbsp;identified&nbsp;with&nbsp;ID.<br>
+&nbsp;<br>
+Identifier&nbsp;returned&nbsp;by&nbsp;after&nbsp;or&nbsp;after_idle&nbsp;must&nbsp;be<br>
+given&nbsp;as&nbsp;first&nbsp;parameter.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-after_idle"><strong>after_idle</strong></a>(self, func, *args)</dt><dd><tt>Call&nbsp;FUNC&nbsp;once&nbsp;if&nbsp;the&nbsp;Tcl&nbsp;main&nbsp;loop&nbsp;has&nbsp;no&nbsp;event&nbsp;to<br>
+process.<br>
+&nbsp;<br>
+Return&nbsp;an&nbsp;identifier&nbsp;to&nbsp;cancel&nbsp;the&nbsp;scheduling&nbsp;with<br>
+after_cancel.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-bbox"><strong>bbox</strong></a> = grid_bbox(self, column<font color="#909090">=None</font>, row<font color="#909090">=None</font>, col2<font color="#909090">=None</font>, row2<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;tuple&nbsp;of&nbsp;integer&nbsp;coordinates&nbsp;for&nbsp;the&nbsp;bounding<br>
+box&nbsp;of&nbsp;this&nbsp;widget&nbsp;controlled&nbsp;by&nbsp;the&nbsp;geometry&nbsp;manager&nbsp;grid.<br>
+&nbsp;<br>
+If&nbsp;COLUMN,&nbsp;ROW&nbsp;is&nbsp;given&nbsp;the&nbsp;bounding&nbsp;box&nbsp;applies&nbsp;from<br>
+the&nbsp;cell&nbsp;with&nbsp;row&nbsp;and&nbsp;column&nbsp;0&nbsp;to&nbsp;the&nbsp;specified<br>
+cell.&nbsp;If&nbsp;COL2&nbsp;and&nbsp;ROW2&nbsp;are&nbsp;given&nbsp;the&nbsp;bounding&nbsp;box<br>
+starts&nbsp;at&nbsp;that&nbsp;cell.<br>
+&nbsp;<br>
+The&nbsp;returned&nbsp;integers&nbsp;specify&nbsp;the&nbsp;offset&nbsp;of&nbsp;the&nbsp;upper&nbsp;left<br>
+corner&nbsp;in&nbsp;the&nbsp;master&nbsp;widget&nbsp;and&nbsp;the&nbsp;width&nbsp;and&nbsp;height.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-bell"><strong>bell</strong></a>(self, displayof<font color="#909090">=0</font>)</dt><dd><tt>Ring&nbsp;a&nbsp;display's&nbsp;bell.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-bind_all"><strong>bind_all</strong></a>(self, sequence<font color="#909090">=None</font>, func<font color="#909090">=None</font>, add<font color="#909090">=None</font>)</dt><dd><tt>Bind&nbsp;to&nbsp;all&nbsp;widgets&nbsp;at&nbsp;an&nbsp;event&nbsp;SEQUENCE&nbsp;a&nbsp;call&nbsp;to&nbsp;function&nbsp;FUNC.<br>
+An&nbsp;additional&nbsp;boolean&nbsp;parameter&nbsp;ADD&nbsp;specifies&nbsp;whether&nbsp;FUNC&nbsp;will<br>
+be&nbsp;called&nbsp;additionally&nbsp;to&nbsp;the&nbsp;other&nbsp;bound&nbsp;function&nbsp;or&nbsp;whether<br>
+it&nbsp;will&nbsp;replace&nbsp;the&nbsp;previous&nbsp;function.&nbsp;See&nbsp;bind&nbsp;for&nbsp;the&nbsp;return&nbsp;value.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-bind_class"><strong>bind_class</strong></a>(self, className, sequence<font color="#909090">=None</font>, func<font color="#909090">=None</font>, add<font color="#909090">=None</font>)</dt><dd><tt>Bind&nbsp;to&nbsp;widgets&nbsp;with&nbsp;bindtag&nbsp;CLASSNAME&nbsp;at&nbsp;event<br>
+SEQUENCE&nbsp;a&nbsp;call&nbsp;of&nbsp;function&nbsp;FUNC.&nbsp;An&nbsp;additional<br>
+boolean&nbsp;parameter&nbsp;ADD&nbsp;specifies&nbsp;whether&nbsp;FUNC&nbsp;will&nbsp;be<br>
+called&nbsp;additionally&nbsp;to&nbsp;the&nbsp;other&nbsp;bound&nbsp;function&nbsp;or<br>
+whether&nbsp;it&nbsp;will&nbsp;replace&nbsp;the&nbsp;previous&nbsp;function.&nbsp;See&nbsp;bind&nbsp;for<br>
+the&nbsp;return&nbsp;value.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-bindtags"><strong>bindtags</strong></a>(self, tagList<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;or&nbsp;get&nbsp;the&nbsp;list&nbsp;of&nbsp;bindtags&nbsp;for&nbsp;this&nbsp;widget.<br>
+&nbsp;<br>
+With&nbsp;no&nbsp;argument&nbsp;return&nbsp;the&nbsp;list&nbsp;of&nbsp;all&nbsp;bindtags&nbsp;associated&nbsp;with<br>
+this&nbsp;widget.&nbsp;With&nbsp;a&nbsp;list&nbsp;of&nbsp;strings&nbsp;as&nbsp;argument&nbsp;the&nbsp;bindtags&nbsp;are<br>
+set&nbsp;to&nbsp;this&nbsp;list.&nbsp;The&nbsp;bindtags&nbsp;determine&nbsp;in&nbsp;which&nbsp;order&nbsp;events&nbsp;are<br>
+processed&nbsp;(see&nbsp;bind).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-cget"><strong>cget</strong></a>(self, key)</dt><dd><tt>Return&nbsp;the&nbsp;resource&nbsp;value&nbsp;for&nbsp;a&nbsp;KEY&nbsp;given&nbsp;as&nbsp;string.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-clipboard_append"><strong>clipboard_append</strong></a>(self, string, **kw)</dt><dd><tt>Append&nbsp;STRING&nbsp;to&nbsp;the&nbsp;Tk&nbsp;clipboard.<br>
+&nbsp;<br>
+A&nbsp;widget&nbsp;specified&nbsp;at&nbsp;the&nbsp;optional&nbsp;displayof&nbsp;keyword<br>
+argument&nbsp;specifies&nbsp;the&nbsp;target&nbsp;display.&nbsp;The&nbsp;clipboard<br>
+can&nbsp;be&nbsp;retrieved&nbsp;with&nbsp;selection_get.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-clipboard_clear"><strong>clipboard_clear</strong></a>(self, **kw)</dt><dd><tt>Clear&nbsp;the&nbsp;data&nbsp;in&nbsp;the&nbsp;Tk&nbsp;clipboard.<br>
+&nbsp;<br>
+A&nbsp;widget&nbsp;specified&nbsp;for&nbsp;the&nbsp;optional&nbsp;displayof&nbsp;keyword<br>
+argument&nbsp;specifies&nbsp;the&nbsp;target&nbsp;display.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-clipboard_get"><strong>clipboard_get</strong></a>(self, **kw)</dt><dd><tt>Retrieve&nbsp;data&nbsp;from&nbsp;the&nbsp;clipboard&nbsp;on&nbsp;window's&nbsp;display.<br>
+&nbsp;<br>
+The&nbsp;window&nbsp;keyword&nbsp;defaults&nbsp;to&nbsp;the&nbsp;root&nbsp;window&nbsp;of&nbsp;the&nbsp;Tkinter<br>
+application.<br>
+&nbsp;<br>
+The&nbsp;type&nbsp;keyword&nbsp;specifies&nbsp;the&nbsp;form&nbsp;in&nbsp;which&nbsp;the&nbsp;data&nbsp;is<br>
+to&nbsp;be&nbsp;returned&nbsp;and&nbsp;should&nbsp;be&nbsp;an&nbsp;atom&nbsp;name&nbsp;such&nbsp;as&nbsp;STRING<br>
+or&nbsp;FILE_NAME.&nbsp;&nbsp;Type&nbsp;defaults&nbsp;to&nbsp;STRING.<br>
+&nbsp;<br>
+This&nbsp;command&nbsp;is&nbsp;equivalent&nbsp;to:<br>
+&nbsp;<br>
+<a href="#TurmiteWorld-selection_get">selection_get</a>(CLIPBOARD)</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-colormodel"><strong>colormodel</strong></a>(self, value<font color="#909090">=None</font>)</dt><dd><tt>Useless.&nbsp;Not&nbsp;implemented&nbsp;in&nbsp;Tk.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-columnconfigure"><strong>columnconfigure</strong></a> = grid_columnconfigure(self, index, cnf<font color="#909090">={}</font>, **kw)</dt><dd><tt>Configure&nbsp;column&nbsp;INDEX&nbsp;of&nbsp;a&nbsp;grid.<br>
+&nbsp;<br>
+Valid&nbsp;resources&nbsp;are&nbsp;minsize&nbsp;(minimum&nbsp;size&nbsp;of&nbsp;the&nbsp;column),<br>
+weight&nbsp;(how&nbsp;much&nbsp;does&nbsp;additional&nbsp;space&nbsp;propagate&nbsp;to&nbsp;this&nbsp;column)<br>
+and&nbsp;pad&nbsp;(how&nbsp;much&nbsp;space&nbsp;to&nbsp;let&nbsp;additionally).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-config"><strong>config</strong></a> = configure(self, cnf<font color="#909090">=None</font>, **kw)</dt><dd><tt>Configure&nbsp;resources&nbsp;of&nbsp;a&nbsp;widget.<br>
+&nbsp;<br>
+The&nbsp;values&nbsp;for&nbsp;resources&nbsp;are&nbsp;specified&nbsp;as&nbsp;keyword<br>
+arguments.&nbsp;To&nbsp;get&nbsp;an&nbsp;overview&nbsp;about<br>
+the&nbsp;allowed&nbsp;keyword&nbsp;arguments&nbsp;call&nbsp;the&nbsp;method&nbsp;keys.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-configure"><strong>configure</strong></a>(self, cnf<font color="#909090">=None</font>, **kw)</dt><dd><tt>Configure&nbsp;resources&nbsp;of&nbsp;a&nbsp;widget.<br>
+&nbsp;<br>
+The&nbsp;values&nbsp;for&nbsp;resources&nbsp;are&nbsp;specified&nbsp;as&nbsp;keyword<br>
+arguments.&nbsp;To&nbsp;get&nbsp;an&nbsp;overview&nbsp;about<br>
+the&nbsp;allowed&nbsp;keyword&nbsp;arguments&nbsp;call&nbsp;the&nbsp;method&nbsp;keys.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-deletecommand"><strong>deletecommand</strong></a>(self, name)</dt><dd><tt>Internal&nbsp;function.<br>
+&nbsp;<br>
+Delete&nbsp;the&nbsp;Tcl&nbsp;command&nbsp;provided&nbsp;in&nbsp;NAME.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-event_add"><strong>event_add</strong></a>(self, virtual, *sequences)</dt><dd><tt>Bind&nbsp;a&nbsp;virtual&nbsp;event&nbsp;VIRTUAL&nbsp;(of&nbsp;the&nbsp;form&nbsp;&lt;&lt;Name&gt;&gt;)<br>
+to&nbsp;an&nbsp;event&nbsp;SEQUENCE&nbsp;such&nbsp;that&nbsp;the&nbsp;virtual&nbsp;event&nbsp;is&nbsp;triggered<br>
+whenever&nbsp;SEQUENCE&nbsp;occurs.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-event_delete"><strong>event_delete</strong></a>(self, virtual, *sequences)</dt><dd><tt>Unbind&nbsp;a&nbsp;virtual&nbsp;event&nbsp;VIRTUAL&nbsp;from&nbsp;SEQUENCE.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-event_generate"><strong>event_generate</strong></a>(self, sequence, **kw)</dt><dd><tt>Generate&nbsp;an&nbsp;event&nbsp;SEQUENCE.&nbsp;Additional<br>
+keyword&nbsp;arguments&nbsp;specify&nbsp;parameter&nbsp;of&nbsp;the&nbsp;event<br>
+(e.g.&nbsp;x,&nbsp;y,&nbsp;rootx,&nbsp;rooty).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-event_info"><strong>event_info</strong></a>(self, virtual<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;virtual&nbsp;events&nbsp;or&nbsp;the&nbsp;information<br>
+about&nbsp;the&nbsp;SEQUENCE&nbsp;bound&nbsp;to&nbsp;the&nbsp;virtual&nbsp;event&nbsp;VIRTUAL.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focus"><strong>focus</strong></a> = focus_set(self)</dt><dd><tt>Direct&nbsp;input&nbsp;focus&nbsp;to&nbsp;this&nbsp;widget.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;application&nbsp;currently&nbsp;does&nbsp;not&nbsp;have&nbsp;the&nbsp;focus<br>
+this&nbsp;widget&nbsp;will&nbsp;get&nbsp;the&nbsp;focus&nbsp;if&nbsp;the&nbsp;application&nbsp;gets<br>
+the&nbsp;focus&nbsp;through&nbsp;the&nbsp;window&nbsp;manager.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focus_displayof"><strong>focus_displayof</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;widget&nbsp;which&nbsp;has&nbsp;currently&nbsp;the&nbsp;focus&nbsp;on&nbsp;the<br>
+display&nbsp;where&nbsp;this&nbsp;widget&nbsp;is&nbsp;located.<br>
+&nbsp;<br>
+Return&nbsp;None&nbsp;if&nbsp;the&nbsp;application&nbsp;does&nbsp;not&nbsp;have&nbsp;the&nbsp;focus.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focus_force"><strong>focus_force</strong></a>(self)</dt><dd><tt>Direct&nbsp;input&nbsp;focus&nbsp;to&nbsp;this&nbsp;widget&nbsp;even&nbsp;if&nbsp;the<br>
+application&nbsp;does&nbsp;not&nbsp;have&nbsp;the&nbsp;focus.&nbsp;Use&nbsp;with<br>
+caution!</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focus_get"><strong>focus_get</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;widget&nbsp;which&nbsp;has&nbsp;currently&nbsp;the&nbsp;focus&nbsp;in&nbsp;the<br>
+application.<br>
+&nbsp;<br>
+Use&nbsp;focus_displayof&nbsp;to&nbsp;allow&nbsp;working&nbsp;with&nbsp;several<br>
+displays.&nbsp;Return&nbsp;None&nbsp;if&nbsp;application&nbsp;does&nbsp;not&nbsp;have<br>
+the&nbsp;focus.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focus_lastfor"><strong>focus_lastfor</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;widget&nbsp;which&nbsp;would&nbsp;have&nbsp;the&nbsp;focus&nbsp;if&nbsp;top&nbsp;level<br>
+for&nbsp;this&nbsp;widget&nbsp;gets&nbsp;the&nbsp;focus&nbsp;from&nbsp;the&nbsp;window&nbsp;manager.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focus_set"><strong>focus_set</strong></a>(self)</dt><dd><tt>Direct&nbsp;input&nbsp;focus&nbsp;to&nbsp;this&nbsp;widget.<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;application&nbsp;currently&nbsp;does&nbsp;not&nbsp;have&nbsp;the&nbsp;focus<br>
+this&nbsp;widget&nbsp;will&nbsp;get&nbsp;the&nbsp;focus&nbsp;if&nbsp;the&nbsp;application&nbsp;gets<br>
+the&nbsp;focus&nbsp;through&nbsp;the&nbsp;window&nbsp;manager.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-getboolean"><strong>getboolean</strong></a>(self, s)</dt><dd><tt>Return&nbsp;a&nbsp;boolean&nbsp;value&nbsp;for&nbsp;Tcl&nbsp;boolean&nbsp;values&nbsp;true&nbsp;and&nbsp;false&nbsp;given&nbsp;as&nbsp;parameter.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-getvar"><strong>getvar</strong></a>(self, name<font color="#909090">='PY_VAR'</font>)</dt><dd><tt>Return&nbsp;value&nbsp;of&nbsp;Tcl&nbsp;variable&nbsp;NAME.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grab_current"><strong>grab_current</strong></a>(self)</dt><dd><tt>Return&nbsp;widget&nbsp;which&nbsp;has&nbsp;currently&nbsp;the&nbsp;grab&nbsp;in&nbsp;this&nbsp;application<br>
+or&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grab_release"><strong>grab_release</strong></a>(self)</dt><dd><tt>Release&nbsp;grab&nbsp;for&nbsp;this&nbsp;widget&nbsp;if&nbsp;currently&nbsp;set.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grab_set"><strong>grab_set</strong></a>(self)</dt><dd><tt>Set&nbsp;grab&nbsp;for&nbsp;this&nbsp;widget.<br>
+&nbsp;<br>
+A&nbsp;grab&nbsp;directs&nbsp;all&nbsp;events&nbsp;to&nbsp;this&nbsp;and&nbsp;descendant<br>
+widgets&nbsp;in&nbsp;the&nbsp;application.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grab_set_global"><strong>grab_set_global</strong></a>(self)</dt><dd><tt>Set&nbsp;global&nbsp;grab&nbsp;for&nbsp;this&nbsp;widget.<br>
+&nbsp;<br>
+A&nbsp;global&nbsp;grab&nbsp;directs&nbsp;all&nbsp;events&nbsp;to&nbsp;this&nbsp;and<br>
+descendant&nbsp;widgets&nbsp;on&nbsp;the&nbsp;display.&nbsp;Use&nbsp;with&nbsp;caution&nbsp;-<br>
+other&nbsp;applications&nbsp;do&nbsp;not&nbsp;get&nbsp;events&nbsp;anymore.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grab_status"><strong>grab_status</strong></a>(self)</dt><dd><tt>Return&nbsp;None,&nbsp;"local"&nbsp;or&nbsp;"global"&nbsp;if&nbsp;this&nbsp;widget&nbsp;has<br>
+no,&nbsp;a&nbsp;local&nbsp;or&nbsp;a&nbsp;global&nbsp;grab.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_bbox"><strong>grid_bbox</strong></a>(self, column<font color="#909090">=None</font>, row<font color="#909090">=None</font>, col2<font color="#909090">=None</font>, row2<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;tuple&nbsp;of&nbsp;integer&nbsp;coordinates&nbsp;for&nbsp;the&nbsp;bounding<br>
+box&nbsp;of&nbsp;this&nbsp;widget&nbsp;controlled&nbsp;by&nbsp;the&nbsp;geometry&nbsp;manager&nbsp;grid.<br>
+&nbsp;<br>
+If&nbsp;COLUMN,&nbsp;ROW&nbsp;is&nbsp;given&nbsp;the&nbsp;bounding&nbsp;box&nbsp;applies&nbsp;from<br>
+the&nbsp;cell&nbsp;with&nbsp;row&nbsp;and&nbsp;column&nbsp;0&nbsp;to&nbsp;the&nbsp;specified<br>
+cell.&nbsp;If&nbsp;COL2&nbsp;and&nbsp;ROW2&nbsp;are&nbsp;given&nbsp;the&nbsp;bounding&nbsp;box<br>
+starts&nbsp;at&nbsp;that&nbsp;cell.<br>
+&nbsp;<br>
+The&nbsp;returned&nbsp;integers&nbsp;specify&nbsp;the&nbsp;offset&nbsp;of&nbsp;the&nbsp;upper&nbsp;left<br>
+corner&nbsp;in&nbsp;the&nbsp;master&nbsp;widget&nbsp;and&nbsp;the&nbsp;width&nbsp;and&nbsp;height.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_columnconfigure"><strong>grid_columnconfigure</strong></a>(self, index, cnf<font color="#909090">={}</font>, **kw)</dt><dd><tt>Configure&nbsp;column&nbsp;INDEX&nbsp;of&nbsp;a&nbsp;grid.<br>
+&nbsp;<br>
+Valid&nbsp;resources&nbsp;are&nbsp;minsize&nbsp;(minimum&nbsp;size&nbsp;of&nbsp;the&nbsp;column),<br>
+weight&nbsp;(how&nbsp;much&nbsp;does&nbsp;additional&nbsp;space&nbsp;propagate&nbsp;to&nbsp;this&nbsp;column)<br>
+and&nbsp;pad&nbsp;(how&nbsp;much&nbsp;space&nbsp;to&nbsp;let&nbsp;additionally).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_location"><strong>grid_location</strong></a>(self, x, y)</dt><dd><tt>Return&nbsp;a&nbsp;tuple&nbsp;of&nbsp;column&nbsp;and&nbsp;row&nbsp;which&nbsp;identify&nbsp;the&nbsp;cell<br>
+at&nbsp;which&nbsp;the&nbsp;pixel&nbsp;at&nbsp;position&nbsp;X&nbsp;and&nbsp;Y&nbsp;inside&nbsp;the&nbsp;master<br>
+widget&nbsp;is&nbsp;located.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_propagate"><strong>grid_propagate</strong></a>(self, flag<font color="#909090">=['_noarg_']</font>)</dt><dd><tt>Set&nbsp;or&nbsp;get&nbsp;the&nbsp;status&nbsp;for&nbsp;propagation&nbsp;of&nbsp;geometry&nbsp;information.<br>
+&nbsp;<br>
+A&nbsp;boolean&nbsp;argument&nbsp;specifies&nbsp;whether&nbsp;the&nbsp;geometry&nbsp;information<br>
+of&nbsp;the&nbsp;slaves&nbsp;will&nbsp;determine&nbsp;the&nbsp;size&nbsp;of&nbsp;this&nbsp;widget.&nbsp;If&nbsp;no&nbsp;argument<br>
+is&nbsp;given,&nbsp;the&nbsp;current&nbsp;setting&nbsp;will&nbsp;be&nbsp;returned.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_rowconfigure"><strong>grid_rowconfigure</strong></a>(self, index, cnf<font color="#909090">={}</font>, **kw)</dt><dd><tt>Configure&nbsp;row&nbsp;INDEX&nbsp;of&nbsp;a&nbsp;grid.<br>
+&nbsp;<br>
+Valid&nbsp;resources&nbsp;are&nbsp;minsize&nbsp;(minimum&nbsp;size&nbsp;of&nbsp;the&nbsp;row),<br>
+weight&nbsp;(how&nbsp;much&nbsp;does&nbsp;additional&nbsp;space&nbsp;propagate&nbsp;to&nbsp;this&nbsp;row)<br>
+and&nbsp;pad&nbsp;(how&nbsp;much&nbsp;space&nbsp;to&nbsp;let&nbsp;additionally).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_size"><strong>grid_size</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;tuple&nbsp;of&nbsp;the&nbsp;number&nbsp;of&nbsp;column&nbsp;and&nbsp;rows&nbsp;in&nbsp;the&nbsp;grid.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-grid_slaves"><strong>grid_slaves</strong></a>(self, row<font color="#909090">=None</font>, column<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;slaves&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;its&nbsp;packing&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-image_names"><strong>image_names</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;existing&nbsp;image&nbsp;names.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-image_types"><strong>image_types</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;available&nbsp;image&nbsp;types&nbsp;(e.g.&nbsp;phote&nbsp;bitmap).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-keys"><strong>keys</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;resource&nbsp;names&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-lift"><strong>lift</strong></a> = tkraise(self, aboveThis<font color="#909090">=None</font>)</dt><dd><tt>Raise&nbsp;this&nbsp;widget&nbsp;in&nbsp;the&nbsp;stacking&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-lower"><strong>lower</strong></a>(self, belowThis<font color="#909090">=None</font>)</dt><dd><tt>Lower&nbsp;this&nbsp;widget&nbsp;in&nbsp;the&nbsp;stacking&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-mainloop"><strong>mainloop</strong></a>(self, n<font color="#909090">=0</font>)</dt><dd><tt>Call&nbsp;the&nbsp;mainloop&nbsp;of&nbsp;Tk.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-nametowidget"><strong>nametowidget</strong></a>(self, name)</dt><dd><tt>Return&nbsp;the&nbsp;Tkinter&nbsp;instance&nbsp;of&nbsp;a&nbsp;widget&nbsp;identified&nbsp;by<br>
+its&nbsp;Tcl&nbsp;name&nbsp;NAME.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-option_add"><strong>option_add</strong></a>(self, pattern, value, priority<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;a&nbsp;VALUE&nbsp;(second&nbsp;parameter)&nbsp;for&nbsp;an&nbsp;option<br>
+PATTERN&nbsp;(first&nbsp;parameter).<br>
+&nbsp;<br>
+An&nbsp;optional&nbsp;third&nbsp;parameter&nbsp;gives&nbsp;the&nbsp;numeric&nbsp;priority<br>
+(defaults&nbsp;to&nbsp;80).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-option_clear"><strong>option_clear</strong></a>(self)</dt><dd><tt>Clear&nbsp;the&nbsp;option&nbsp;database.<br>
+&nbsp;<br>
+It&nbsp;will&nbsp;be&nbsp;reloaded&nbsp;if&nbsp;option_add&nbsp;is&nbsp;called.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-option_get"><strong>option_get</strong></a>(self, name, className)</dt><dd><tt>Return&nbsp;the&nbsp;value&nbsp;for&nbsp;an&nbsp;option&nbsp;NAME&nbsp;for&nbsp;this&nbsp;widget<br>
+with&nbsp;CLASSNAME.<br>
+&nbsp;<br>
+Values&nbsp;with&nbsp;higher&nbsp;priority&nbsp;override&nbsp;lower&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-option_readfile"><strong>option_readfile</strong></a>(self, fileName, priority<font color="#909090">=None</font>)</dt><dd><tt>Read&nbsp;file&nbsp;FILENAME&nbsp;into&nbsp;the&nbsp;option&nbsp;database.<br>
+&nbsp;<br>
+An&nbsp;optional&nbsp;second&nbsp;parameter&nbsp;gives&nbsp;the&nbsp;numeric<br>
+priority.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-pack_propagate"><strong>pack_propagate</strong></a>(self, flag<font color="#909090">=['_noarg_']</font>)</dt><dd><tt>Set&nbsp;or&nbsp;get&nbsp;the&nbsp;status&nbsp;for&nbsp;propagation&nbsp;of&nbsp;geometry&nbsp;information.<br>
+&nbsp;<br>
+A&nbsp;boolean&nbsp;argument&nbsp;specifies&nbsp;whether&nbsp;the&nbsp;geometry&nbsp;information<br>
+of&nbsp;the&nbsp;slaves&nbsp;will&nbsp;determine&nbsp;the&nbsp;size&nbsp;of&nbsp;this&nbsp;widget.&nbsp;If&nbsp;no&nbsp;argument<br>
+is&nbsp;given&nbsp;the&nbsp;current&nbsp;setting&nbsp;will&nbsp;be&nbsp;returned.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-pack_slaves"><strong>pack_slaves</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;slaves&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;its&nbsp;packing&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-place_slaves"><strong>place_slaves</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;slaves&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;its&nbsp;packing&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-propagate"><strong>propagate</strong></a> = pack_propagate(self, flag<font color="#909090">=['_noarg_']</font>)</dt><dd><tt>Set&nbsp;or&nbsp;get&nbsp;the&nbsp;status&nbsp;for&nbsp;propagation&nbsp;of&nbsp;geometry&nbsp;information.<br>
+&nbsp;<br>
+A&nbsp;boolean&nbsp;argument&nbsp;specifies&nbsp;whether&nbsp;the&nbsp;geometry&nbsp;information<br>
+of&nbsp;the&nbsp;slaves&nbsp;will&nbsp;determine&nbsp;the&nbsp;size&nbsp;of&nbsp;this&nbsp;widget.&nbsp;If&nbsp;no&nbsp;argument<br>
+is&nbsp;given&nbsp;the&nbsp;current&nbsp;setting&nbsp;will&nbsp;be&nbsp;returned.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-rowconfigure"><strong>rowconfigure</strong></a> = grid_rowconfigure(self, index, cnf<font color="#909090">={}</font>, **kw)</dt><dd><tt>Configure&nbsp;row&nbsp;INDEX&nbsp;of&nbsp;a&nbsp;grid.<br>
+&nbsp;<br>
+Valid&nbsp;resources&nbsp;are&nbsp;minsize&nbsp;(minimum&nbsp;size&nbsp;of&nbsp;the&nbsp;row),<br>
+weight&nbsp;(how&nbsp;much&nbsp;does&nbsp;additional&nbsp;space&nbsp;propagate&nbsp;to&nbsp;this&nbsp;row)<br>
+and&nbsp;pad&nbsp;(how&nbsp;much&nbsp;space&nbsp;to&nbsp;let&nbsp;additionally).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-selection_clear"><strong>selection_clear</strong></a>(self, **kw)</dt><dd><tt>Clear&nbsp;the&nbsp;current&nbsp;X&nbsp;selection.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-selection_get"><strong>selection_get</strong></a>(self, **kw)</dt><dd><tt>Return&nbsp;the&nbsp;contents&nbsp;of&nbsp;the&nbsp;current&nbsp;X&nbsp;selection.<br>
+&nbsp;<br>
+A&nbsp;keyword&nbsp;parameter&nbsp;selection&nbsp;specifies&nbsp;the&nbsp;name&nbsp;of<br>
+the&nbsp;selection&nbsp;and&nbsp;defaults&nbsp;to&nbsp;PRIMARY.&nbsp;&nbsp;A&nbsp;keyword<br>
+parameter&nbsp;displayof&nbsp;specifies&nbsp;a&nbsp;widget&nbsp;on&nbsp;the&nbsp;display<br>
+to&nbsp;use.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-selection_handle"><strong>selection_handle</strong></a>(self, command, **kw)</dt><dd><tt>Specify&nbsp;a&nbsp;function&nbsp;COMMAND&nbsp;to&nbsp;call&nbsp;if&nbsp;the&nbsp;X<br>
+selection&nbsp;owned&nbsp;by&nbsp;this&nbsp;widget&nbsp;is&nbsp;queried&nbsp;by&nbsp;another<br>
+application.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;must&nbsp;return&nbsp;the&nbsp;contents&nbsp;of&nbsp;the<br>
+selection.&nbsp;The&nbsp;function&nbsp;will&nbsp;be&nbsp;called&nbsp;with&nbsp;the<br>
+arguments&nbsp;OFFSET&nbsp;and&nbsp;LENGTH&nbsp;which&nbsp;allows&nbsp;the&nbsp;chunking<br>
+of&nbsp;very&nbsp;long&nbsp;selections.&nbsp;The&nbsp;following&nbsp;keyword<br>
+parameters&nbsp;can&nbsp;be&nbsp;provided:<br>
+selection&nbsp;-&nbsp;name&nbsp;of&nbsp;the&nbsp;selection&nbsp;(default&nbsp;PRIMARY),<br>
+type&nbsp;-&nbsp;type&nbsp;of&nbsp;the&nbsp;selection&nbsp;(e.g.&nbsp;STRING,&nbsp;FILE_NAME).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-selection_own"><strong>selection_own</strong></a>(self, **kw)</dt><dd><tt>Become&nbsp;owner&nbsp;of&nbsp;X&nbsp;selection.<br>
+&nbsp;<br>
+A&nbsp;keyword&nbsp;parameter&nbsp;selection&nbsp;specifies&nbsp;the&nbsp;name&nbsp;of<br>
+the&nbsp;selection&nbsp;(default&nbsp;PRIMARY).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-selection_own_get"><strong>selection_own_get</strong></a>(self, **kw)</dt><dd><tt>Return&nbsp;owner&nbsp;of&nbsp;X&nbsp;selection.<br>
+&nbsp;<br>
+The&nbsp;following&nbsp;keyword&nbsp;parameter&nbsp;can<br>
+be&nbsp;provided:<br>
+selection&nbsp;-&nbsp;name&nbsp;of&nbsp;the&nbsp;selection&nbsp;(default&nbsp;PRIMARY),<br>
+type&nbsp;-&nbsp;type&nbsp;of&nbsp;the&nbsp;selection&nbsp;(e.g.&nbsp;STRING,&nbsp;FILE_NAME).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-send"><strong>send</strong></a>(self, interp, cmd, *args)</dt><dd><tt>Send&nbsp;Tcl&nbsp;command&nbsp;CMD&nbsp;to&nbsp;different&nbsp;interpreter&nbsp;INTERP&nbsp;to&nbsp;be&nbsp;executed.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-setvar"><strong>setvar</strong></a>(self, name<font color="#909090">='PY_VAR'</font>, value<font color="#909090">='1'</font>)</dt><dd><tt>Set&nbsp;Tcl&nbsp;variable&nbsp;NAME&nbsp;to&nbsp;VALUE.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-size"><strong>size</strong></a> = grid_size(self)</dt><dd><tt>Return&nbsp;a&nbsp;tuple&nbsp;of&nbsp;the&nbsp;number&nbsp;of&nbsp;column&nbsp;and&nbsp;rows&nbsp;in&nbsp;the&nbsp;grid.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-slaves"><strong>slaves</strong></a> = pack_slaves(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;slaves&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;its&nbsp;packing&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_bisque"><strong>tk_bisque</strong></a>(self)</dt><dd><tt>Change&nbsp;the&nbsp;color&nbsp;scheme&nbsp;to&nbsp;light&nbsp;brown&nbsp;as&nbsp;used&nbsp;in&nbsp;Tk&nbsp;3.6&nbsp;and&nbsp;before.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_focusFollowsMouse"><strong>tk_focusFollowsMouse</strong></a>(self)</dt><dd><tt>The&nbsp;widget&nbsp;under&nbsp;mouse&nbsp;will&nbsp;get&nbsp;automatically&nbsp;focus.&nbsp;Can&nbsp;not<br>
+be&nbsp;disabled&nbsp;easily.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_focusNext"><strong>tk_focusNext</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;next&nbsp;widget&nbsp;in&nbsp;the&nbsp;focus&nbsp;order&nbsp;which&nbsp;follows<br>
+widget&nbsp;which&nbsp;has&nbsp;currently&nbsp;the&nbsp;focus.<br>
+&nbsp;<br>
+The&nbsp;focus&nbsp;order&nbsp;first&nbsp;goes&nbsp;to&nbsp;the&nbsp;next&nbsp;child,&nbsp;then&nbsp;to<br>
+the&nbsp;children&nbsp;of&nbsp;the&nbsp;child&nbsp;recursively&nbsp;and&nbsp;then&nbsp;to&nbsp;the<br>
+next&nbsp;sibling&nbsp;which&nbsp;is&nbsp;higher&nbsp;in&nbsp;the&nbsp;stacking&nbsp;order.&nbsp;&nbsp;A<br>
+widget&nbsp;is&nbsp;omitted&nbsp;if&nbsp;it&nbsp;has&nbsp;the&nbsp;takefocus&nbsp;resource&nbsp;set<br>
+to&nbsp;0.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_focusPrev"><strong>tk_focusPrev</strong></a>(self)</dt><dd><tt>Return&nbsp;previous&nbsp;widget&nbsp;in&nbsp;the&nbsp;focus&nbsp;order.&nbsp;See&nbsp;tk_focusNext&nbsp;for&nbsp;details.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_menuBar"><strong>tk_menuBar</strong></a>(self, *args)</dt><dd><tt>Do&nbsp;not&nbsp;use.&nbsp;Needed&nbsp;in&nbsp;Tk&nbsp;3.6&nbsp;and&nbsp;earlier.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_setPalette"><strong>tk_setPalette</strong></a>(self, *args, **kw)</dt><dd><tt>Set&nbsp;a&nbsp;new&nbsp;color&nbsp;scheme&nbsp;for&nbsp;all&nbsp;widget&nbsp;elements.<br>
+&nbsp;<br>
+A&nbsp;single&nbsp;color&nbsp;as&nbsp;argument&nbsp;will&nbsp;cause&nbsp;that&nbsp;all&nbsp;colors&nbsp;of&nbsp;Tk<br>
+widget&nbsp;elements&nbsp;are&nbsp;derived&nbsp;from&nbsp;this.<br>
+Alternatively&nbsp;several&nbsp;keyword&nbsp;parameters&nbsp;and&nbsp;its&nbsp;associated<br>
+colors&nbsp;can&nbsp;be&nbsp;given.&nbsp;The&nbsp;following&nbsp;keywords&nbsp;are&nbsp;valid:<br>
+activeBackground,&nbsp;foreground,&nbsp;selectColor,<br>
+activeForeground,&nbsp;highlightBackground,&nbsp;selectBackground,<br>
+background,&nbsp;highlightColor,&nbsp;selectForeground,<br>
+disabledForeground,&nbsp;insertBackground,&nbsp;troughColor.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tk_strictMotif"><strong>tk_strictMotif</strong></a>(self, boolean<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;Tcl&nbsp;internal&nbsp;variable,&nbsp;whether&nbsp;the&nbsp;look&nbsp;and&nbsp;feel<br>
+should&nbsp;adhere&nbsp;to&nbsp;Motif.<br>
+&nbsp;<br>
+A&nbsp;parameter&nbsp;of&nbsp;1&nbsp;means&nbsp;adhere&nbsp;to&nbsp;Motif&nbsp;(e.g.&nbsp;no&nbsp;color<br>
+change&nbsp;if&nbsp;mouse&nbsp;passes&nbsp;over&nbsp;slider).<br>
+Returns&nbsp;the&nbsp;set&nbsp;value.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-tkraise"><strong>tkraise</strong></a>(self, aboveThis<font color="#909090">=None</font>)</dt><dd><tt>Raise&nbsp;this&nbsp;widget&nbsp;in&nbsp;the&nbsp;stacking&nbsp;order.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-unbind"><strong>unbind</strong></a>(self, sequence, funcid<font color="#909090">=None</font>)</dt><dd><tt>Unbind&nbsp;for&nbsp;this&nbsp;widget&nbsp;for&nbsp;event&nbsp;SEQUENCE&nbsp;&nbsp;the<br>
+function&nbsp;identified&nbsp;with&nbsp;FUNCID.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-unbind_all"><strong>unbind_all</strong></a>(self, sequence)</dt><dd><tt>Unbind&nbsp;for&nbsp;all&nbsp;widgets&nbsp;for&nbsp;event&nbsp;SEQUENCE&nbsp;all&nbsp;functions.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-unbind_class"><strong>unbind_class</strong></a>(self, className, sequence)</dt><dd><tt>Unbind&nbsp;for&nbsp;a&nbsp;all&nbsp;widgets&nbsp;with&nbsp;bindtag&nbsp;CLASSNAME&nbsp;for&nbsp;event&nbsp;SEQUENCE<br>
+all&nbsp;functions.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-update"><strong>update</strong></a>(self)</dt><dd><tt>Enter&nbsp;event&nbsp;loop&nbsp;until&nbsp;all&nbsp;pending&nbsp;events&nbsp;have&nbsp;been&nbsp;processed&nbsp;by&nbsp;Tcl.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-update_idletasks"><strong>update_idletasks</strong></a>(self)</dt><dd><tt>Enter&nbsp;event&nbsp;loop&nbsp;until&nbsp;all&nbsp;idle&nbsp;callbacks&nbsp;have&nbsp;been&nbsp;called.&nbsp;This<br>
+will&nbsp;update&nbsp;the&nbsp;display&nbsp;of&nbsp;windows&nbsp;but&nbsp;not&nbsp;process&nbsp;events&nbsp;caused&nbsp;by<br>
+the&nbsp;user.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wait_variable"><strong>wait_variable</strong></a>(self, name<font color="#909090">='PY_VAR'</font>)</dt><dd><tt>Wait&nbsp;until&nbsp;the&nbsp;variable&nbsp;is&nbsp;modified.<br>
+&nbsp;<br>
+A&nbsp;parameter&nbsp;of&nbsp;type&nbsp;IntVar,&nbsp;StringVar,&nbsp;DoubleVar&nbsp;or<br>
+BooleanVar&nbsp;must&nbsp;be&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wait_visibility"><strong>wait_visibility</strong></a>(self, window<font color="#909090">=None</font>)</dt><dd><tt>Wait&nbsp;until&nbsp;the&nbsp;visibility&nbsp;of&nbsp;a&nbsp;WIDGET&nbsp;changes<br>
+(e.g.&nbsp;it&nbsp;appears).<br>
+&nbsp;<br>
+If&nbsp;no&nbsp;parameter&nbsp;is&nbsp;given&nbsp;self&nbsp;is&nbsp;used.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wait_window"><strong>wait_window</strong></a>(self, window<font color="#909090">=None</font>)</dt><dd><tt>Wait&nbsp;until&nbsp;a&nbsp;WIDGET&nbsp;is&nbsp;destroyed.<br>
+&nbsp;<br>
+If&nbsp;no&nbsp;parameter&nbsp;is&nbsp;given&nbsp;self&nbsp;is&nbsp;used.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-waitvar"><strong>waitvar</strong></a> = wait_variable(self, name<font color="#909090">='PY_VAR'</font>)</dt><dd><tt>Wait&nbsp;until&nbsp;the&nbsp;variable&nbsp;is&nbsp;modified.<br>
+&nbsp;<br>
+A&nbsp;parameter&nbsp;of&nbsp;type&nbsp;IntVar,&nbsp;StringVar,&nbsp;DoubleVar&nbsp;or<br>
+BooleanVar&nbsp;must&nbsp;be&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_atom"><strong>winfo_atom</strong></a>(self, name, displayof<font color="#909090">=0</font>)</dt><dd><tt>Return&nbsp;integer&nbsp;which&nbsp;represents&nbsp;atom&nbsp;NAME.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_atomname"><strong>winfo_atomname</strong></a>(self, id, displayof<font color="#909090">=0</font>)</dt><dd><tt>Return&nbsp;name&nbsp;of&nbsp;atom&nbsp;with&nbsp;identifier&nbsp;ID.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_cells"><strong>winfo_cells</strong></a>(self)</dt><dd><tt>Return&nbsp;number&nbsp;of&nbsp;cells&nbsp;in&nbsp;the&nbsp;colormap&nbsp;for&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_children"><strong>winfo_children</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;widgets&nbsp;which&nbsp;are&nbsp;children&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_class"><strong>winfo_class</strong></a>(self)</dt><dd><tt>Return&nbsp;window&nbsp;class&nbsp;name&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_colormapfull"><strong>winfo_colormapfull</strong></a>(self)</dt><dd><tt>Return&nbsp;true&nbsp;if&nbsp;at&nbsp;the&nbsp;last&nbsp;color&nbsp;request&nbsp;the&nbsp;colormap&nbsp;was&nbsp;full.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_containing"><strong>winfo_containing</strong></a>(self, rootX, rootY, displayof<font color="#909090">=0</font>)</dt><dd><tt>Return&nbsp;the&nbsp;widget&nbsp;which&nbsp;is&nbsp;at&nbsp;the&nbsp;root&nbsp;coordinates&nbsp;ROOTX,&nbsp;ROOTY.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_depth"><strong>winfo_depth</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;bits&nbsp;per&nbsp;pixel.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_exists"><strong>winfo_exists</strong></a>(self)</dt><dd><tt>Return&nbsp;true&nbsp;if&nbsp;this&nbsp;widget&nbsp;exists.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_fpixels"><strong>winfo_fpixels</strong></a>(self, number)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;pixels&nbsp;for&nbsp;the&nbsp;given&nbsp;distance&nbsp;NUMBER<br>
+(e.g.&nbsp;"3c")&nbsp;as&nbsp;float.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_geometry"><strong>winfo_geometry</strong></a>(self)</dt><dd><tt>Return&nbsp;geometry&nbsp;string&nbsp;for&nbsp;this&nbsp;widget&nbsp;in&nbsp;the&nbsp;form&nbsp;"widthxheight+X+Y".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_height"><strong>winfo_height</strong></a>(self)</dt><dd><tt>Return&nbsp;height&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_id"><strong>winfo_id</strong></a>(self)</dt><dd><tt>Return&nbsp;identifier&nbsp;ID&nbsp;for&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_interps"><strong>winfo_interps</strong></a>(self, displayof<font color="#909090">=0</font>)</dt><dd><tt>Return&nbsp;the&nbsp;name&nbsp;of&nbsp;all&nbsp;Tcl&nbsp;interpreters&nbsp;for&nbsp;this&nbsp;display.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_ismapped"><strong>winfo_ismapped</strong></a>(self)</dt><dd><tt>Return&nbsp;true&nbsp;if&nbsp;this&nbsp;widget&nbsp;is&nbsp;mapped.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_manager"><strong>winfo_manager</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;window&nbsp;mananger&nbsp;name&nbsp;for&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_name"><strong>winfo_name</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;name&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_parent"><strong>winfo_parent</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;parent&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_pathname"><strong>winfo_pathname</strong></a>(self, id, displayof<font color="#909090">=0</font>)</dt><dd><tt>Return&nbsp;the&nbsp;pathname&nbsp;of&nbsp;the&nbsp;widget&nbsp;given&nbsp;by&nbsp;ID.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_pixels"><strong>winfo_pixels</strong></a>(self, number)</dt><dd><tt>Rounded&nbsp;integer&nbsp;value&nbsp;of&nbsp;winfo_fpixels.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_pointerx"><strong>winfo_pointerx</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;x&nbsp;coordinate&nbsp;of&nbsp;the&nbsp;pointer&nbsp;on&nbsp;the&nbsp;root&nbsp;window.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_pointerxy"><strong>winfo_pointerxy</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;tuple&nbsp;of&nbsp;x&nbsp;and&nbsp;y&nbsp;coordinates&nbsp;of&nbsp;the&nbsp;pointer&nbsp;on&nbsp;the&nbsp;root&nbsp;window.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_pointery"><strong>winfo_pointery</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;y&nbsp;coordinate&nbsp;of&nbsp;the&nbsp;pointer&nbsp;on&nbsp;the&nbsp;root&nbsp;window.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_reqheight"><strong>winfo_reqheight</strong></a>(self)</dt><dd><tt>Return&nbsp;requested&nbsp;height&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_reqwidth"><strong>winfo_reqwidth</strong></a>(self)</dt><dd><tt>Return&nbsp;requested&nbsp;width&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_rgb"><strong>winfo_rgb</strong></a>(self, color)</dt><dd><tt>Return&nbsp;tuple&nbsp;of&nbsp;decimal&nbsp;values&nbsp;for&nbsp;red,&nbsp;green,&nbsp;blue&nbsp;for<br>
+COLOR&nbsp;in&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_rootx"><strong>winfo_rootx</strong></a>(self)</dt><dd><tt>Return&nbsp;x&nbsp;coordinate&nbsp;of&nbsp;upper&nbsp;left&nbsp;corner&nbsp;of&nbsp;this&nbsp;widget&nbsp;on&nbsp;the<br>
+root&nbsp;window.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_rooty"><strong>winfo_rooty</strong></a>(self)</dt><dd><tt>Return&nbsp;y&nbsp;coordinate&nbsp;of&nbsp;upper&nbsp;left&nbsp;corner&nbsp;of&nbsp;this&nbsp;widget&nbsp;on&nbsp;the<br>
+root&nbsp;window.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screen"><strong>winfo_screen</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;screen&nbsp;name&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screencells"><strong>winfo_screencells</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;the&nbsp;cells&nbsp;in&nbsp;the&nbsp;colormap&nbsp;of&nbsp;the&nbsp;screen<br>
+of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screendepth"><strong>winfo_screendepth</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;bits&nbsp;per&nbsp;pixel&nbsp;of&nbsp;the&nbsp;root&nbsp;window&nbsp;of&nbsp;the<br>
+screen&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screenheight"><strong>winfo_screenheight</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;pixels&nbsp;of&nbsp;the&nbsp;height&nbsp;of&nbsp;the&nbsp;screen&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;pixel.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screenmmheight"><strong>winfo_screenmmheight</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;pixels&nbsp;of&nbsp;the&nbsp;height&nbsp;of&nbsp;the&nbsp;screen&nbsp;of<br>
+this&nbsp;widget&nbsp;in&nbsp;mm.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screenmmwidth"><strong>winfo_screenmmwidth</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;pixels&nbsp;of&nbsp;the&nbsp;width&nbsp;of&nbsp;the&nbsp;screen&nbsp;of<br>
+this&nbsp;widget&nbsp;in&nbsp;mm.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screenvisual"><strong>winfo_screenvisual</strong></a>(self)</dt><dd><tt>Return&nbsp;one&nbsp;of&nbsp;the&nbsp;strings&nbsp;directcolor,&nbsp;grayscale,&nbsp;pseudocolor,<br>
+staticcolor,&nbsp;staticgray,&nbsp;or&nbsp;truecolor&nbsp;for&nbsp;the&nbsp;default<br>
+colormodel&nbsp;of&nbsp;this&nbsp;screen.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_screenwidth"><strong>winfo_screenwidth</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;of&nbsp;pixels&nbsp;of&nbsp;the&nbsp;width&nbsp;of&nbsp;the&nbsp;screen&nbsp;of<br>
+this&nbsp;widget&nbsp;in&nbsp;pixel.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_server"><strong>winfo_server</strong></a>(self)</dt><dd><tt>Return&nbsp;information&nbsp;of&nbsp;the&nbsp;X-Server&nbsp;of&nbsp;the&nbsp;screen&nbsp;of&nbsp;this&nbsp;widget&nbsp;in<br>
+the&nbsp;form&nbsp;"XmajorRminor&nbsp;vendor&nbsp;vendorVersion".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_toplevel"><strong>winfo_toplevel</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;toplevel&nbsp;widget&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_viewable"><strong>winfo_viewable</strong></a>(self)</dt><dd><tt>Return&nbsp;true&nbsp;if&nbsp;the&nbsp;widget&nbsp;and&nbsp;all&nbsp;its&nbsp;higher&nbsp;ancestors&nbsp;are&nbsp;mapped.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_visual"><strong>winfo_visual</strong></a>(self)</dt><dd><tt>Return&nbsp;one&nbsp;of&nbsp;the&nbsp;strings&nbsp;directcolor,&nbsp;grayscale,&nbsp;pseudocolor,<br>
+staticcolor,&nbsp;staticgray,&nbsp;or&nbsp;truecolor&nbsp;for&nbsp;the<br>
+colormodel&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_visualid"><strong>winfo_visualid</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;X&nbsp;identifier&nbsp;for&nbsp;the&nbsp;visual&nbsp;for&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_visualsavailable"><strong>winfo_visualsavailable</strong></a>(self, includeids<font color="#909090">=0</font>)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;visuals&nbsp;available&nbsp;for&nbsp;the&nbsp;screen<br>
+of&nbsp;this&nbsp;widget.<br>
+&nbsp;<br>
+Each&nbsp;item&nbsp;in&nbsp;the&nbsp;list&nbsp;consists&nbsp;of&nbsp;a&nbsp;visual&nbsp;name&nbsp;(see&nbsp;winfo_visual),&nbsp;a<br>
+depth&nbsp;and&nbsp;if&nbsp;INCLUDEIDS=1&nbsp;is&nbsp;given&nbsp;also&nbsp;the&nbsp;X&nbsp;identifier.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_vrootheight"><strong>winfo_vrootheight</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;height&nbsp;of&nbsp;the&nbsp;virtual&nbsp;root&nbsp;window&nbsp;associated&nbsp;with&nbsp;this<br>
+widget&nbsp;in&nbsp;pixels.&nbsp;If&nbsp;there&nbsp;is&nbsp;no&nbsp;virtual&nbsp;root&nbsp;window&nbsp;return&nbsp;the<br>
+height&nbsp;of&nbsp;the&nbsp;screen.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_vrootwidth"><strong>winfo_vrootwidth</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;width&nbsp;of&nbsp;the&nbsp;virtual&nbsp;root&nbsp;window&nbsp;associated&nbsp;with&nbsp;this<br>
+widget&nbsp;in&nbsp;pixel.&nbsp;If&nbsp;there&nbsp;is&nbsp;no&nbsp;virtual&nbsp;root&nbsp;window&nbsp;return&nbsp;the<br>
+width&nbsp;of&nbsp;the&nbsp;screen.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_vrootx"><strong>winfo_vrootx</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;x&nbsp;offset&nbsp;of&nbsp;the&nbsp;virtual&nbsp;root&nbsp;relative&nbsp;to&nbsp;the&nbsp;root<br>
+window&nbsp;of&nbsp;the&nbsp;screen&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_vrooty"><strong>winfo_vrooty</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;y&nbsp;offset&nbsp;of&nbsp;the&nbsp;virtual&nbsp;root&nbsp;relative&nbsp;to&nbsp;the&nbsp;root<br>
+window&nbsp;of&nbsp;the&nbsp;screen&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_width"><strong>winfo_width</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;width&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_x"><strong>winfo_x</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;x&nbsp;coordinate&nbsp;of&nbsp;the&nbsp;upper&nbsp;left&nbsp;corner&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;the&nbsp;parent.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-winfo_y"><strong>winfo_y</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;y&nbsp;coordinate&nbsp;of&nbsp;the&nbsp;upper&nbsp;left&nbsp;corner&nbsp;of&nbsp;this&nbsp;widget<br>
+in&nbsp;the&nbsp;parent.</tt></dd></dl>
+
+<hr>
+Data and other attributes inherited from <a href="Tkinter.html#Misc">Tkinter.Misc</a>:<br>
+<dl><dt><strong>getdouble</strong> = &lt;type 'float'&gt;<dd><tt>float(x)&nbsp;-&gt;&nbsp;floating&nbsp;point&nbsp;number<br>
+&nbsp;<br>
+Convert&nbsp;a&nbsp;string&nbsp;or&nbsp;number&nbsp;to&nbsp;a&nbsp;floating&nbsp;point&nbsp;number,&nbsp;if&nbsp;possible.</tt></dl>
+
+<dl><dt><strong>getint</strong> = &lt;type 'int'&gt;<dd><tt>int(x[,&nbsp;base])&nbsp;-&gt;&nbsp;integer<br>
+&nbsp;<br>
+Convert&nbsp;a&nbsp;string&nbsp;or&nbsp;number&nbsp;to&nbsp;an&nbsp;integer,&nbsp;if&nbsp;possible.&nbsp;&nbsp;A&nbsp;floating&nbsp;point<br>
+argument&nbsp;will&nbsp;be&nbsp;truncated&nbsp;towards&nbsp;zero&nbsp;(this&nbsp;does&nbsp;not&nbsp;include&nbsp;a&nbsp;string<br>
+representation&nbsp;of&nbsp;a&nbsp;floating&nbsp;point&nbsp;number!)&nbsp;&nbsp;When&nbsp;converting&nbsp;a&nbsp;string,&nbsp;use<br>
+the&nbsp;optional&nbsp;base.&nbsp;&nbsp;It&nbsp;is&nbsp;an&nbsp;error&nbsp;to&nbsp;supply&nbsp;a&nbsp;base&nbsp;when&nbsp;converting&nbsp;a<br>
+non-string.&nbsp;&nbsp;If&nbsp;base&nbsp;is&nbsp;zero,&nbsp;the&nbsp;proper&nbsp;base&nbsp;is&nbsp;guessed&nbsp;based&nbsp;on&nbsp;the<br>
+string&nbsp;content.&nbsp;&nbsp;If&nbsp;the&nbsp;argument&nbsp;is&nbsp;outside&nbsp;the&nbsp;integer&nbsp;range&nbsp;a<br>
+long&nbsp;object&nbsp;will&nbsp;be&nbsp;returned&nbsp;instead.</tt></dl>
+
+<hr>
+Methods inherited from <a href="Tkinter.html#Wm">Tkinter.Wm</a>:<br>
+<dl><dt><a name="TurmiteWorld-aspect"><strong>aspect</strong></a> = wm_aspect(self, minNumer<font color="#909090">=None</font>, minDenom<font color="#909090">=None</font>, maxNumer<font color="#909090">=None</font>, maxDenom<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;to&nbsp;set&nbsp;the&nbsp;aspect&nbsp;ratio&nbsp;(width/height)<br>
+of&nbsp;this&nbsp;widget&nbsp;to&nbsp;be&nbsp;between&nbsp;MINNUMER/MINDENOM&nbsp;and&nbsp;MAXNUMER/MAXDENOM.&nbsp;Return&nbsp;a&nbsp;tuple<br>
+of&nbsp;the&nbsp;actual&nbsp;values&nbsp;if&nbsp;no&nbsp;argument&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-attributes"><strong>attributes</strong></a> = wm_attributes(self, *args)</dt><dd><tt>This&nbsp;subcommand&nbsp;returns&nbsp;or&nbsp;sets&nbsp;platform&nbsp;specific&nbsp;attributes<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;form&nbsp;returns&nbsp;a&nbsp;list&nbsp;of&nbsp;the&nbsp;platform&nbsp;specific&nbsp;flags&nbsp;and<br>
+their&nbsp;values.&nbsp;The&nbsp;second&nbsp;form&nbsp;returns&nbsp;the&nbsp;value&nbsp;for&nbsp;the&nbsp;specific<br>
+option.&nbsp;The&nbsp;third&nbsp;form&nbsp;sets&nbsp;one&nbsp;or&nbsp;more&nbsp;of&nbsp;the&nbsp;values.&nbsp;The&nbsp;values<br>
+are&nbsp;as&nbsp;follows:<br>
+&nbsp;<br>
+On&nbsp;Windows,&nbsp;-disabled&nbsp;gets&nbsp;or&nbsp;sets&nbsp;whether&nbsp;the&nbsp;window&nbsp;is&nbsp;in&nbsp;a<br>
+disabled&nbsp;state.&nbsp;-toolwindow&nbsp;gets&nbsp;or&nbsp;sets&nbsp;the&nbsp;style&nbsp;of&nbsp;the&nbsp;window<br>
+to&nbsp;toolwindow&nbsp;(as&nbsp;defined&nbsp;in&nbsp;the&nbsp;MSDN).&nbsp;-topmost&nbsp;gets&nbsp;or&nbsp;sets<br>
+whether&nbsp;this&nbsp;is&nbsp;a&nbsp;topmost&nbsp;window&nbsp;(displays&nbsp;above&nbsp;all&nbsp;other<br>
+windows).<br>
+&nbsp;<br>
+On&nbsp;Macintosh,&nbsp;XXXXX<br>
+&nbsp;<br>
+On&nbsp;Unix,&nbsp;there&nbsp;are&nbsp;currently&nbsp;no&nbsp;special&nbsp;attribute&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-client"><strong>client</strong></a> = wm_client(self, name<font color="#909090">=None</font>)</dt><dd><tt>Store&nbsp;NAME&nbsp;in&nbsp;WM_CLIENT_MACHINE&nbsp;property&nbsp;of&nbsp;this&nbsp;widget.&nbsp;Return<br>
+current&nbsp;value.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-colormapwindows"><strong>colormapwindows</strong></a> = wm_colormapwindows(self, *wlist)</dt><dd><tt>Store&nbsp;list&nbsp;of&nbsp;window&nbsp;names&nbsp;(WLIST)&nbsp;into&nbsp;WM_COLORMAPWINDOWS&nbsp;property<br>
+of&nbsp;this&nbsp;widget.&nbsp;This&nbsp;list&nbsp;contains&nbsp;windows&nbsp;whose&nbsp;colormaps&nbsp;differ&nbsp;from&nbsp;their<br>
+parents.&nbsp;Return&nbsp;current&nbsp;list&nbsp;of&nbsp;widgets&nbsp;if&nbsp;WLIST&nbsp;is&nbsp;empty.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-command"><strong>command</strong></a> = wm_command(self, value<font color="#909090">=None</font>)</dt><dd><tt>Store&nbsp;VALUE&nbsp;in&nbsp;WM_COMMAND&nbsp;property.&nbsp;It&nbsp;is&nbsp;the&nbsp;command<br>
+which&nbsp;shall&nbsp;be&nbsp;used&nbsp;to&nbsp;invoke&nbsp;the&nbsp;application.&nbsp;Return&nbsp;current<br>
+command&nbsp;if&nbsp;VALUE&nbsp;is&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-deiconify"><strong>deiconify</strong></a> = wm_deiconify(self)</dt><dd><tt>Deiconify&nbsp;this&nbsp;widget.&nbsp;If&nbsp;it&nbsp;was&nbsp;never&nbsp;mapped&nbsp;it&nbsp;will&nbsp;not&nbsp;be&nbsp;mapped.<br>
+On&nbsp;Windows&nbsp;it&nbsp;will&nbsp;raise&nbsp;this&nbsp;widget&nbsp;and&nbsp;give&nbsp;it&nbsp;the&nbsp;focus.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-focusmodel"><strong>focusmodel</strong></a> = wm_focusmodel(self, model<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;focus&nbsp;model&nbsp;to&nbsp;MODEL.&nbsp;"active"&nbsp;means&nbsp;that&nbsp;this&nbsp;widget&nbsp;will&nbsp;claim<br>
+the&nbsp;focus&nbsp;itself,&nbsp;"passive"&nbsp;means&nbsp;that&nbsp;the&nbsp;window&nbsp;manager&nbsp;shall&nbsp;give<br>
+the&nbsp;focus.&nbsp;Return&nbsp;current&nbsp;focus&nbsp;model&nbsp;if&nbsp;MODEL&nbsp;is&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-frame"><strong>frame</strong></a> = wm_frame(self)</dt><dd><tt>Return&nbsp;identifier&nbsp;for&nbsp;decorative&nbsp;frame&nbsp;of&nbsp;this&nbsp;widget&nbsp;if&nbsp;present.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-geometry"><strong>geometry</strong></a> = wm_geometry(self, newGeometry<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;geometry&nbsp;to&nbsp;NEWGEOMETRY&nbsp;of&nbsp;the&nbsp;form&nbsp;=widthxheight+x+y.&nbsp;Return<br>
+current&nbsp;value&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-group"><strong>group</strong></a> = wm_group(self, pathName<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;group&nbsp;leader&nbsp;widgets&nbsp;for&nbsp;related&nbsp;widgets&nbsp;to&nbsp;PATHNAME.&nbsp;Return<br>
+the&nbsp;group&nbsp;leader&nbsp;of&nbsp;this&nbsp;widget&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-iconbitmap"><strong>iconbitmap</strong></a> = wm_iconbitmap(self, bitmap<font color="#909090">=None</font>, default<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;bitmap&nbsp;for&nbsp;the&nbsp;iconified&nbsp;widget&nbsp;to&nbsp;BITMAP.&nbsp;Return<br>
+the&nbsp;bitmap&nbsp;if&nbsp;None&nbsp;is&nbsp;given.<br>
+&nbsp;<br>
+Under&nbsp;Windows,&nbsp;the&nbsp;DEFAULT&nbsp;parameter&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;set&nbsp;the&nbsp;icon<br>
+for&nbsp;the&nbsp;widget&nbsp;and&nbsp;any&nbsp;descendents&nbsp;that&nbsp;don't&nbsp;have&nbsp;an&nbsp;icon&nbsp;set<br>
+explicitly.&nbsp;&nbsp;DEFAULT&nbsp;can&nbsp;be&nbsp;the&nbsp;relative&nbsp;path&nbsp;to&nbsp;a&nbsp;.ico&nbsp;file<br>
+(example:&nbsp;root.<a href="#TurmiteWorld-iconbitmap">iconbitmap</a>(default='myicon.ico')&nbsp;).&nbsp;&nbsp;See&nbsp;Tk<br>
+documentation&nbsp;for&nbsp;more&nbsp;information.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-iconify"><strong>iconify</strong></a> = wm_iconify(self)</dt><dd><tt>Display&nbsp;widget&nbsp;as&nbsp;icon.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-iconmask"><strong>iconmask</strong></a> = wm_iconmask(self, bitmap<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;mask&nbsp;for&nbsp;the&nbsp;icon&nbsp;bitmap&nbsp;of&nbsp;this&nbsp;widget.&nbsp;Return&nbsp;the<br>
+mask&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-iconname"><strong>iconname</strong></a> = wm_iconname(self, newName<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;icon&nbsp;for&nbsp;this&nbsp;widget.&nbsp;Return&nbsp;the&nbsp;name&nbsp;if<br>
+None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-iconposition"><strong>iconposition</strong></a> = wm_iconposition(self, x<font color="#909090">=None</font>, y<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;position&nbsp;of&nbsp;the&nbsp;icon&nbsp;of&nbsp;this&nbsp;widget&nbsp;to&nbsp;X&nbsp;and&nbsp;Y.&nbsp;Return<br>
+a&nbsp;tuple&nbsp;of&nbsp;the&nbsp;current&nbsp;values&nbsp;of&nbsp;X&nbsp;and&nbsp;X&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-iconwindow"><strong>iconwindow</strong></a> = wm_iconwindow(self, pathName<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;widget&nbsp;PATHNAME&nbsp;to&nbsp;be&nbsp;displayed&nbsp;instead&nbsp;of&nbsp;icon.&nbsp;Return&nbsp;the&nbsp;current<br>
+value&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-maxsize"><strong>maxsize</strong></a> = wm_maxsize(self, width<font color="#909090">=None</font>, height<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;max&nbsp;WIDTH&nbsp;and&nbsp;HEIGHT&nbsp;for&nbsp;this&nbsp;widget.&nbsp;If&nbsp;the&nbsp;window&nbsp;is&nbsp;gridded<br>
+the&nbsp;values&nbsp;are&nbsp;given&nbsp;in&nbsp;grid&nbsp;units.&nbsp;Return&nbsp;the&nbsp;current&nbsp;values&nbsp;if&nbsp;None<br>
+is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-minsize"><strong>minsize</strong></a> = wm_minsize(self, width<font color="#909090">=None</font>, height<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;min&nbsp;WIDTH&nbsp;and&nbsp;HEIGHT&nbsp;for&nbsp;this&nbsp;widget.&nbsp;If&nbsp;the&nbsp;window&nbsp;is&nbsp;gridded<br>
+the&nbsp;values&nbsp;are&nbsp;given&nbsp;in&nbsp;grid&nbsp;units.&nbsp;Return&nbsp;the&nbsp;current&nbsp;values&nbsp;if&nbsp;None<br>
+is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-overrideredirect"><strong>overrideredirect</strong></a> = wm_overrideredirect(self, boolean<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;to&nbsp;ignore&nbsp;this&nbsp;widget<br>
+if&nbsp;BOOLEAN&nbsp;is&nbsp;given&nbsp;with&nbsp;1.&nbsp;Return&nbsp;the&nbsp;current&nbsp;value&nbsp;if&nbsp;None<br>
+is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-positionfrom"><strong>positionfrom</strong></a> = wm_positionfrom(self, who<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;the&nbsp;position&nbsp;of&nbsp;this&nbsp;widget&nbsp;shall<br>
+be&nbsp;defined&nbsp;by&nbsp;the&nbsp;user&nbsp;if&nbsp;WHO&nbsp;is&nbsp;"user",&nbsp;and&nbsp;by&nbsp;its&nbsp;own&nbsp;policy&nbsp;if&nbsp;WHO&nbsp;is<br>
+"program".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-protocol"><strong>protocol</strong></a> = wm_protocol(self, name<font color="#909090">=None</font>, func<font color="#909090">=None</font>)</dt><dd><tt>Bind&nbsp;function&nbsp;FUNC&nbsp;to&nbsp;command&nbsp;NAME&nbsp;for&nbsp;this&nbsp;widget.<br>
+Return&nbsp;the&nbsp;function&nbsp;bound&nbsp;to&nbsp;NAME&nbsp;if&nbsp;None&nbsp;is&nbsp;given.&nbsp;NAME&nbsp;could&nbsp;be<br>
+e.g.&nbsp;"WM_SAVE_YOURSELF"&nbsp;or&nbsp;"WM_DELETE_WINDOW".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-resizable"><strong>resizable</strong></a> = wm_resizable(self, width<font color="#909090">=None</font>, height<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;whether&nbsp;this&nbsp;width&nbsp;can&nbsp;be&nbsp;resized<br>
+in&nbsp;WIDTH&nbsp;or&nbsp;HEIGHT.&nbsp;Both&nbsp;values&nbsp;are&nbsp;boolean&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-sizefrom"><strong>sizefrom</strong></a> = wm_sizefrom(self, who<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;the&nbsp;size&nbsp;of&nbsp;this&nbsp;widget&nbsp;shall<br>
+be&nbsp;defined&nbsp;by&nbsp;the&nbsp;user&nbsp;if&nbsp;WHO&nbsp;is&nbsp;"user",&nbsp;and&nbsp;by&nbsp;its&nbsp;own&nbsp;policy&nbsp;if&nbsp;WHO&nbsp;is<br>
+"program".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-state"><strong>state</strong></a> = wm_state(self, newstate<font color="#909090">=None</font>)</dt><dd><tt>Query&nbsp;or&nbsp;set&nbsp;the&nbsp;state&nbsp;of&nbsp;this&nbsp;widget&nbsp;as&nbsp;one&nbsp;of&nbsp;normal,&nbsp;icon,<br>
+iconic&nbsp;(see&nbsp;wm_iconwindow),&nbsp;withdrawn,&nbsp;or&nbsp;zoomed&nbsp;(Windows&nbsp;only).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-title"><strong>title</strong></a> = wm_title(self, string<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;title&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-transient"><strong>transient</strong></a> = wm_transient(self, master<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;this&nbsp;widget&nbsp;is&nbsp;transient<br>
+with&nbsp;regard&nbsp;to&nbsp;widget&nbsp;MASTER.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-withdraw"><strong>withdraw</strong></a> = wm_withdraw(self)</dt><dd><tt>Withdraw&nbsp;this&nbsp;widget&nbsp;from&nbsp;the&nbsp;screen&nbsp;such&nbsp;that&nbsp;it&nbsp;is&nbsp;unmapped<br>
+and&nbsp;forgotten&nbsp;by&nbsp;the&nbsp;window&nbsp;manager.&nbsp;Re-draw&nbsp;it&nbsp;with&nbsp;wm_deiconify.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_aspect"><strong>wm_aspect</strong></a>(self, minNumer<font color="#909090">=None</font>, minDenom<font color="#909090">=None</font>, maxNumer<font color="#909090">=None</font>, maxDenom<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;to&nbsp;set&nbsp;the&nbsp;aspect&nbsp;ratio&nbsp;(width/height)<br>
+of&nbsp;this&nbsp;widget&nbsp;to&nbsp;be&nbsp;between&nbsp;MINNUMER/MINDENOM&nbsp;and&nbsp;MAXNUMER/MAXDENOM.&nbsp;Return&nbsp;a&nbsp;tuple<br>
+of&nbsp;the&nbsp;actual&nbsp;values&nbsp;if&nbsp;no&nbsp;argument&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_attributes"><strong>wm_attributes</strong></a>(self, *args)</dt><dd><tt>This&nbsp;subcommand&nbsp;returns&nbsp;or&nbsp;sets&nbsp;platform&nbsp;specific&nbsp;attributes<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;form&nbsp;returns&nbsp;a&nbsp;list&nbsp;of&nbsp;the&nbsp;platform&nbsp;specific&nbsp;flags&nbsp;and<br>
+their&nbsp;values.&nbsp;The&nbsp;second&nbsp;form&nbsp;returns&nbsp;the&nbsp;value&nbsp;for&nbsp;the&nbsp;specific<br>
+option.&nbsp;The&nbsp;third&nbsp;form&nbsp;sets&nbsp;one&nbsp;or&nbsp;more&nbsp;of&nbsp;the&nbsp;values.&nbsp;The&nbsp;values<br>
+are&nbsp;as&nbsp;follows:<br>
+&nbsp;<br>
+On&nbsp;Windows,&nbsp;-disabled&nbsp;gets&nbsp;or&nbsp;sets&nbsp;whether&nbsp;the&nbsp;window&nbsp;is&nbsp;in&nbsp;a<br>
+disabled&nbsp;state.&nbsp;-toolwindow&nbsp;gets&nbsp;or&nbsp;sets&nbsp;the&nbsp;style&nbsp;of&nbsp;the&nbsp;window<br>
+to&nbsp;toolwindow&nbsp;(as&nbsp;defined&nbsp;in&nbsp;the&nbsp;MSDN).&nbsp;-topmost&nbsp;gets&nbsp;or&nbsp;sets<br>
+whether&nbsp;this&nbsp;is&nbsp;a&nbsp;topmost&nbsp;window&nbsp;(displays&nbsp;above&nbsp;all&nbsp;other<br>
+windows).<br>
+&nbsp;<br>
+On&nbsp;Macintosh,&nbsp;XXXXX<br>
+&nbsp;<br>
+On&nbsp;Unix,&nbsp;there&nbsp;are&nbsp;currently&nbsp;no&nbsp;special&nbsp;attribute&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_client"><strong>wm_client</strong></a>(self, name<font color="#909090">=None</font>)</dt><dd><tt>Store&nbsp;NAME&nbsp;in&nbsp;WM_CLIENT_MACHINE&nbsp;property&nbsp;of&nbsp;this&nbsp;widget.&nbsp;Return<br>
+current&nbsp;value.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_colormapwindows"><strong>wm_colormapwindows</strong></a>(self, *wlist)</dt><dd><tt>Store&nbsp;list&nbsp;of&nbsp;window&nbsp;names&nbsp;(WLIST)&nbsp;into&nbsp;WM_COLORMAPWINDOWS&nbsp;property<br>
+of&nbsp;this&nbsp;widget.&nbsp;This&nbsp;list&nbsp;contains&nbsp;windows&nbsp;whose&nbsp;colormaps&nbsp;differ&nbsp;from&nbsp;their<br>
+parents.&nbsp;Return&nbsp;current&nbsp;list&nbsp;of&nbsp;widgets&nbsp;if&nbsp;WLIST&nbsp;is&nbsp;empty.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_command"><strong>wm_command</strong></a>(self, value<font color="#909090">=None</font>)</dt><dd><tt>Store&nbsp;VALUE&nbsp;in&nbsp;WM_COMMAND&nbsp;property.&nbsp;It&nbsp;is&nbsp;the&nbsp;command<br>
+which&nbsp;shall&nbsp;be&nbsp;used&nbsp;to&nbsp;invoke&nbsp;the&nbsp;application.&nbsp;Return&nbsp;current<br>
+command&nbsp;if&nbsp;VALUE&nbsp;is&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_deiconify"><strong>wm_deiconify</strong></a>(self)</dt><dd><tt>Deiconify&nbsp;this&nbsp;widget.&nbsp;If&nbsp;it&nbsp;was&nbsp;never&nbsp;mapped&nbsp;it&nbsp;will&nbsp;not&nbsp;be&nbsp;mapped.<br>
+On&nbsp;Windows&nbsp;it&nbsp;will&nbsp;raise&nbsp;this&nbsp;widget&nbsp;and&nbsp;give&nbsp;it&nbsp;the&nbsp;focus.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_focusmodel"><strong>wm_focusmodel</strong></a>(self, model<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;focus&nbsp;model&nbsp;to&nbsp;MODEL.&nbsp;"active"&nbsp;means&nbsp;that&nbsp;this&nbsp;widget&nbsp;will&nbsp;claim<br>
+the&nbsp;focus&nbsp;itself,&nbsp;"passive"&nbsp;means&nbsp;that&nbsp;the&nbsp;window&nbsp;manager&nbsp;shall&nbsp;give<br>
+the&nbsp;focus.&nbsp;Return&nbsp;current&nbsp;focus&nbsp;model&nbsp;if&nbsp;MODEL&nbsp;is&nbsp;None.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_frame"><strong>wm_frame</strong></a>(self)</dt><dd><tt>Return&nbsp;identifier&nbsp;for&nbsp;decorative&nbsp;frame&nbsp;of&nbsp;this&nbsp;widget&nbsp;if&nbsp;present.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_geometry"><strong>wm_geometry</strong></a>(self, newGeometry<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;geometry&nbsp;to&nbsp;NEWGEOMETRY&nbsp;of&nbsp;the&nbsp;form&nbsp;=widthxheight+x+y.&nbsp;Return<br>
+current&nbsp;value&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_grid"><strong>wm_grid</strong></a>(self, baseWidth<font color="#909090">=None</font>, baseHeight<font color="#909090">=None</font>, widthInc<font color="#909090">=None</font>, heightInc<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;this&nbsp;widget&nbsp;shall&nbsp;only&nbsp;be<br>
+resized&nbsp;on&nbsp;grid&nbsp;boundaries.&nbsp;WIDTHINC&nbsp;and&nbsp;HEIGHTINC&nbsp;are&nbsp;the&nbsp;width&nbsp;and<br>
+height&nbsp;of&nbsp;a&nbsp;grid&nbsp;unit&nbsp;in&nbsp;pixels.&nbsp;BASEWIDTH&nbsp;and&nbsp;BASEHEIGHT&nbsp;are&nbsp;the<br>
+number&nbsp;of&nbsp;grid&nbsp;units&nbsp;requested&nbsp;in&nbsp;Tk_GeometryRequest.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_group"><strong>wm_group</strong></a>(self, pathName<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;group&nbsp;leader&nbsp;widgets&nbsp;for&nbsp;related&nbsp;widgets&nbsp;to&nbsp;PATHNAME.&nbsp;Return<br>
+the&nbsp;group&nbsp;leader&nbsp;of&nbsp;this&nbsp;widget&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_iconbitmap"><strong>wm_iconbitmap</strong></a>(self, bitmap<font color="#909090">=None</font>, default<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;bitmap&nbsp;for&nbsp;the&nbsp;iconified&nbsp;widget&nbsp;to&nbsp;BITMAP.&nbsp;Return<br>
+the&nbsp;bitmap&nbsp;if&nbsp;None&nbsp;is&nbsp;given.<br>
+&nbsp;<br>
+Under&nbsp;Windows,&nbsp;the&nbsp;DEFAULT&nbsp;parameter&nbsp;can&nbsp;be&nbsp;used&nbsp;to&nbsp;set&nbsp;the&nbsp;icon<br>
+for&nbsp;the&nbsp;widget&nbsp;and&nbsp;any&nbsp;descendents&nbsp;that&nbsp;don't&nbsp;have&nbsp;an&nbsp;icon&nbsp;set<br>
+explicitly.&nbsp;&nbsp;DEFAULT&nbsp;can&nbsp;be&nbsp;the&nbsp;relative&nbsp;path&nbsp;to&nbsp;a&nbsp;.ico&nbsp;file<br>
+(example:&nbsp;root.<a href="#TurmiteWorld-iconbitmap">iconbitmap</a>(default='myicon.ico')&nbsp;).&nbsp;&nbsp;See&nbsp;Tk<br>
+documentation&nbsp;for&nbsp;more&nbsp;information.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_iconify"><strong>wm_iconify</strong></a>(self)</dt><dd><tt>Display&nbsp;widget&nbsp;as&nbsp;icon.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_iconmask"><strong>wm_iconmask</strong></a>(self, bitmap<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;mask&nbsp;for&nbsp;the&nbsp;icon&nbsp;bitmap&nbsp;of&nbsp;this&nbsp;widget.&nbsp;Return&nbsp;the<br>
+mask&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_iconname"><strong>wm_iconname</strong></a>(self, newName<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;name&nbsp;of&nbsp;the&nbsp;icon&nbsp;for&nbsp;this&nbsp;widget.&nbsp;Return&nbsp;the&nbsp;name&nbsp;if<br>
+None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_iconposition"><strong>wm_iconposition</strong></a>(self, x<font color="#909090">=None</font>, y<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;position&nbsp;of&nbsp;the&nbsp;icon&nbsp;of&nbsp;this&nbsp;widget&nbsp;to&nbsp;X&nbsp;and&nbsp;Y.&nbsp;Return<br>
+a&nbsp;tuple&nbsp;of&nbsp;the&nbsp;current&nbsp;values&nbsp;of&nbsp;X&nbsp;and&nbsp;X&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_iconwindow"><strong>wm_iconwindow</strong></a>(self, pathName<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;widget&nbsp;PATHNAME&nbsp;to&nbsp;be&nbsp;displayed&nbsp;instead&nbsp;of&nbsp;icon.&nbsp;Return&nbsp;the&nbsp;current<br>
+value&nbsp;if&nbsp;None&nbsp;is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_maxsize"><strong>wm_maxsize</strong></a>(self, width<font color="#909090">=None</font>, height<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;max&nbsp;WIDTH&nbsp;and&nbsp;HEIGHT&nbsp;for&nbsp;this&nbsp;widget.&nbsp;If&nbsp;the&nbsp;window&nbsp;is&nbsp;gridded<br>
+the&nbsp;values&nbsp;are&nbsp;given&nbsp;in&nbsp;grid&nbsp;units.&nbsp;Return&nbsp;the&nbsp;current&nbsp;values&nbsp;if&nbsp;None<br>
+is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_minsize"><strong>wm_minsize</strong></a>(self, width<font color="#909090">=None</font>, height<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;min&nbsp;WIDTH&nbsp;and&nbsp;HEIGHT&nbsp;for&nbsp;this&nbsp;widget.&nbsp;If&nbsp;the&nbsp;window&nbsp;is&nbsp;gridded<br>
+the&nbsp;values&nbsp;are&nbsp;given&nbsp;in&nbsp;grid&nbsp;units.&nbsp;Return&nbsp;the&nbsp;current&nbsp;values&nbsp;if&nbsp;None<br>
+is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_overrideredirect"><strong>wm_overrideredirect</strong></a>(self, boolean<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;to&nbsp;ignore&nbsp;this&nbsp;widget<br>
+if&nbsp;BOOLEAN&nbsp;is&nbsp;given&nbsp;with&nbsp;1.&nbsp;Return&nbsp;the&nbsp;current&nbsp;value&nbsp;if&nbsp;None<br>
+is&nbsp;given.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_positionfrom"><strong>wm_positionfrom</strong></a>(self, who<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;the&nbsp;position&nbsp;of&nbsp;this&nbsp;widget&nbsp;shall<br>
+be&nbsp;defined&nbsp;by&nbsp;the&nbsp;user&nbsp;if&nbsp;WHO&nbsp;is&nbsp;"user",&nbsp;and&nbsp;by&nbsp;its&nbsp;own&nbsp;policy&nbsp;if&nbsp;WHO&nbsp;is<br>
+"program".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_protocol"><strong>wm_protocol</strong></a>(self, name<font color="#909090">=None</font>, func<font color="#909090">=None</font>)</dt><dd><tt>Bind&nbsp;function&nbsp;FUNC&nbsp;to&nbsp;command&nbsp;NAME&nbsp;for&nbsp;this&nbsp;widget.<br>
+Return&nbsp;the&nbsp;function&nbsp;bound&nbsp;to&nbsp;NAME&nbsp;if&nbsp;None&nbsp;is&nbsp;given.&nbsp;NAME&nbsp;could&nbsp;be<br>
+e.g.&nbsp;"WM_SAVE_YOURSELF"&nbsp;or&nbsp;"WM_DELETE_WINDOW".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_resizable"><strong>wm_resizable</strong></a>(self, width<font color="#909090">=None</font>, height<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;whether&nbsp;this&nbsp;width&nbsp;can&nbsp;be&nbsp;resized<br>
+in&nbsp;WIDTH&nbsp;or&nbsp;HEIGHT.&nbsp;Both&nbsp;values&nbsp;are&nbsp;boolean&nbsp;values.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_sizefrom"><strong>wm_sizefrom</strong></a>(self, who<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;the&nbsp;size&nbsp;of&nbsp;this&nbsp;widget&nbsp;shall<br>
+be&nbsp;defined&nbsp;by&nbsp;the&nbsp;user&nbsp;if&nbsp;WHO&nbsp;is&nbsp;"user",&nbsp;and&nbsp;by&nbsp;its&nbsp;own&nbsp;policy&nbsp;if&nbsp;WHO&nbsp;is<br>
+"program".</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_state"><strong>wm_state</strong></a>(self, newstate<font color="#909090">=None</font>)</dt><dd><tt>Query&nbsp;or&nbsp;set&nbsp;the&nbsp;state&nbsp;of&nbsp;this&nbsp;widget&nbsp;as&nbsp;one&nbsp;of&nbsp;normal,&nbsp;icon,<br>
+iconic&nbsp;(see&nbsp;wm_iconwindow),&nbsp;withdrawn,&nbsp;or&nbsp;zoomed&nbsp;(Windows&nbsp;only).</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_title"><strong>wm_title</strong></a>(self, string<font color="#909090">=None</font>)</dt><dd><tt>Set&nbsp;the&nbsp;title&nbsp;of&nbsp;this&nbsp;widget.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_transient"><strong>wm_transient</strong></a>(self, master<font color="#909090">=None</font>)</dt><dd><tt>Instruct&nbsp;the&nbsp;window&nbsp;manager&nbsp;that&nbsp;this&nbsp;widget&nbsp;is&nbsp;transient<br>
+with&nbsp;regard&nbsp;to&nbsp;widget&nbsp;MASTER.</tt></dd></dl>
+
+<dl><dt><a name="TurmiteWorld-wm_withdraw"><strong>wm_withdraw</strong></a>(self)</dt><dd><tt>Withdraw&nbsp;this&nbsp;widget&nbsp;from&nbsp;the&nbsp;screen&nbsp;such&nbsp;that&nbsp;it&nbsp;is&nbsp;unmapped<br>
+and&nbsp;forgotten&nbsp;by&nbsp;the&nbsp;window&nbsp;manager.&nbsp;Re-draw&nbsp;it&nbsp;with&nbsp;wm_deiconify.</tt></dd></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>ACTIVE</strong> = 'active'<br>
+<strong>ALL</strong> = 'all'<br>
+<strong>ANCHOR</strong> = 'anchor'<br>
+<strong>ARC</strong> = 'arc'<br>
+<strong>BASELINE</strong> = 'baseline'<br>
+<strong>BEVEL</strong> = 'bevel'<br>
+<strong>BOLD</strong> = 'bold'<br>
+<strong>BOTH</strong> = 'both'<br>
+<strong>BOTTOM</strong> = 'bottom'<br>
+<strong>BROWSE</strong> = 'browse'<br>
+<strong>BUTT</strong> = 'butt'<br>
+<strong>CASCADE</strong> = 'cascade'<br>
+<strong>CENTER</strong> = 'center'<br>
+<strong>CHAR</strong> = 'char'<br>
+<strong>CHECKBUTTON</strong> = 'checkbutton'<br>
+<strong>CHORD</strong> = 'chord'<br>
+<strong>COMMAND</strong> = 'command'<br>
+<strong>CURRENT</strong> = 'current'<br>
+<strong>DISABLED</strong> = 'disabled'<br>
+<strong>DOTBOX</strong> = 'dotbox'<br>
+<strong>E</strong> = 'e'<br>
+<strong>END</strong> = 'end'<br>
+<strong>EW</strong> = 'ew'<br>
+<strong>EXCEPTION</strong> = 8<br>
+<strong>EXTENDED</strong> = 'extended'<br>
+<strong>FALSE</strong> = 0<br>
+<strong>FIRST</strong> = 'first'<br>
+<strong>FLAT</strong> = 'flat'<br>
+<strong>GROOVE</strong> = 'groove'<br>
+<strong>HIDDEN</strong> = 'hidden'<br>
+<strong>HORIZONTAL</strong> = 'horizontal'<br>
+<strong>INSERT</strong> = 'insert'<br>
+<strong>INSIDE</strong> = 'inside'<br>
+<strong>ITALIC</strong> = 'italic'<br>
+<strong>LAST</strong> = 'last'<br>
+<strong>LEFT</strong> = 'left'<br>
+<strong>MITER</strong> = 'miter'<br>
+<strong>MOVETO</strong> = 'moveto'<br>
+<strong>MULTIPLE</strong> = 'multiple'<br>
+<strong>N</strong> = 'n'<br>
+<strong>NE</strong> = 'ne'<br>
+<strong>NO</strong> = 0<br>
+<strong>NONE</strong> = 'none'<br>
+<strong>NORMAL</strong> = 'normal'<br>
+<strong>NS</strong> = 'ns'<br>
+<strong>NSEW</strong> = 'nsew'<br>
+<strong>NUMERIC</strong> = 'numeric'<br>
+<strong>NW</strong> = 'nw'<br>
+<strong>OFF</strong> = 0<br>
+<strong>ON</strong> = 1<br>
+<strong>OUTSIDE</strong> = 'outside'<br>
+<strong>PAGES</strong> = 'pages'<br>
+<strong>PIESLICE</strong> = 'pieslice'<br>
+<strong>PROJECTING</strong> = 'projecting'<br>
+<strong>RADIOBUTTON</strong> = 'radiobutton'<br>
+<strong>RAISED</strong> = 'raised'<br>
+<strong>READABLE</strong> = 2<br>
+<strong>RIDGE</strong> = 'ridge'<br>
+<strong>RIGHT</strong> = 'right'<br>
+<strong>ROMAN</strong> = 'roman'<br>
+<strong>ROUND</strong> = 'round'<br>
+<strong>S</strong> = 's'<br>
+<strong>SCROLL</strong> = 'scroll'<br>
+<strong>SE</strong> = 'se'<br>
+<strong>SEL</strong> = 'sel'<br>
+<strong>SEL_FIRST</strong> = 'sel.first'<br>
+<strong>SEL_LAST</strong> = 'sel.last'<br>
+<strong>SEPARATOR</strong> = 'separator'<br>
+<strong>SINGLE</strong> = 'single'<br>
+<strong>SOLID</strong> = 'solid'<br>
+<strong>SUNKEN</strong> = 'sunken'<br>
+<strong>SW</strong> = 'sw'<br>
+<strong>StringTypes</strong> = (&lt;type 'str'&gt;, &lt;type 'unicode'&gt;)<br>
+<strong>TOP</strong> = 'top'<br>
+<strong>TRUE</strong> = 1<br>
+<strong>TclVersion</strong> = 8.5<br>
+<strong>TkVersion</strong> = 8.5<br>
+<strong>UNDERLINE</strong> = 'underline'<br>
+<strong>UNITS</strong> = 'units'<br>
+<strong>VERTICAL</strong> = 'vertical'<br>
+<strong>W</strong> = 'w'<br>
+<strong>WORD</strong> = 'word'<br>
+<strong>WRITABLE</strong> = 4<br>
+<strong>X</strong> = 'x'<br>
+<strong>Y</strong> = 'y'<br>
+<strong>YES</strong> = 1<br>
+<strong>wantobjects</strong> = 1</td></tr></table>
+</body></html>
