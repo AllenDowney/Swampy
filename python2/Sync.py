@@ -28,7 +28,20 @@
 from Gui import *
 from random import *
 from time import sleep
-import sys, copy, string
+
+import sys
+import copy
+import string
+
+# get the version of Python
+v = sys.version.split()[0].split('.')
+major = int(v[0])
+
+if major == 2:
+    all_thread_names = string.uppercase + string.lowercase
+else:
+    all_thread_names = string.ascii_uppercase + string.acsii_lowercase
+
 
 font = ("Courier", 12)
 FSU = 10                    # FSU, the fundamental Sync unit,
@@ -459,7 +472,7 @@ class QueueCanvas(GuiCanvas):
 class Thread:
     """this class represents simulated threads.
     """
-    names = string.uppercase + string.lowercase
+    names = all_thread_names
     next_name = 0
     colors = ['red', 'orange', 'yellow', 'greenyellow',
               'green', 'mediumseagreen', 'skyblue',

@@ -50,15 +50,21 @@ from Gui import *
 
 # get the version of Python
 v = sys.version.split()[0].split('.')
-if v[0] != '2':
+major = int(v[0])
+
+if major < 2:
     print('You must have at least Python version 2.0 to run Lumpy.')
     sys.exit()
 
 minor = int(v[1])
-if minor < 4:
-    # need to find a substitute implementation of set
+if major == 2 and minor < 4:
+    # TODO: need to find a substitute implementation of set
     pass
         
+if major == 2:
+    tkinter_module = Tkinter
+else:
+    tkinter_module = tkinter
 
 # most text uses the font specified below; some labels
 # in object diagrams use smallfont.  Lumpy uses the size
@@ -447,20 +453,20 @@ class Instance(Mapping):
             # if the class is in the list, only display only the
             # unrestricted instance variables
             ks = lumpy.instance_vars[class_or_type]
-            iter = [(k, getattr(val, k)) for k in ks]
-            seq = make_bindings(lumpy, iter)
+            it = [(k, getattr(val, k)) for k in ks]
+            seq = make_bindings(lumpy, it)
         else:
             # otherwise, display all of the instance variables
             if hasdict(val):
-                iter = iter(val.__dict__.items())
+                it = iter(val.__dict__.items())
             elif hasslots(val):
-                iter = [(k, getattr(val, k)) for k in val.__slots__]
+                it = [(k, getattr(val, k)) for k in val.__slots__]
             else:
                 t = [k for k, v in type(val).__dict__.items()
                      if str(v).find('attribute') == 1]
-                iter = [(k, getattr(val, k)) for k in t]
+                it = [(k, getattr(val, k)) for k in t]
             
-            seq = make_bindings(lumpy, iter)
+            seq = make_bindings(lumpy, it)
 
             # and if the object extends list, tuple or dict,
             # append the items
@@ -493,8 +499,8 @@ class Frame(Mapping):
     """The graphical representation of a frame,
     implemented as a list of Bindings"""
     def __init__(self, lumpy, frame):
-        iter = iter(frame.locals.items())
-        self.bindings = make_bindings(lumpy, iter)
+        it = iter(frame.locals.items())
+        self.bindings = make_bindings(lumpy, it)
         self.label = frame.func
         self.boxoptions = dict(outline='blue')
     
@@ -633,7 +639,8 @@ class ClassDiagramClass(Thing):
             else:
                 self.cvars.append(key)
 
-        self.methods.sort()
+        key = lambda x: x.__class__.__name__ + "."  + x.__name__
+        self.methods.sort(key=key)
         self.cvars.sort()
 
         self.boxoptions = dict(outline='blue')
@@ -948,7 +955,7 @@ def make_thing(lumpy, val):
 
     # otherwise for simple immutable types, ignore aliasing and
     # just draw
-    simple = (str, bool, int, int, float, complex, NoneType)
+    simple = (str, bool, int, int, float, complex, type(None))
 
     if isinstance(val, simple):
         thing = Simple(lumpy, val)
@@ -1065,8 +1072,8 @@ class Lumpy(Gui):
         self.opaque_class(set)
 
         # any object that belongs to a class in the Tkinter module
-        # is opaque
-        self.opaque_module(Tkinter)
+        # is opaque (the name of the module depends on the Python version)
+        self.opaque_module(tkinter_module)
 
         # by default, class objects and module objects are opaque
         classobjtype = type(Lumpy)
