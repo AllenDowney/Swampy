@@ -40,7 +40,7 @@ major = int(v[0])
 if major == 2:
     all_thread_names = string.uppercase + string.lowercase
 else:
-    all_thread_names = string.ascii_uppercase + string.acsii_lowercase
+    all_thread_names = string.ascii_uppercase + string.ascii_lowercase
 
 
 font = ("Courier", 12)
@@ -419,9 +419,9 @@ class QueueCanvas(GuiCanvas):
     def __init__(self, w, n=1, label='Queue'):
         self.n = n
         self.label = label
-        self.width = 2 * n * FSU
-        self.height = 3 * FSU
-        GuiCanvas.__init__(self, w, width=self.width, height=self.height,
+        width = 2 * n * FSU
+        height = 3 * FSU
+        GuiCanvas.__init__(self, w, width=width, height=height,
                            transforms=[])
         self.threads = []
         self.setup()
@@ -446,7 +446,7 @@ class QueueCanvas(GuiCanvas):
         for thread in self.threads:
             self.draw_thread(thread, x, y, r)
             x += 1.5*r
-            if x > self.width:
+            if x > self.get_width():
                 x = FSU
                 y += 1.5*r
         
@@ -516,20 +516,20 @@ class Thread:
         self.row = None
         self.next_loop()
 
-    def next(self):
+    def next_row(self):
         "move this thread to the next row in the column"
         if self.queued: return
         if self.row:
             self.row.remove_thread(self)
         try:
-            self.row = self.iter.next()
+            self.row = next(self.iter)
             self.row.add_thread(self)
         except StopIteration:
             self.row = None
 
     def next_loop(self):
         "move to the next row, looping to the top if necessary"
-        self.next()
+        self.next_row()
         if self.row == None: self.start()
 
     def step(self, event=None):
@@ -566,7 +566,7 @@ class Thread:
             sync.views[key] = self.row
 
         sync.update_views()
-        self.next()
+        self.next_row()
 
     def step_loop(self, event=None):
         self.step()

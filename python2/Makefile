@@ -22,7 +22,7 @@ python3:
 	cd ../python3; 2to3 -wn TurmiteWorld.py
 	cd ../python3; 2to3 -wn AmoebaWorld.py
 	cd ../python3; 2to3 -wn Lumpy.py
-	cd ../python3; 2to3 -wn -x next Sync.py
+	cd ../python3; 2to3 -wn Sync.py
 
 clean:
 	rm *~ *.pyc
