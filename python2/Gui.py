@@ -1,6 +1,10 @@
 #!/usr/bin/python
 
-"""Wrapper classes for use with tkinter.
+"""
+This module is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
+
+Wrapper classes for use with tkinter.
 
 This module provides the following classes:
 
@@ -52,30 +56,10 @@ avoid keeping track of parent widgets explicitly.
 
     GuiCanvas provides wrappers for the canvas item methods.
 
-"""
 
-"""
-  Copyright 2005 Allen B. Downey
+Copyright 2005 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
-    This file contains wrapper classes I use with tkinter.  It is
-    mostly for my own use; I don't support it, and it is not very
-    well documented.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, see
-    http://www.gnu.org/licenses/gpl.html or write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA 
 """
 
 import math
@@ -83,19 +67,23 @@ from Tkinter import *
 from tkFont import *
 
 class Gui(Tk):
-    """Gui provides wrappers for many of the methods in the Tk
-    class; also, it keeps track of the current frame so that
+    """Provides wrappers for many of the methods in the Tk class.
+
+    Keeps track of the current frame so that
     you can create new widgets without naming the parent frame
-    explicitly."""
+    explicitly.
+    """
 
     def __init__(self, debug=False):
-        """initialize the gui.
-        turning on debugging changes the behavior of Gui.fr so
+        """Initializes the gui.
+
+        Turning on debugging changes the behavior of Gui.fr so
         that the nested frame structure is apparent.
 
-        (debug) is a boolean that makes Frames visible if True.
-        (frame) is the current Frame.
-        (frames) is the stack of pending Frames.
+        Attributes:
+        debug: is a boolean that makes Frames visible if True.
+        frame: is the current Frame.
+        frames: is the stack of pending Frames.
         """
         Tk.__init__(self)
         self.debug = debug
@@ -103,12 +91,12 @@ class Gui(Tk):
         self.frames = []
 
     def pushfr(self, frame):
-        """push a frame onto the frame stack"""
+        """Pushes a frame onto the frame stack."""
         self.frames.append(self.frame)
         self.frame = frame
 
     def endfr(self):
-        """end the current frame (and return the new current frame)"""
+        """Ends the current frame (and return the new current frame)."""
         self.frame = self.frames.pop()
         return self.frame
 
@@ -119,11 +107,12 @@ class Gui(Tk):
     endcol = endfr
 
     def tl(self, **options):
-        """make a return a top level window."""
+        """Makes and returns a top level window."""
         return Toplevel(**options)
 
     def fr(self, *args, **options):
-        """create a frame.
+        """Makes and returns a frame.
+
         The new frame becomes the current frame.
         By default, frames use the pack geometry manager, unless
         self.gridding=True.
@@ -137,15 +126,15 @@ class Gui(Tk):
         return frame
 
     def row(self, weights=[], **options):
-        """create a frame that lays out widgets in a single row."""
+        """Makes a frame that lays out widgets in a single row."""
         return self.gr(10000, weights, [1], **options)
 
     def col(self, weights=[], **options):
-        """create a frame that lays out widgets in a single column."""
+        """Makes a frame that lays out widgets in a single column."""
         return self.gr(1, [1], weights, **options)
 
     def gr(self, cols, cweights=[], rweights=[], **options):
-        """create a frame and switch to grid mode.
+        """Makes a frame and switches to grid mode.
 
         (cols) is the number of columns in the grid.
 
@@ -168,9 +157,10 @@ class Gui(Tk):
         return fr
 
     def colweights(self, weights):
-        """attach weights to the columns of the current grid.
-        (weights) is a list of values, which are assigned to
-        columns starting with 0.
+        """Attaches weights to the columns of the current grid.
+
+        Args:
+        weights: list of values, assigned to columns starting with 0.
         
         These weights control how the columns in the grid expand
         when the grid expands.  The default weight is 0, which
@@ -181,8 +171,10 @@ class Gui(Tk):
             self.frame.columnconfigure(i, weight=weight)
 
     def rowweights(self, weights):
-        """attach weights to the rows of the current grid.
-        (weights) is a list of values, which are assigned to
+        """Attaches weights to the rows of the current grid.
+
+        Args:
+        weights: is a list of values, which are assigned to
         rows starting with 0.
         
         These weights control how the rows in the grid expand
@@ -194,17 +186,16 @@ class Gui(Tk):
             self.frame.rowconfigure(i, weight=weight)
 
     def colweight(self, i, weight):
-        """assign (weight) to column (i)
-        """
+        """Assigns (weight) to column (i)."""
         self.frame.columnconfigure(i, weight=weight)
 
     def rowweight(self, i, weight):
-        """assign (weight) to row (i)
-        """
+        """Assigns (weight) to row (i)."""
         self.frame.rowconfigure(i, weight=weight)
 
     def grid(self, widget, i=None, j=None, **options):
-        """pack the given widget in the current grid.
+        """Packs the given widget in the current grid.
+
         By default, the widget is packed in the next available
         space, but parameters i and j can specify the row
         and column explicitly.
@@ -232,9 +223,8 @@ class Gui(Tk):
             if self.frame.rweights == []:
                 self.rowweight(i, 1)
 
-    # entry
     def en(self, **options):
-        """make an entry widget."""
+        """Makes an entry widget."""
 
         # pull the text option out
         text = options.pop('text', '')
@@ -244,59 +234,44 @@ class Gui(Tk):
         en.insert(0, text)
         return en
 
-    # canvas
     def ca(self, width=100, height=100, **options):
-        """make a canvas widget."""
+        """Makes a canvas widget."""
         return self.widget(GuiCanvas, width=width, height=height, **options)
 
-    # label
     def la(self, text='', **options):
-        """make a label widget."""
+        """Makes a label widget."""
         return self.widget(Label, text=text, **options)
 
-    # listbox
     def lb(self, **options):
-        """make a listbox."""
+        """Makes a listbox."""
         return self.widget(Listbox, **options)
 
-    # button
     def bu(self, text='', command=None, **options):
-        """make a button"""
+        """Makes a button"""
         return self.widget(Button, text=text, command=command, **options)
 
-    # menu button
     def mb(self, **options):
-        """make a menubutton"""
+        """Makes a menubutton"""
         underride(options, relief=RAISED)
         mb = self.widget(Menubutton, **options)
         mb.menu = Menu(mb, tearoff=False)
         mb['menu'] = mb.menu
         return mb
 
-    # menu item
     def mi(self, mb, text='', **options):
-        """make a menu item"""
+        """Makes a menu item"""
         mb.menu.add_command(label=text, **options)        
 
-    # text entry
     def te(self, **options):
-        """make a text entry"""
+        """Makes a text entry"""
         return self.widget(Text, **options)
 
-    # scrollbar
     def sb(self, **options):
-        """make a text scrollbar"""
+        """Makes a text scrollbar"""
         return self.widget(Scrollbar, **options)
 
-    # WARNING: in the following two functions (cb and rb), I
-    # attach new attributes to objects (Checkbutton and
-    # RadioButton) created by tkinter.  There is no name
-    # collision in current versions, but there might be in
-    # the future!
-
-    # check button
     def cb(self, **options):
-        """make a checkbutton."""
+        """Makes a checkbutton."""
         
         # if the user didn't provide a variable, create one
         try:
@@ -306,16 +281,15 @@ class Gui(Tk):
             override(options, variable=var)
             
         w = self.widget(Checkbutton, **options)
-        w.var = var
+        w.swampy_var = var
         return w
 
-    # radio button
     def rb(self, **options):
-        """make a radiobutton"""
+        """Makes a radiobutton"""
 
         w = self.widget(Radiobutton, **options)
-        w.var = options['variable']
-        w.val = options['value']
+        w.swampy_var = options['variable']
+        w.swampy_val = options['value']
         return w
 
     class ScrollableText(object):
@@ -331,7 +305,7 @@ class Gui(Tk):
             gui.endrow()
 
     def st(self, **options):
-        """make a scrollable text entry"""
+        """Makes a scrollable text entry"""
         return Gui.ScrollableText(self, **options)
 
     class ScrollableCanvas(object):
@@ -352,7 +326,7 @@ class Gui(Tk):
             gui.endgr()
 
     def sc(self, **options):
-        """make a scrollable canvas.
+        """Makes a scrollable canvas.
         The options provided  apply to the frame only;
         if you want to configure the other widgets, you have to do
         it after invoking st"""
@@ -372,7 +346,7 @@ class Gui(Tk):
         # or grid
         widopt, packopt, gridopt = split_options(options)
 
-        # make the widget and either pack or grid it
+        # Makes the widget and either pack or grid it
         widget = constructor(self.frame, **widopt)
         if hasattr(self.frame, 'gridding'):
             self.grid(widget, **gridopt)
@@ -382,9 +356,16 @@ class Gui(Tk):
 
 
 def pop_options(options, names):
-    """options is a dictionary; names is a list of keys.
-    Remove the given keys from options and
-    return a new dictionary with those key-value pairs.
+    """Remove the given keys from options.
+
+    Return a new dictionary with those key-value pairs.
+
+    Args:
+        options: dictionary
+        names: list of keys.
+    
+    Returns:
+        dict
     """
     new = {}
     for name in names:
@@ -392,10 +373,16 @@ def pop_options(options, names):
             new[name] = options.pop(name)
     return new
 
+
 def get_options(options, names):
-    """options is a dictionary; names is a list of keys.
-    return a new dictionary that contains the key-value
-    pairs for each key that appears in options.
+    """Returns a dictionary with options for the given keys.
+
+    Args:
+        options: dict
+        names: list of keys
+
+    Returns:
+        dict
     """
     new = {}
     for name in names:
@@ -403,16 +390,29 @@ def get_options(options, names):
             new[name] = options[name]
     return new
 
+
 def remove_options(options, names):
-    """remove from (options) all the keys in (names)."""
+    """Removes options from the dictionary.
+
+    Modifies options.
+
+    Args:
+        options: dict
+        names: list of keys
+    """
     for name in names:
         if name in options:
             del options[name]
 
 def split_options(options):
-    """take a dictionary of options and split it into pack
-    options and grid options; anything left is assumed to
-    be a widget option
+    """Splits an options dictionary into into pack options and grid options.
+
+    Anything left is assumed to be a widget option
+
+    Args:
+        options: dict
+
+    Returns: tuple of (widget options, pack options, grid options)
     """
     
     packnames = ['side', 'fill', 'expand', 'anchor',
@@ -420,7 +420,7 @@ def split_options(options):
     gridnames = ['column', 'columnspan', 'row', 'rowspan',
                  'padx', 'pady', 'ipadx', 'ipady', 'sticky']
 
-    # notice that some options will appear in both packopts
+    # some options appear in both packopts
     # and gridopts, so that's why I didn't use pop_options.
     packopts = get_options(options, packnames)
     gridopts = get_options(options, gridnames)
@@ -432,8 +432,9 @@ def split_options(options):
 
 
 class BBox(list):
-    """a bounding box is a list of coordinates, where each
-    coordinate is a pair or a Point.  The first coordinate is the
+    """List of coordinates, where each coordinate is a pair or a Point.
+
+    The first coordinate is the
     upper-left corner; the second pair is the lower-right.
 
     Creating a new bounding box makes a _shallow_ copy of
@@ -457,45 +458,45 @@ class BBox(list):
     bottom = property(lambda self: self[1][1], setbottom)
 
     def width(self):
-        """return the width of the bbox"""
+        """Returns the width of the bbox"""
         return self.right - self.left
     
     def height(self):
-        """return the height of the bbox"""
+        """Returns the height of the bbox"""
         return self.bottom - self.top
 
     def upperleft(self):
-        """return the first corner of the bbox, which is often
+        """Returns the first corner of the bbox, which is often
         the upper left"""
         return Point(self[0])
     
     def lowerright(self):
-        """return the second corner of the bbox, which is often
+        """Returns the second corner of the bbox, which is often
         the lower right"""
         return Point(self[1])
 
     def midright(self):
-        """return the midpoint of the right edge as a Point object
+        """Returns the midpoint of the right edge as a Point object
         """
         x = self.right
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
 
     def midleft(self):
-        """return the midpoint of the left edge as a Point object
+        """Returns the midpoint of the left edge as a Point object
         """
         x = self.left
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
 
     def center(self):
-        """return the midpoint of the bbox as a Point"""
+        """Returns the midpoint of the bbox as a Point"""
         x = (self.left + self.right) / 2.0
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
         
     def union(self, other):
-        """return a new bbox that covers self and other,
+        """Returns a new bbox that covers self and other,
         assuming that the positive y direction is UP"""
         left = min(self.left, other.left)
         right = max(self.right, other.right)
@@ -504,16 +505,16 @@ class BBox(list):
         return BBox([[left, top], [right, bottom]])
 
     def offset(bbox, pos):
-        """return the vector between the upper-left corner of bbox and
+        """Returns the vector between the upper-left corner of bbox and
         the given position"""
         return Point([pos[0]-bbox.left, pos[1]-bbox.top])
 
     def pos(bbox, offset):
-        """return the position at the given offset from bbox upper-left"""
+        """Returns the position at the given offset from bbox upper-left"""
         return Point([offset[0]+bbox.left, offset[1]+bbox.top])
 
     def flatten(bbox):
-        """return a list of four coordinates"""
+        """Returns a list of four coordinates"""
         return bbox[0] + bbox[1]
 
 
@@ -539,13 +540,13 @@ class Point(list):
 # lists of coordinates
 
 def pairiter(seq):
-    """return an iterator that yields consecutive pairs from seq"""
+    """Returns an iterator that yields consecutive pairs from seq"""
     it = iter(seq)
     while True:
         yield [it.next(), it.next()]
 
 def pair(seq):
-    """return a list of consecutive pairs from seq"""
+    """Returns a list of consecutive pairs from seq"""
     return [x for x in pairiter(seq)]
 
 def flatten(seq):
@@ -844,12 +845,11 @@ class Item(object):
         self.canvas.tag_bind(self.tag, event, *args)
 
     def unbind(self, *args):
-        """this method applies bindings to canvas items (not
-        the whole canvas)"""
+        """Applies bindings to canvas items (not the whole canvas)"""
         self.canvas.tag_unbind(self.tag, *args)
 
     def type(self):
-        """return a string indicating the type of this item"""
+        """Returns a string indicating the type of this item"""
         return self.canvas.type(self.tag)
 
     def lift(self):
@@ -987,9 +987,12 @@ class SwirlTransform(RotateTransform):
 
 
 class Callable(object):
-    """this class is used to wrap a function and its arguments
-    into an object that can be passed as a callback parameter
-    and invoked later.  It is from the Python Cookbook 9.1, page 302,
+    """Wrap a function and its arguments in a callable object.
+
+    Callables can can be passed as a callback parameter
+    and invoked later.
+
+    This code is adapted from the Python Cookbook 9.1, page 302,
     with one change: if call is invoked with args and kwds, they
     are added to the args and kwds stored in the Callable.
     """
@@ -1009,9 +1012,7 @@ class Callable(object):
 
 
 def tk_example():
-    """this example creates a simple GUI using only tkinter
-    functions
-    """
+    """Creates a simple GUI using only tkinter functions."""
     tk = Tk()
     
     def hello():
@@ -1030,10 +1031,9 @@ def tk_example():
     
     tk.mainloop()
 
+
 def gui_example():
-    """this example creates the same GUI as the previous function,
-    but it uses the classes defined in this file
-    """
+    """Creates the same GUI as the previous function using Gui.py"""
     def hello():
         ca.text([0,0], 'hello', 'blue')
 
@@ -1051,8 +1051,7 @@ def gui_example():
 
 
 def widget_demo():
-    """demonstrate a variety of widgets
-    """
+    """Demonstrates a variety of widgets."""
     g = Gui()
     g.row()
 
@@ -1070,8 +1069,7 @@ def widget_demo():
     la2 = g.la(text='')
 
     def press_me():
-        """read the text from the entry and display it as a label
-        """
+        """Reads the text from the entry and display it as a label."""
         text = en.get()
         la2.configure(text=text)
 
@@ -1079,7 +1077,6 @@ def widget_demo():
     bu = g.bu(side=TOP, text='Press me', command=press_me)
 
     g.endcol()
-
 
     # COLUMN 2
 
@@ -1156,7 +1153,6 @@ def widget_demo():
     lb.configure(yscrollcommand=sb.set)
     sb.configure(command=lb.yview)
 
-
     # COLUMN 3
 
     g.col()
@@ -1175,7 +1171,6 @@ def widget_demo():
 
     g.endcol()
 
-
     # COLUMN 4
 
     g.col()
@@ -1186,8 +1181,8 @@ def widget_demo():
         """
         family = 'helvetica'
         size = fontsize.get()
-        weight = b1.var.get()
-        slant = b2.var.get()
+        weight = b1.swampy_var.get()
+        slant = b2.swampy_var.get()
         font = Font(family=family, size=size, weight=weight, slant=slant)
         print font.actual()
         item3.config(font=font)
