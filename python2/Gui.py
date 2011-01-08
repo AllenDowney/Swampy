@@ -100,7 +100,7 @@ class Gui(Tk):
         self.frame = self.frames.pop()
         return self.frame
 
-    # synonyms for endfr
+    """Synonyms for endfr."""
     popfr = endfr
     endgr = endfr
     endrow = endfr
@@ -293,10 +293,7 @@ class Gui(Tk):
         return w
 
     class ScrollableText(object):
-        """a scrollable text entry is a
-        compound widget with a frame that contains a
-        text entry on the left and a scrollbar on the right.
-        """
+        """A frame with a text entry and a scrollbar."""
         def __init__(self, gui, **options):
             self.frame = gui.row(**options)
             self.text = gui.te(wrap=WORD)
@@ -305,13 +302,11 @@ class Gui(Tk):
             gui.endrow()
 
     def st(self, **options):
-        """Makes a scrollable text entry"""
+        """Makes a scrollable text entry."""
         return Gui.ScrollableText(self, **options)
 
     class ScrollableCanvas(object):
-        """a compound widget with a grid that contains a canvas
-        and two scrollbars
-        """
+        """A grid with a canvas and two scrollbars."""
         def __init__(self, gui, width=200, height=200, **options):
             self.grid = gui.gr(2, **options)
             self.canvas = gui.ca(width=width, height=height, bg='white')
@@ -327,17 +322,24 @@ class Gui(Tk):
 
     def sc(self, **options):
         """Makes a scrollable canvas.
+
         The options provided  apply to the frame only;
         if you want to configure the other widgets, you have to do
-        it after invoking st"""
+        it after invoking st.
+        """
         return Gui.ScrollableCanvas(self, **options)
 
     def widget(self, constructor, **options):
-        """this is the kernel of the widget constructors.
-        (constructor) is the function that will
-        be called to build the new widget. (args) is rolled
-        into (options), and then (options) is split into widget
-        options, pack options and grid options
+        """Makes a widget of the given type.
+
+        options is split into widget options, pack options and grid options.
+
+        Args:
+            constructor: function called to build the new widget.
+            options: option dictionary 
+
+        Returns:
+            new widget
         """
         underride(options, fill=BOTH, expand=1, sticky=N+S+E+W)
 
@@ -434,8 +436,8 @@ def split_options(options):
 class BBox(list):
     """List of coordinates, where each coordinate is a pair or a Point.
 
-    The first coordinate is the
-    upper-left corner; the second pair is the lower-right.
+    The first coordinate is the upper-left corner; the second pair is
+    the lower-right.
 
     Creating a new bounding box makes a _shallow_ copy of
     the list of coordinates.  For a deep copy, use Bbox.copy().
@@ -458,68 +460,78 @@ class BBox(list):
     bottom = property(lambda self: self[1][1], setbottom)
 
     def width(self):
-        """Returns the width of the bbox"""
+        """Returns the width of the bbox."""
         return self.right - self.left
     
     def height(self):
-        """Returns the height of the bbox"""
+        """Returns the height of the bbox."""
         return self.bottom - self.top
 
     def upperleft(self):
-        """Returns the first corner of the bbox, which is often
-        the upper left"""
+        """Returns the first corner of the bbox.
+
+        Usually the upper left
+        """
         return Point(self[0])
     
     def lowerright(self):
-        """Returns the second corner of the bbox, which is often
-        the lower right"""
+        """Returns the second corner of the bbox.
+
+        Usually the lower right
+        """
         return Point(self[1])
 
     def midright(self):
-        """Returns the midpoint of the right edge as a Point object
-        """
+        """Returns the midpoint of the right edge as a Point object."""
         x = self.right
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
 
     def midleft(self):
-        """Returns the midpoint of the left edge as a Point object
-        """
+        """Returns the midpoint of the left edge as a Point object."""
         x = self.left
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
 
     def center(self):
-        """Returns the midpoint of the bbox as a Point"""
+        """Returns the midpoint of the bbox as a Point object."""
         x = (self.left + self.right) / 2.0
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
         
     def union(self, other):
-        """Returns a new bbox that covers self and other,
-        assuming that the positive y direction is UP"""
+        """Returns a new bbox that covers self and other.
+        
+        Assumes that the positive y direction is UP.
+        """
         left = min(self.left, other.left)
         right = max(self.right, other.right)
         top = max(self.top, other.top)
         bottom = min(self.bottom, other.bottom)
         return BBox([[left, top], [right, bottom]])
 
-    def offset(bbox, pos):
-        """Returns the vector between the upper-left corner of bbox and
-        the given position"""
-        return Point([pos[0]-bbox.left, pos[1]-bbox.top])
+    def offset(self, pos):
+        """Returns the vector between the upper-left corner of self and pos.
 
-    def pos(bbox, offset):
-        """Returns the position at the given offset from bbox upper-left"""
-        return Point([offset[0]+bbox.left, offset[1]+bbox.top])
+        Args:
+            pos: Point object or coordinate tuple.
 
-    def flatten(bbox):
-        """Returns a list of four coordinates"""
-        return bbox[0] + bbox[1]
+        Returns:
+            Point
+        """
+        return Point([pos[0]-self.left, pos[1]-self.top])
+
+    def pos(self, offset):
+        """Returns the position at the given offset from the upper-left"""
+        return Point([offset[0]+self.left, offset[1]+self.top])
+
+    def flatten(self):
+        """Returns a list of four coordinates."""
+        return self[0] + self[1]
 
 
 class Point(list):
-    """a position is a list of coordinates.
+    """A list of coordinates.
 
     Because Point inherits __init__ from list, it makes a copy
     of the argument to the constructor.
@@ -540,17 +552,19 @@ class Point(list):
 # lists of coordinates
 
 def pairiter(seq):
-    """Returns an iterator that yields consecutive pairs from seq"""
+    """Returns an iterator that yields consecutive pairs from seq."""
     it = iter(seq)
     while True:
         yield [it.next(), it.next()]
 
 def pair(seq):
-    """Returns a list of consecutive pairs from seq"""
+    """Returns a list of consecutive pairs from seq."""
     return [x for x in pairiter(seq)]
 
 def flatten(seq):
-    """given a list of lists, return a new list that concatentes
+    """Concatenates the elements of seq.
+
+    Given a list of lists, returns a new list that concatentes
     the elements of (seq).  This just does one level of flattening;
     it is not recursive.
     """
@@ -560,18 +574,18 @@ def flatten(seq):
 # dictionaries
 
 def underride(d, **kwds):
-    """Add entries from (kwds) to (d) only if they are not already set"""
+    """Adds entries from (kwds) to (d) only if they are not already set."""
     for key, val in kwds.iteritems():
-        if key not in d:
-            d[key] = val
+        d.setdefault(key, val)
 
 def override(d, **kwds):
-    """Add entries from (kwds) to (d) even if they are already set"""
+    """Adds entries from (kwds) to (d) even if they are already set."""
     d.update(kwds)
 
 
 class GuiCanvas(Canvas):
-    """GuiCanvas is a wrapper for the Canvas provided by Tkinter.
+    """A wrapper for the Canvas provided by Tkinter.
+
     The primary difference is that it supports coordinate
     transformations, the most common of which is the CanvasTranform,
     which makes canvas coordinates Cartesian (origin in the middle,
@@ -581,7 +595,7 @@ class GuiCanvas(Canvas):
     nice interface to the underlying canvas methods.
 
     The item-creating methods all return Item objects (as opposed
-    to string tags) so you can perform subsequent operations by
+    to Tkinter tags) so you can perform subsequent operations by
     invoking methods on the Items, rather than the Canvas.
     """
     def __init__(self, w, scale=[1,1], transforms=None, **options):
@@ -592,7 +606,7 @@ class GuiCanvas(Canvas):
             self.transforms = [CanvasTransform(self, scale)]
 
     def get_width(self):
-        """get the nominal width of this canvas"""
+        """Gets the nominal width of this canvas."""
         x = int(self.cget('width'))
         
         # winfo would return the actual width
@@ -600,24 +614,27 @@ class GuiCanvas(Canvas):
         return x
 
     def get_height(self):
-        """get the nominal height of this canvas"""
+        """Gets the nominal height of this canvas."""
         x = int(self.cget('height'))
 
         # winfo would return the actual height
         # x = self.winfo_height()
         return x
 
-    # make width and height available as read-only attributes
+    """Width and height are available as read-only attributes."""
     width = property(get_width)
     height = property(get_height)
 
     def clear_transforms(self):
-        """remove existing transforms """
+        """Removes all existing transforms."""
         self.transforms = []
 
     def add_transform(self, transform, index=None):
-        """add the given transform at the given index in the
-        transform list (appending is the default).
+        """Add a transform.
+
+        Args:
+            transform: Transform object
+            index: where in the list to insert it; appending is the default.
         """
         if index == None:
             self.transforms.append(transform)
@@ -625,43 +642,53 @@ class GuiCanvas(Canvas):
             self.transforms.insert(index, transform)            
             
     def trans(self, coords):
-        """apply each of the transforms for this canvas, in order."""
+        """Applies each of the transforms for this canvas, in order."""
         for trans in self.transforms:
             coords = trans.trans_list(coords)
         return coords
 
     def invert(self, coords):
-        """apply the inverse of each of the transforms, in reverse
-        order."""
+        """Applies the inverse of each transforms, in reverse order."""
         t = self.transforms[::-1]
         for trans in t:
             coords = trans.invert_list(coords)
         return coords
 
     def canvas_coords(self, coords):
-        """convert a position or list of coordinates from pixel
-        coordinates to Canvas coordinates.
+        """Convert a position from pixel coordinates to Canvas coordinates.
+
+        Args:
+            coords: Point object or list of coordinates.
         """
         return self.invert(coords)
         
     def canvas_itemcoords(self, item, coords=None):
-        """provides get and set access to item coordinates,
-        with coordinate translation in both directions.
+        """Gets and sets item coordinates, with translation.
+
+        Args:
+            item: tag of a canvas item
+            coords: Point object or list of coordinates
         """
         if coords != None:
+            # set coords
             coords = self.trans(coords)
             coords = flatten(coords)
             Canvas.coords(self, item, *coords)
         else:
-            "have to get the coordinates and invert them"
+            #get the coordinates and invert them
             coords = Canvas.coords(self, item)
             coords = pair(coords)
             coords = self.invert(coords)
             return coords
 
     def translate_event(self, event):
-        """if this event string is in the translator, return the
-        translation; otherwise return the event.
+        """Translates event strings into a canonical form.
+
+        Args:
+            event: Tkinter event string
+
+        Returns:
+            Tkinter event string
         """
         translator = {}
         for i in ['1', '2', '3']:
@@ -673,24 +700,42 @@ class GuiCanvas(Canvas):
         return translator.get(event, event)
 
     def clear(self):
-        """delete all items on the canvas
-        """
+        """Deletes all items on the canvas."""
         self.delete('all')
 
     def bbox(self, item):
-        """compute the bounding box of the given item
-        (transformed from pixel coordinates to transformed
-        coordinates).
+        """Compute the bounding box of the given item.
+
+        Transforms from pixel coordinates to canvas coordinates.
+
+        Args:
+            item: tag of a canvas item
+
+        Returns:
+            Bbox object in canvas coordinates.
         """
         if isinstance(item, list):
             item = item[0]
+
+        # call the super
         bbox = Canvas.bbox(self, item)
-        if bbox == None: return bbox
+
+        if bbox == None:
+            return bbox
+
         bbox = pair(bbox)
         bbox = self.invert(bbox)
         return BBox(bbox)
 
     def move(self, item, dx, dy, transform=False):
+        """Moves an item on the canvas.
+
+        Args:
+            item: string tag of a canvas item
+            dx: distance to move on the x axis
+            dy: distance to move on the y axis
+            transform: boolean, whether to transform dx, dy
+        """
         if transform:
             coords = [[0,0], [dx,dy]]
             p1, p2 = self.trans(coords)
@@ -703,7 +748,9 @@ class GuiCanvas(Canvas):
     # inherited from the Canvas class.
 
     def arc(self, coords, start=0, extent=90, fill='', **options):
-        """make an arc with bounding box (coords), sweeping out angle
+        """Makes an arc item.
+
+        with bounding box (coords), sweeping out angle
         (extent) starting at (start) both in degrees.
         """
         tag = self.create_arc(self.trans(coords), options,
@@ -711,34 +758,44 @@ class GuiCanvas(Canvas):
         return Item(self, tag)
 
     def bitmap(self, coord, bitmap, **options):
-        """make a bitmap item with the given bitmap at the given position.
+        """Makes a bitmap item.
+
+        with the given bitmap at the given position.
         The default anchor is center.
         """
         tag = self.create_bitmap(self.trans([coord]), options, bitmap=bitmap)
         return Item(self, tag)
 
     def image(self, coord, image, **options):
-        """make an image item with the given image at the given position.
+        """Makes an image item.
+
+        with the given image at the given position.
         The default anchor is center.
         """
         tag = self.create_image(self.trans([coord]), options, image=image)
         return Item(self, tag)
 
     def line(self, coords, fill='black', **options):
-        """make a polyline with vertices at each point in (coords)
+        """Makes a polyline.
+
+        with vertices at each point in (coords)
         and pen color (fill).
         """
         tag = self.create_line(self.trans(coords), options, fill=fill)
         return Item(self, tag)
 
     def oval(self, coords, fill='', **options):
-        """make an oval with bounding box (coords) and fill color (fill)
+        """Makes an oval.
+
+        with bounding box (coords) and fill color (fill)
         """
         tag = self.create_oval(self.trans(coords), options, fill=fill)
         return Item(self, tag)
 
     def circle(self, coord, r, fill='', **options):
-        """make a circle with center at (x, y) and radius (r)
+        """Makes a circle.
+
+        with center at (x, y) and radius (r)
         """
         x, y = coord
         coords = self.trans([[x-r, y-r], [x+r, y+r]])
@@ -746,20 +803,26 @@ class GuiCanvas(Canvas):
         return Item(self, tag)
     
     def polygon(self, coords, fill='', **options):
-        """make a closed polygon with vertices at each point in (coords)
+        """Makes a closed polygon.
+
+        with vertices at each point in (coords)
         and fill color (fill).
         """
         tag = self.create_polygon(self.trans(coords), options, fill=fill)
         return Item(self, tag)
 
     def rectangle(self, coords, fill='', **options):
-        """make an oval with bounding box (coords) and fill color (fill)
+        """Makes an oval.
+
+        with bounding box (coords) and fill color (fill)
         """
         tag = self.create_rectangle(self.trans(coords), options, fill=fill)
         return Item(self, tag)
     
     def text(self, coord, text='', fill='black', **options):
-        """make a text item with the given text and fill color.
+        """Makes a text item.
+
+        with the given text and fill color.
         The default anchor is center.
         """
         tag = self.create_text(self.trans([coord]), options,
@@ -767,15 +830,12 @@ class GuiCanvas(Canvas):
         return Item(self, tag)
 
     def window(self, coord, widget, **options):
-        """embed a window (widget) in the canvas at the given coord.
-        """
+        """Embeds a window (widget) in the canvas at the given coord."""
         tag = self.create_text(self.trans([coord]), options, window=widget)
         return Item(self, tag)
 
     def dump(self, filename='canvas.eps'):
-        """create a PostScipt file with the given name and dump
-        the contents of the canvas into it.
-        """
+        """Create a PostScipt file and dumps the contents of the canvas."""
         bbox = Canvas.bbox(self, ALL)
         if bbox:
             x, y, width, height = bbox
@@ -791,7 +851,7 @@ class GuiCanvas(Canvas):
 
 
 class Item(object):
-    """an Item object represents a canvas item.
+    """Represents a canvas item.
 
     When you create a canvas item, Tkinter returns an integer 'tag'
     that identifies the new item.  To perform an operation on the
@@ -812,29 +872,33 @@ class Item(object):
     # the following are wrappers for canvas methods
 
     def delete(self):
-        """delete this item from the canvas."""
+        """Deletes this item from the canvas."""
         self.canvas.delete(self.tag)
 
     def cget(self, *args):
-        """look up the value of the given option for this item."""
+        """Looks up the value of the given option for this item."""
         return self.canvas.itemcget(self.tag, *args)
         
     def config(self, **options):
-        """reconfigure this item with the given options"""
+        """Reconfigures this item with the given options."""
         self.canvas.itemconfig(self.tag, **options)
 
     def coords(self, *args):
-        """get or set the canvas coordinates for this item"""
+        """Gets or sets the canvas coordinates for this item."""
         return self.canvas.canvas_itemcoords(self.tag, *args)
 
     def bbox(self):
-        """get the approximate bounding box for this item
-        as a BBox object in canvas coordinates."""
+        """Get the approximate bounding box for this item.
+
+        Returns:
+            BBox object in canvas coordinates.
+        """
         return self.canvas.bbox(self.tag)
 
     def bind(self, event, *args):
-        """apply a bindings to this item.  args can be
-        (event, callback) or (event, callback, '+')
+        """Applies a binding to this item.
+
+        args can be (event, callback) or (event, callback, '+')
 
         For the event specifier, you can use Tkinter format,
         as in <Button-1>, or you can leave out the angle brackets.
@@ -845,41 +909,42 @@ class Item(object):
         self.canvas.tag_bind(self.tag, event, *args)
 
     def unbind(self, *args):
-        """Applies bindings to canvas items (not the whole canvas)"""
+        """Removes bindings from this items."""
         self.canvas.tag_unbind(self.tag, *args)
 
     def type(self):
-        """Returns a string indicating the type of this item"""
+        """Returns a string indicating the type of this item."""
         return self.canvas.type(self.tag)
 
     def lift(self):
-        """raise this item to the top of the pile"""
+        """Raises this item to the top of the pile."""
         return self.canvas.lift(self.tag)
 
     def lower(self):
-        """lower this item to the bottom of the pile"""
+        """Lowers this item to the bottom of the pile."""
         return self.canvas.lower(self.tag)
 
     def move(self, dx, dy):
-        """move this item by (dx, dy) in canvas coordinates"""
+        """Moves this item by (dx, dy) in canvas coordinates."""
         self.canvas.move(self.tag, dx, dy)
 
     def move_coord(self, i, dx, dy):
-        """move the ith coordinate by (dx, dy) in canvas coordinates """
+        """Moves the ith coordinate by (dx, dy) in canvas coordinates."""
         coords = self.coords()
         coords[i][0] += dx
         coords[i][1] += dy
         self.coords(coords)
 
     def replace_coord(self, i, coord):
-        """replace the ith coordinate with the given coordinate"""
+        """Replaces the ith coordinate with the given coordinate."""
         coords = self.coords()
         coords[i] = coord
         self.coords(coords)
 
     def scale(self, scale, offset):
-        """shift the coordinates of this item by -(offset) and
-        multiply by (scale)
+        """Shifts and scales the coordinates of this item.
+
+        Shifts by -(offset) and multiplies by (scale)
         """
         xscale, yscale = scale
         xoffset, yoffset = offset
@@ -887,13 +952,14 @@ class Item(object):
 
 
 class Transform(object):
-    """the parent class of transforms, Transform provides methods
-    for transforming lists of coordinates.  Subclasses of Transform
-    are supposed to implement trans() and invert()
+    """Provides methods for transforming lists of coordinates.
+
+    Subclasses should implement trans() and invert().
     """
     def trans_list(self, points, func=None):
-        """apply (func) to a list of points.
-        If (func) is none, apply self.trans.
+        """Applies (func) to a list of points.
+
+        If (func) is none, applies self.trans.
         """
         if func == None:
             func = self.trans
@@ -904,12 +970,14 @@ class Transform(object):
             return Point(func(points))
 
     def invert_list(self, points):
-        """apply the inverse transform to the list of points"""
+        """Applies the inverse transform to the list of points."""
         return self.trans_list(points, self.invert)
     
 
 class CanvasTransform(Transform):
-    """under a CanvasTransform, the origin is in the middle of
+    """Transform for Cartesian coordinates.
+
+    Under a CanvasTransform, the origin is in the middle of
     the canvas, the positive y-axis is up, and the coordinate
     [1, 1] maps to the point specified by scale.
     """
@@ -929,7 +997,8 @@ class CanvasTransform(Transform):
 
 
 class ScaleTransform(Transform):
-    """a ScaleTransform scales the coordinates in the x and y directions.
+    """Scales coordinates in the x and y directions.
+
     The origin is half a unit from the upper-left corner; the y axis
     points down.
     """
@@ -948,16 +1017,16 @@ class ScaleTransform(Transform):
 
 
 class RotateTransform(Transform):
-    """rotate the coordinate system
-    """
+    """Rotates the coordinate system."""
     def __init__(self, theta):
-        """rotate the coordinate system (theta) radians counterclockwise.
-        """
+        """Rotates the coordinate system (theta) radians counterclockwise."""
         self.theta = theta
 
-    def rotate(self, p, theta):
-        """rotate the point p counterclockwise (theta) radians and
-        return a new point.
+    def _rotate(self, p, theta):
+        """Rotates the point p counterclockwise (theta) radians.
+
+        Returns:
+            coordinate pair
         """
         s = sin(theta)
         c = cos(theta)
@@ -966,14 +1035,16 @@ class RotateTransform(Transform):
         return [x, y]
     
     def trans(self, p):
-        return self.rotate(p, self.theta)
+        return self._rotate(p, self.theta)
 
     def invert(self, p):
-        return self.rotate(p, -self.theta)
+        return self._rotate(p, -self.theta)
 
 
 class SwirlTransform(RotateTransform):
-    """rotate the coordinate system (d) radians counterclockwise,
+    """Rotates the coordinate system in proportion to distance from origin.
+
+    Rotates (d) radians counterclockwise,
     where (d) is proportional to the distance from the origin
     """
 
@@ -989,14 +1060,12 @@ class SwirlTransform(RotateTransform):
 class Callable(object):
     """Wrap a function and its arguments in a callable object.
 
-    Callables can can be passed as a callback parameter
-    and invoked later.
+    Callables can can be passed as a callback parameter and invoked later.
 
     This code is adapted from the Python Cookbook 9.1, page 302,
     with one change: if call is invoked with args and kwds, they
     are added to the args and kwds stored in the Callable.
     """
-    
     def __init__(self, func, *args, **kwds):
         self.func = func
         self.args = args
