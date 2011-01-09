@@ -63,10 +63,15 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
 import math
-from Tkinter import *
-from tkFont import *
+import sys
+import Tkinter
+import tkFont
 
-class Gui(Tk):
+from Tkinter import N, S, E, W
+from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END
+
+
+class Gui(Tkinter.Tk):
     """Provides wrappers for many of the methods in the Tk class.
 
     Keeps track of the current frame so that
@@ -85,7 +90,7 @@ class Gui(Tk):
         frame: is the current Frame.
         frames: is the stack of pending Frames.
         """
-        Tk.__init__(self)
+        Tkinter.Tk.__init__(self)
         self.debug = debug
         self.frame = self
         self.frames = []
@@ -96,7 +101,7 @@ class Gui(Tk):
         self.frame = frame
 
     def endfr(self):
-        """Ends the current frame (and return the new current frame)."""
+        """Ends the current frame (and returns the new current frame)."""
         self.frame = self.frames.pop()
         return self.frame
 
@@ -108,7 +113,7 @@ class Gui(Tk):
 
     def tl(self, **options):
         """Makes and returns a top level window."""
-        return Toplevel(**options)
+        return Tkinter.Toplevel(**options)
 
     def fr(self, *args, **options):
         """Makes and returns a frame.
@@ -118,10 +123,10 @@ class Gui(Tk):
         self.gridding=True.
         """
         if self.debug:
-            override(options, bd=5, relief=RIDGE)
+            override(options, bd=5, relief=Tkinter.RIDGE)
 
         # create the new frame and push it onto the stack
-        frame = self.widget(Frame, **options)
+        frame = self.widget(Tkinter.Frame, **options)
         self.pushfr(frame)
         return frame
 
@@ -230,7 +235,7 @@ class Gui(Tk):
         text = options.pop('text', '')
 
         # create the entry and insert the text
-        en = self.widget(Entry, **options)
+        en = self.widget(Tkinter.Entry, **options)
         en.insert(0, text)
         return en
 
@@ -240,21 +245,22 @@ class Gui(Tk):
 
     def la(self, text='', **options):
         """Makes a label widget."""
-        return self.widget(Label, text=text, **options)
+        return self.widget(Tkinter.Label, text=text, **options)
 
     def lb(self, **options):
         """Makes a listbox."""
-        return self.widget(Listbox, **options)
+        return self.widget(Tkinter.Listbox, **options)
 
     def bu(self, text='', command=None, **options):
         """Makes a button"""
-        return self.widget(Button, text=text, command=command, **options)
+        return self.widget(Tkinter.Button, text=text, command=command, 
+                           **options)
 
     def mb(self, **options):
         """Makes a menubutton"""
-        underride(options, relief=RAISED)
-        mb = self.widget(Menubutton, **options)
-        mb.menu = Menu(mb, tearoff=False)
+        underride(options, relief=Tkinter.RAISED)
+        mb = self.widget(Tkinter.Menubutton, **options)
+        mb.menu = Tkinter.Menu(mb, tearoff=False)
         mb['menu'] = mb.menu
         return mb
 
@@ -264,11 +270,11 @@ class Gui(Tk):
 
     def te(self, **options):
         """Makes a text entry"""
-        return self.widget(Text, **options)
+        return self.widget(Tkinter.Text, **options)
 
     def sb(self, **options):
         """Makes a text scrollbar"""
-        return self.widget(Scrollbar, **options)
+        return self.widget(Tkinter.Scrollbar, **options)
 
     def cb(self, **options):
         """Makes a checkbutton."""
@@ -277,17 +283,17 @@ class Gui(Tk):
         try:
             var = options['variable']
         except KeyError:
-            var = IntVar()
+            var = Tkinter.IntVar()
             override(options, variable=var)
             
-        w = self.widget(Checkbutton, **options)
+        w = self.widget(Tkinter.Checkbutton, **options)
         w.swampy_var = var
         return w
 
     def rb(self, **options):
         """Makes a radiobutton"""
 
-        w = self.widget(Radiobutton, **options)
+        w = self.widget(Tkinter.Radiobutton, **options)
         w.swampy_var = options['variable']
         w.swampy_val = options['value']
         return w
@@ -296,7 +302,7 @@ class Gui(Tk):
         """A frame with a text entry and a scrollbar."""
         def __init__(self, gui, **options):
             self.frame = gui.row(**options)
-            self.text = gui.te(wrap=WORD)
+            self.text = gui.te(wrap=Tkinter.WORD)
             self.scrollbar = gui.sb(command=self.text.yview)
             self.text.configure(yscrollcommand=self.scrollbar.set)
             gui.endrow()
@@ -312,8 +318,9 @@ class Gui(Tk):
             self.canvas = gui.ca(width=width, height=height, bg='white')
 
             self.yb = gui.sb(command=self.canvas.yview, sticky=N+S)
-            self.xb = gui.sb(command=self.canvas.xview, orient=HORIZONTAL,
-                              sticky=E+W)
+            self.xb = gui.sb(command=self.canvas.xview, 
+                             orient=Tkinter.HORIZONTAL,
+                             sticky=E+W)
 
             self.canvas.configure(xscrollcommand=self.xb.set,
                                   yscrollcommand=self.yb.set,
@@ -341,7 +348,7 @@ class Gui(Tk):
         Returns:
             new widget
         """
-        underride(options, fill=BOTH, expand=1, sticky=N+S+E+W)
+        underride(options, fill=Tkinter.BOTH, expand=1, sticky=N+S+E+W)
 
         # roll the positional arguments into the option dictionary,
         # then divide into options for the widget constructor, pack
@@ -583,7 +590,7 @@ def override(d, **kwds):
     d.update(kwds)
 
 
-class GuiCanvas(Canvas):
+class GuiCanvas(Tkinter.Canvas):
     """A wrapper for the Canvas provided by Tkinter.
 
     The primary difference is that it supports coordinate
@@ -599,7 +606,7 @@ class GuiCanvas(Canvas):
     invoking methods on the Items, rather than the Canvas.
     """
     def __init__(self, w, scale=[1,1], transforms=None, **options):
-        Canvas.__init__(self, w, **options)
+        Tkinter.Canvas.__init__(self, w, **options)
         if transforms != None:
             self.transforms = transforms
         else:
@@ -673,10 +680,10 @@ class GuiCanvas(Canvas):
             # set coords
             coords = self.trans(coords)
             coords = flatten(coords)
-            Canvas.coords(self, item, *coords)
+            Tkinter.Canvas.coords(self, item, *coords)
         else:
             #get the coordinates and invert them
-            coords = Canvas.coords(self, item)
+            coords = Tkinter.Canvas.coords(self, item)
             coords = pair(coords)
             coords = self.invert(coords)
             return coords
@@ -718,7 +725,7 @@ class GuiCanvas(Canvas):
             item = item[0]
 
         # call the super
-        bbox = Canvas.bbox(self, item)
+        bbox = Tkinter.Canvas.bbox(self, item)
 
         if bbox == None:
             return bbox
@@ -741,7 +748,7 @@ class GuiCanvas(Canvas):
             p1, p2 = self.trans(coords)
             dx = p2.x - p1.x
             dy = p2.y - p1.y
-        Canvas.move(self, item, dx, dy)
+        Tkinter.Canvas.move(self, item, dx, dy)
         
 
     # the following are wrappers for the item creation methods
@@ -836,7 +843,7 @@ class GuiCanvas(Canvas):
 
     def dump(self, filename='canvas.eps'):
         """Create a PostScipt file and dumps the contents of the canvas."""
-        bbox = Canvas.bbox(self, ALL)
+        bbox = Tkinter.Canvas.bbox(self, ALL)
         if bbox:
             x, y, width, height = bbox
         else:
@@ -1235,7 +1242,7 @@ def widget_demo():
     item2 = ca.rectangle([[0, 0], [60, 60]], 'blue')
     item3 = ca.text([0, 0], 'This is a canvas.', 'white')
 
-    photo = PhotoImage(file='danger.gif')
+    photo = Tkinter.PhotoImage(file='danger.gif')
     item4 = ca.create_image(200, 300, image=photo)
 
     g.endcol()
@@ -1252,14 +1259,15 @@ def widget_demo():
         size = fontsize.get()
         weight = b1.swampy_var.get()
         slant = b2.swampy_var.get()
-        font = Font(family=family, size=size, weight=weight, slant=slant)
+        font = tkFont.Font(family=family, size=size, weight=weight,
+                           slant=slant)
         print font.actual()
         item3.config(font=font)
 
     g.la(text='Font:')
 
     # fontsize is the variable associated with the radiobuttons
-    fontsize = IntVar()
+    fontsize = Tkinter.IntVar()
 
     # make the radio buttons
     for size in [10, 12, 14, 15, 17, 20]:
@@ -1267,12 +1275,12 @@ def widget_demo():
                   command=set_font)
 
     # make the check buttons
-    b1 = g.cb(text='Bold', command=set_font, variable=StringVar(),
-              onvalue=BOLD, offvalue=NORMAL)
+    b1 = g.cb(text='Bold', command=set_font, variable=Tkinter.StringVar(),
+              onvalue=tkFont.BOLD, offvalue=tkFont.NORMAL)
     b1.deselect()
     
-    b2 = g.cb(text='Italic', command=set_font, variable=StringVar(),
-              onvalue=ITALIC, offvalue=ROMAN)
+    b2 = g.cb(text='Italic', command=set_font, variable=Tkinter.StringVar(),
+              onvalue=tkFont.ITALIC, offvalue=tkFont.ROMAN)
     b2.deselect()
 
     # choose the initial font size
