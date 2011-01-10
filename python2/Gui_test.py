@@ -57,7 +57,7 @@ class Tests(unittest.TestCase):
 
         gui.destroy()
 
-    def testOptions(self):
+    def test_options(self):
         d = dict(a=1, b=2, c=3)
         res = Gui.pop_options(d, ['b'])
         self.assertEquals(len(res), 1)
@@ -75,8 +75,16 @@ class Tests(unittest.TestCase):
         self.assertEquals(len(options), 1)
         self.assertEquals(len(packopts), 1)
         self.assertEquals(len(gridopts), 1)
+
+        Gui.override(d, side=2)
+        self.assertEquals(d['side'], 2)
+ 
+        Gui.underride(d, column=3, fill=4)
+        self.assertEquals(d['column'], 2)
+        self.assertEquals(d['fill'], 4)
+       
         
-    def testBbox(self):
+    def test_bbox(self):
         bbox = Gui.BBox([[100, 200], [300, 500]])
         self.assertEquals(bbox.left, 100)
         self.assertEquals(bbox.right, 300)
@@ -96,6 +104,43 @@ class Tests(unittest.TestCase):
 
         seq = Gui.flatten(pairs)
         self.assertEquals(len(seq), 4)
+        
+    def test_point(self):
+        point = Gui.Point([100, 200])
+        self.assertEquals(point.x, 100)
+        self.assertEquals(point.y, 200)
+
+    def test_canvas(self):
+        gui = Gui.Gui()
+        ca = gui.ca()
+        self.assertEquals(ca.width, 100)
+        self.assertEquals(ca.height, 100)
+
+        point = [50, 50]
+        box = [[100, 200], [300, 500]]
+        item = ca.arc(box)
+        self.assertTrue(isinstance(item, Gui.Item))
+
+        item = ca.line(box)
+        self.assertTrue(isinstance(item, Gui.Item))
+
+        item = ca.oval(box)
+        self.assertTrue(isinstance(item, Gui.Item))
+
+        item = ca.circle(point, 25)
+        self.assertTrue(isinstance(item, Gui.Item))
+
+        item = ca.polygon(box)
+        self.assertTrue(isinstance(item, Gui.Item))
+
+        item = ca.rectangle(box)
+        self.assertTrue(isinstance(item, Gui.Item))
+
+        item = ca.text(point, 'text')
+        self.assertTrue(isinstance(item, Gui.Item))
+
+    def test_item(self):
+        pass
 
 if __name__ == '__main__':
     unittest.main()

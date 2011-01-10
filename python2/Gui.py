@@ -434,10 +434,23 @@ def split_options(options):
     packopts = get_options(options, packnames)
     gridopts = get_options(options, gridnames)
 
-    remove_options(options, packopts)
-    remove_options(options, gridopts)
+    widgetopts = dict(options)
+    remove_options(widgetopts, packopts)
+    remove_options(widgetopts, gridopts)
 
-    return options, packopts, gridopts
+    return widgetopts, packopts, gridopts
+
+
+def underride(d, **kwds):
+    """Adds entries from (kwds) to (d) only if they are not already set."""
+    for key, val in kwds.iteritems():
+        d.setdefault(key, val)
+
+
+def override(d, **kwds):
+    """Adds entries from (kwds) to (d) even if they are already set."""
+    d.update(kwds)
+
 
 
 class BBox(list):
@@ -445,6 +458,8 @@ class BBox(list):
 
     The first coordinate is the upper-left corner; the second pair is
     the lower-right.
+
+    Assumes pixel coordinates; that is, a higher y-value is lower.
 
     Creating a new bounding box makes a _shallow_ copy of
     the list of coordinates.  For a deep copy, use Bbox.copy().
@@ -576,18 +591,6 @@ def flatten(seq):
     it is not recursive.
     """
     return sum(seq, [])
-
-# underride and override are utilities for dealing with options
-# dictionaries
-
-def underride(d, **kwds):
-    """Adds entries from (kwds) to (d) only if they are not already set."""
-    for key, val in kwds.iteritems():
-        d.setdefault(key, val)
-
-def override(d, **kwds):
-    """Adds entries from (kwds) to (d) even if they are already set."""
-    d.update(kwds)
 
 
 class GuiCanvas(Tkinter.Canvas):
