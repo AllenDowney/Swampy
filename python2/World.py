@@ -1,40 +1,29 @@
 #!/usr/bin/python
 
 """
+This module is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
 
-"""
+Copyright 2005 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
-"""
-  Copyright 2005 Allen B. Downey
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, see
-    http://www.gnu.org/licenses/gpl.html or write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA
-    
 """
 
 
 import random
 import time
 import threading
-from Gui import *
+
+from Gui import Gui
 
 class World(Gui):
-    """the environment where Animals live.  A World usually
-    includes a canvas where animals are drawn, and a control panel.
+    """Represents the environment where Animals live.
+    
+    A World usually includes a canvas, where animals are drawn, 
+    and sometimes a control panel.
     """
+    current_world = None
+
     def __init__(self, *args, **kwds):
         Gui.__init__(self, *args, **kwds)
         self.title('World')
@@ -42,70 +31,84 @@ class World(Gui):
         # keep track of the most recent world
         World.current_world = self
 
-        # exists is set to False when the user presses quit.
+        # set to False when the user presses quit.
         self.exists = True    
 
         # list of animals that live in this world.
         self.animals = []
 
     def quit(self):
-        """shut down the World."""
+        """Shuts down the World."""
         # setting exists tells other threads that the world is gone
         self.exists = False
         Gui.quit(self)
 
     def register(self, animal):
-        """add a new animal to the world"""
+        """Adds a new animal to the world."""
         self.animals.append(animal)
 
     def unregister(self, animal):
-        """remove an animal from the world"""
+        """Removes an animal from the world."""
         self.animals.remove(animal)
 
     def clear(self):
-        """undraw and remove all the animals, and anything else
-        on the canvas.
+        """Undraws and removes all the animals.
+
+        And deletes anything else on the canvas.
         """
         for animal in self.animals:
             animal.undraw()
         self.animals = []
-        self.canvas.delete('all')
+        try:
+            self.canvas.delete('all')
+        except AttributeError:
+            print 'Warning: World.clear: World must have a canvas.'
+
 
     def step(self):
-        """invoke the step method on every animal
-        """
+        """Invoke the step method on every animal."""
         for animal in self.animals:
             animal.step()
         
     def run(self):
-        """invoke step intermittently until the user presses
-        Quit or Stop
-        """
+        """Invoke step intermittently until the user presses Quit or Stop."""
         self.running = True
         while self.exists and self.running:
             self.step()
             self.update()
 
     def stop(self):
-        """stop running"""
+        """Stops running."""
         self.running = False
 
     def map_animals(self, callable):
-        """apply the given callable to all animals"""
-        map(callable, self.animals)
+        """Apply the given callable to all animals.
+
+        Args:
+            callable: any callable object, including Gui.Callable
+        """
+        return map(callable, self.animals)
+
+    def make_interpreter(self, gs=None):
+        """Makes an interpreter for this world.
+        
+        Creates an attribute named inter.
+        """
+        self.inter = Interpreter(self, gs)
         
     def run_text(self):
-        """get the code from the TextEntry widget in the control
-        panel, and execute it.
+        """Executes the code from the TextEntry in the control panel.
 
-        Precondition: self must have an Interpreter and a text entry"""
+        Precondition: self must have an Interpreter and a text entry.
+        """
         source = self.te_code.get(1.0, END)
         self.inter.run_code(source, '<user-provided code>')
 
     def run_file(self):
-        """read the code from the filename in the entry and run it.
+        """Read the code from the filename in the entry and runs it.
         
-        Precondition: self must have an Interpreter and a filename entry"""
+        Precondition: self must have an Interpreter and a filename entry.
+        """
         filename = self.en_file.get()
         fp = open(filename)
         source = fp.read()
@@ -113,10 +116,9 @@ class World(Gui):
 
 
 class Interpreter(object):
-    """this object encapsulates the environment where user-provided
-    code will execute
-    """
+    """Encapsulates the environment where user-provided code executes."""
     def __init__(self, world, gs=None):
+        self.world = world
 
         # if the caller didn't provide globals, use the current env
         if gs == None:
@@ -125,11 +127,11 @@ class Interpreter(object):
             self.globals = gs
             
     def run_code_thread(self, *args):
-        """run the given code in a new thread"""
-        MyThread(self.run_code, *args)
+        """Runs the given code in a new thread."""
+        return MyThread(self.run_code, *args)
         
     def run_code(self, source, filename):
-        """run the given code in the saved environment"""
+        """Runs the given code in the saved environment."""
         code = compile(source, filename, 'exec')
         try:
             exec code in self.globals
@@ -138,8 +140,9 @@ class Interpreter(object):
 
 
 class MyThread(threading.Thread):
-    """this is a wrapper for threading.Thread that improves
-    the syntax for creating and starting threads.
+    """Wrapper for threading.Thread.
+
+    Improves the syntax for creating and starting threads.
     """
     def __init__(self, target, *args):
         threading.Thread.__init__(self, target=target, args=args)
@@ -147,52 +150,63 @@ class MyThread(threading.Thread):
 
 
 class Animal(object):
-    """Animal is an abstract class the specifies the methods an
-    Animal child class needs to provide.
+    """Abstract class, defines the methods child classes need to provide.
+
+    Attributes:
+        world: reference to the World the animal lives in.
+        x: location in Canvas coordinates
+        y: location in Canvas coordinates
     """
-    def __init__(self, world):
-        """each animal has a location (x, y) and a reference to the
-        world it lives in
-        """
-        self.world = world
+    def __init__(self, world=None):
+        self.world = world or World.current_world
+        self.world.register(self)
         self.x = 0
         self.y = 0
-        self.delay = 0
         
     def step(self):
-        """subclasses should override this method"""
+        """Takes one step.
+
+        Subclasses should override this method.
+        """
         pass
 
     def draw(self):
-        """subclasses should override this method"""
+        """Draws the animal.
+
+        Subclasses should override this method.
+        """
         pass
 
     def undraw(self):
+        """Undraws the animal."""
         try:
             # delete the items on the canvas that have my tag...
             self.world.canvas.delete(self.tag)
         except AttributeError:
-            # ...assuming the canvas exists
+            # ...assuming the canvas and tag exist
             pass
 
     def die(self):
-        """remove this animal from the world and undraw it"""
+        """Removes the animal from the world and undraws it."""
         self.world.unregister(self)
         self.undraw()
 
     def redraw(self):
-        """undraw and then redraw this animal"""
+        """Undraws and then redraws the animal."""
         self.undraw()
         self.draw()
 
-    def update(self):
-        """update the world and then sleep"""
-        self.world.update()
-        time.sleep(self.delay)
-
     def polar(self, x, y, r, theta):
-        """convert polar coordinates (r, theta) to cartesian
-        coordinates with the origin at (x, y).  (theta is in degrees)"""
+        """Converts polar coordinates to cartesian.
+        
+        Args:
+            x, y: location of the origin
+            r: radius
+            theta: angle in degrees
+
+        Returns:
+            tuple of x, y coordinates
+        """
         rad = theta * math.pi/180
         s = math.sin(rad)
         c = math.cos(rad)
@@ -200,8 +214,9 @@ class Animal(object):
 
 
 def wait_for_user():
-    """invoke mainloop on the most recent World"""
+    """Invokes mainloop on the most recent World."""
     World.current_world.mainloop()
+
 
 if __name__ == '__main__':
 
@@ -209,7 +224,8 @@ if __name__ == '__main__':
     world = World()
 
     # create a canvas and put a text item on it
-    world.ca().text([0,0], 'hello')
+    ca = world.ca()
+    ca.text([0,0], 'hello')
 
     # wait for the user
     wait_for_user()
