@@ -12,7 +12,7 @@ import CellWorld
 class Tests(unittest.TestCase):
 
     def test_cell_world(self):
-        cw = CellWorld.CellWorld(cell_size=10)
+        cw = CellWorld.CellWorld(cell_size=10, interactive=True)
         cw.bind()
 
         cell = cw.make_cell(2, 3)
@@ -25,7 +25,6 @@ class Tests(unittest.TestCase):
         neighbors = cw.get_eight_neighbors(cell)
         self.assertEquals(len(neighbors), 8)
 
-        cw.setup_scale()
         cw.rescale()
 
         cw.clear()

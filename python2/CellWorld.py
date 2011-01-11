@@ -11,7 +11,7 @@ from World import World
 
 class CellWorld(World):
     """Contains cells and animals that move between cells."""
-    def __init__(self, canvas_size=500, cell_size=5):
+    def __init__(self, canvas_size=500, cell_size=5, interactive=False):
         World.__init__(self)
         self.title('CellWorld')
         self.canvas_size = canvas_size
@@ -19,18 +19,29 @@ class CellWorld(World):
 
         # cells is a map from index tuples to Cell objects
         self.cells = {}
-        self.setup()
+
+        if interactive:
+            self.make_canvas()
+            self.make_control()
         
-    def setup(self):
+    def make_canvas(self):
         """Creates the GUI."""
         self.canvas = self.ca(width=self.canvas_size, 
                               height=self.canvas_size,
                               bg='white', 
                               scale = [self.cell_size, self.cell_size])
+        
+    def make_control(self):
+        """Adds GUI elements that allow the user to change the scale."""
 
         self.la(text='Click or drag on the canvas to create cells.')
-        self.setup_scale()
-        
+
+        self.row([0,1,0])
+        self.la(text='Cell size: ')
+        self.cell_size_en = self.en(width=10, text=str(self.cell_size))
+        self.bu(text='resize', command=self.rescale)
+        self.endrow()
+
     def bind(self):
         """Creates bindings for the canvas."""
         self.canvas.bind('<ButtonPress-1>', self.click)
@@ -94,14 +105,6 @@ class CellWorld(World):
         cells = [self.get_cell(i+di, j+dj, default) for di, dj in deltas]
         return cells
         
-    def setup_scale(self):
-        """Adds GUI elements that allow the user to change the scale."""
-        self.row([0,1,0])
-        self.la(text='Cell size: ')
-        self.cell_size_en = self.en(width=10, text=str(self.cell_size))
-        self.bu(text='resize', command=self.rescale)
-        self.endrow()
-
     def rescale(self):
         """Event handler that rescales the world.
 
@@ -185,29 +188,8 @@ class Cell(object):
         else:
             self.mark()
 
-# the following are some useful vector operations
-
-def vadd(p1, p2):
-    """Adds vectors p1 and p2 (returns a new vector)."""
-    return [x+y for x,y in zip(p1, p2)]
-
-def vscale(p, s):
-    """Multiplies p by a scalar (returns a new vector)."""
-    return [x*s for x in p]
-
-def vmid(p1, p2):
-    """Returns a new vector that is the pointwise average of p1 and p2."""
-    return vscale(vadd(p1, p2), 0.5)
-
-def rotate(v, n=1):
-    """Rotates the elements of a sequence by (n) places.
-    Returns a new list.
-    """
-    n %= len(v)
-    return v[n:] + v[:n]
-
 
 if __name__ == '__main__':
-    world = CellWorld()
+    world = CellWorld(interactive=True)
     world.bind()
     world.mainloop()
