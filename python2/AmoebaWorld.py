@@ -17,12 +17,12 @@ class AmoebaWorld(World):
     """A microscope slide where Amoebas trace parametric equations.
 
     Attributes:
-        interval: time step in ms
+        delay: time step in ms
     """
 
-    def __init__(self, interactive=False, interval=100):
+    def __init__(self, interactive=False, delay=100):
         World.__init__(self)
-        self.interval = interval
+        self.delay = delay
         self.title('AmoebaWorld')
         self.running = False
 
@@ -135,7 +135,7 @@ class AmoebaWorld(World):
             amoeba.move(x, y)
         
         # schedule the next step
-        self.after(self.interval, self.step)
+        self.after(self.delay, self.step)
             
     def clear(self):
         """Clears the amoebas and slime (but not the grid marks)."""
@@ -210,7 +210,7 @@ if __name__ == '__main__':
     world.set_y_t('10 * math.sin(t)')
 
     # create the amoeba
-    amoeba = Amoeba(world)
+    amoeba = Amoeba()
     
     # wait for the user to do something
     world.mainloop()
