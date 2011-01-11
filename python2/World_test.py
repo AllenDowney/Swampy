@@ -59,6 +59,20 @@ class Tests(unittest.TestCase):
         thread.join()
         self.assertEquals(x, 5)
 
+    def test_delay(self):
+        world = World.World()
+        animal = World.Animal()
+
+        world.delay = 0.3
+        self.assertEquals(animal.delay, 0.3)
+        self.assertEquals(world.delay, 0.3)
+
+        animal.delay = 0.4
+        self.assertEquals(animal.delay, 0.4)
+        self.assertEquals(world.delay, 0.4)
+
+        
+        
 
 if __name__ == '__main__':
     unittest.main()

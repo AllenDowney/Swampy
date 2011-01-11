@@ -1,25 +1,33 @@
+"""This module is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
 
-from World import *
+Copyright 2010 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
+"""
+
+import Tkinter
+from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE
+
+from Gui import Callable
+from World import World, Animal
+
 
 class TurtleWorld(World):
-    """an environment for Turtles and TurtleControls
-    """
+    """An environment for Turtles and TurtleControls."""
     def __init__(self, interactive=False):
         World.__init__(self)
         self.title('TurtleWorld')
 
         # the interpreter executes user-provided code
-        self.inter = Interpreter(self, globals())
+        self.make_interpreter(globals())
 
-        # delays is time in seconds to sleep after an update
-        self.delay = 0.05
-        
+        # make the GUI
         self.setup()
         if interactive:
             self.setup_interactive()
 
     def setup(self):
-        """create the GUI"""
+        """Create the GUI."""
 
         # canvas width and height
         self.ca_width = 400
@@ -31,8 +39,7 @@ class TurtleWorld(World):
                               bg='white')
 
     def setup_interactive(self):
-        """create the right frame with the buttons for interactive mode
-        """
+        """Creates the right frame with the buttons for interactive mode."""
         # right frame
         self.fr()
 
@@ -62,7 +69,7 @@ class TurtleWorld(World):
         # self.endfr()
 
     def setup_run(self):
-        """add a row of buttons for run, step, stop and clear"""
+        """Adds a row of buttons for run, step, stop and clear."""
         self.gr(2, [1,1], [1,1], expand=0)
         self.bu(text='Run', command=self.run)
         self.bu(text='Stop', command=self.stop)
@@ -71,14 +78,16 @@ class TurtleWorld(World):
         self.endgr()
 
     def make_turtle(self):
-        """create a new turtle and corresponding controller"""
+        """Creates a new turtle and corresponding controller."""
         turtle = Turtle(self)
         control = TurtleControl(turtle)
         turtle.control = control
+        return control
 
     def clear(self):
-        """undraw and remove all the animals, and anything else
-        on the canvas
+        """Undraws and remove all the animals, clears the canvas.
+
+        Also removes any control panels.
         """
         for animal in self.animals:
             animal.undraw()
@@ -90,59 +99,66 @@ class TurtleWorld(World):
 
 
 class Turtle(Animal):
-    """represent a Turtle in a TurtleWorld
-    """
-    def __init__(self, world=None, delay=0.1):
-        """a Turtle has a radius (r), heading, pen (True/False for
-        active/inactive), and a color.
-        """
-        if world == None:
-            world = TurtleWorld.current_world
+    """Represents a Turtle in a TurtleWorld.
 
+    Attributes:
+        x: position (inherited from Animal)
+        y: position (inherited from Animal)
+        r: radius of shell
+        heading: what direction the turtle is facing, in degrees.  0 is east.
+        pen: boolean, whether the pen is down
+        color: string turtle color
+    """
+    def __init__(self, world=None):
         Animal.__init__(self, world)        
         self.r = 5
         self.heading = 0
         self.pen = True
         self.color = 'red'
-        self.delay = delay
         self.draw()
-        world.register(self)
 
     def step(self):
-        """default step behavior is forward one pixel"""
+        """Takes a step.
+
+        Default step behavior is forward one pixel.
+        """
         self.fd()
 
-    def draw_line(self, scale, dtheta, **options):
-        """draw a line through the center of this turtle,
-        with a dtheta angle from the turtle's heading,
-        and length 2r"""
+    def draw(self):
+        """Draws the turtle."""
+        self.tag = 'Turtle%d' % id(self)
+        lw = self.r/2
+        
+        # draw the line that makes the head and tail
+        self._draw_line(2.5, 0, tags=self.tag, width=lw, arrow=LAST)
+
+        # draw the diagonal that makes two feet
+        self._draw_line(1.8, 40, tags=self.tag, width=lw)
+
+        # draw the diagonal that makes the other two feet
+        self._draw_line(1.8, -40, tags=self.tag, width=lw)
+
+        # draw the shell
+        self.world.canvas.circle([self.x, self.y], self.r, self.color,
+                                 tags=self.tag)
+
+        self.world.sleep()
+
+    def _draw_line(self, scale, dtheta, **options):
+        """Draws the lines that make the feet, head and tail.
+
+        Args:
+            scale: length of the line relative to self.r
+            dtheta: angle of the line relative to self.heading
+        """    
         r = scale * self.r
         theta = self.heading + dtheta
         head = self.polar(self.x, self.y, r, theta)
         tail = self.polar(self.x, self.y, -r, theta)
         self.world.canvas.line([tail, head], **options)
 
-    def draw(self):
-        """draw the turtle"""
-        self.tag = 'Turtle%d' % id(self)
-        lw = self.r/2
-        
-        # draw the line that makes the head and tail
-        self.draw_line(2.5, 0, tags=self.tag, width=lw, arrow=LAST)
-
-        # draw the diagonal that makes two feet
-        self.draw_line(1.8, 40, tags=self.tag, width=lw)
-
-        # draw the diagonal that makes the other two feet
-        self.draw_line(1.8, -40, tags=self.tag, width=lw)
-
-        # draw the shell
-        self.world.canvas.circle([self.x, self.y], self.r, self.color,
-                                 tags=self.tag)
-        self.update()
-
     def fd(self, dist=1):
-        """move the turtle foward by the given distance"""
+        """Moves the turtle foward by the given distance."""
         x, y = self.x, self.y
         p1 = [x, y]
         p2 = self.polar(x, y, dist, self.heading)
@@ -154,29 +170,30 @@ class Turtle(Animal):
         self.redraw()
 
     def bk(self, dist=1):
-        """move the turtle backward by the given distance"""
+        """Moves the turtle backward by the given distance."""
         self.fd(-dist)
 
     def rt(self, angle=90):
-        """turn right by the given angle"""
+        """Turns right by the given angle."""
         self.heading = self.heading - angle
         self.redraw()
 
     def lt(self, angle=90):
-        """turn left by the given angle"""
+        """Turns left by the given angle."""
         self.heading = self.heading + angle
         self.redraw()
 
     def pd(self):
-        """put the pen down (active)"""
+        """Puts the pen down (active)."""
         self.pen = True
 
     def pu(self):
-        """put the pen up (inactive)"""
+        """Puts the pen up (inactive)."""
         self.pen = False
 
     def set_color(self, color):
-        """change the color of the turtle and redraw.
+        """Changes the color of the turtle.
+
         Note that changing the color attribute doesn't change the
         turtle on the canvas until redraw is invoked.  One way
         to address that would be to make color a property.
@@ -185,8 +202,25 @@ class Turtle(Animal):
         self.redraw()
 
 
+"""Add the turtle methods to the module namespace
+so they can be invoked as simple functions (not methods).
+"""
+fd = Turtle.fd
+bk = Turtle.bk
+lt = Turtle.lt
+rt = Turtle.rt
+pu = Turtle.pu
+pd = Turtle.pd
+die = Turtle.die
+set_color = Turtle.set_color
+
+
 class TurtleControl(object):
-    """some turtles have a turtle control panel in the GUI"""
+    """Represents the control panel for a turtle.
+
+    Some turtles have a turtle control panel in the GUI, but not all;
+    it depends on how they were created.
+    """
 
     def __init__(self, turtle):
         self.turtle = turtle
@@ -195,7 +229,8 @@ class TurtleControl(object):
     def setup(self):
         w = self.turtle.world
 
-        self.frame = w.fr(bd=2, relief=SUNKEN, padx=1, pady=1, expand=0)
+        self.frame = w.fr(bd=2, relief=Tkinter.SUNKEN,
+                          padx=1, pady=1, expand=0)
         w.la(text='Turtle Control')
 
         # forward and back (and the entry that says how far)
@@ -219,34 +254,26 @@ class TurtleControl(object):
         w.la('Color:')
         self.mb = w.mb(text=colors[0])
         for color in colors:
-            w.mi(self.mb, text=color, command=Callable(self.color, color))
+            w.mi(self.mb, text=color, command=Callable(self.set_color, color))
 
         w.endrow()
         w.endfr()
 
-    def color(self, color):
-        """callback for the menu button: change the color of the
-        turtle and the text on the button"""
+    def set_color(self, color):
+        """Changes the color of the turtle and the text on the button."""
         self.mb.config(text=color)
         self.turtle.set_color(color)
 
     def move_turtle(self, sign=1):
-        """callback for fd and bk buttons: read the entry and move
-        the turtle.  sign should be +1 or -1 for fd or back."""
+        """Reads the entry and moves the turtle.  
+
+        Args:
+            sign: +1 for fd or -1 for back.
+        """
         dist = int(self.en_dist.get())
         self.turtle.fd(sign*dist)
 
-# add the turtle methods to the module namespace
-# so they can be invoked as simple functions (not methods)
-fd = Turtle.fd
-bk = Turtle.bk
-lt = Turtle.lt
-rt = Turtle.rt
-pu = Turtle.pu
-pd = Turtle.pd
-die = Turtle.die
-set_color = Turtle.set_color
 
 if __name__ == '__main__':
-    world = TurtleWorld(interactive=True)
-    wait_for_user()
+    tw = TurtleWorld(interactive=True)
+    tw.wait_for_user()

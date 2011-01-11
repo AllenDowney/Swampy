@@ -9,11 +9,12 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
 """
 
-
+import math
 import random
 import time
 import threading
 
+import Tkinter
 from Gui import Gui
 
 class World(Gui):
@@ -24,8 +25,9 @@ class World(Gui):
     """
     current_world = None
 
-    def __init__(self, *args, **kwds):
+    def __init__(self, delay=0.5, *args, **kwds):
         Gui.__init__(self, *args, **kwds)
+        self.delay = delay
         self.title('World')
         
         # keep track of the most recent world
@@ -37,11 +39,45 @@ class World(Gui):
         # list of animals that live in this world.
         self.animals = []
 
+    def wait_for_user(self):
+        """Waits for user events and processes them."""
+        try:
+            self.mainloop()
+        except KeyboardInterrupt:
+            print 'KeyboardInterrupt'
+
     def quit(self):
         """Shuts down the World."""
         # setting exists tells other threads that the world is gone
         self.exists = False
+
+        # destroy closes the window
+        self.destroy()
+        
+        # quit terminates mainloop (but since mainloop can get called
+        # recursively, quitting once might not be enough!)
         Gui.quit(self)
+
+    def sleep(self):
+        """Updates the GUI and sleeps.
+
+        Calling Tk.update from a function that might be invoked by
+        an event handler is generally considered a bad idea.  For
+        a discussion, see http://wiki.tcl.tk/1255
+
+        However, in this case:
+        1) It is by far the simplest option, and I want to keep this
+           code readable.
+        2) It is generally the last thing that happens in an event
+           handler.  So any changes that happen during the update
+           won't cause problems when it returns.
+
+        Sleeping is also a potential problem, since the GUI is
+        unresponsive while sleeping.  So it is probably a good idea
+        to keep delay less than about 0.5 seconds.
+        """
+        self.update()
+        time.sleep(self.delay)
 
     def register(self, animal):
         """Adds a new animal to the world."""
@@ -63,7 +99,6 @@ class World(Gui):
             self.canvas.delete('all')
         except AttributeError:
             print 'Warning: World.clear: World must have a canvas.'
-
 
     def step(self):
         """Invoke the step method on every animal."""
@@ -101,7 +136,7 @@ class World(Gui):
 
         Precondition: self must have an Interpreter and a text entry.
         """
-        source = self.te_code.get(1.0, END)
+        source = self.te_code.get(1.0, Tkinter.END)
         self.inter.run_code(source, '<user-provided code>')
 
     def run_file(self):
@@ -137,6 +172,8 @@ class Interpreter(object):
             exec code in self.globals
         except KeyboardInterrupt:
             self.world.quit()
+        except Tkinter.TclError:
+            pass
 
 
 class MyThread(threading.Thread):
@@ -162,7 +199,21 @@ class Animal(object):
         self.world.register(self)
         self.x = 0
         self.y = 0
-        
+
+    def set_delay(self, delay):
+        """Sets delay for this animal's world.
+
+        delay is made available as an animal attribute for backward
+        compatibility; ideally it should be considered an attribute
+        of the world, not an animal.
+
+        Args:
+            delay: float delay in seconds
+        """
+        self.world.delay = delay
+
+    delay = property(lambda self: self.world.delay, set_delay)
+
     def step(self):
         """Takes one step.
 
@@ -214,8 +265,8 @@ class Animal(object):
 
 
 def wait_for_user():
-    """Invokes mainloop on the most recent World."""
-    World.current_world.mainloop()
+    """Invokes wait_for_user on the most recent World."""
+    World.current_world.wait_for_user()
 
 
 if __name__ == '__main__':
