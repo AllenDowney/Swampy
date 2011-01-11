@@ -14,14 +14,18 @@ class Tests(unittest.TestCase):
     def test_turtle_world(self):
         aw = AmoebaWorld.AmoebaWorld(interactive=True)
         a = AmoebaWorld.Amoeba()
-        aw.run(0.05)
-        aw.clear_slime()
+        aw.set_end_time('3.14')
+        aw.set_x_t('2*t')
+        aw.set_y_t('3*t')
+        aw.run()
+        aw.clear()
         aw.quit()
         
     def test_amoeba(self):
         aw = AmoebaWorld.AmoebaWorld()
         a = AmoebaWorld.Amoeba()
         a.draw()
+        a.move(2, 3)
         aw.quit()
 
 if __name__ == '__main__':
