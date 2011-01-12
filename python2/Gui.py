@@ -4,6 +4,10 @@
 This module is part of Swampy, a suite of programs available from
 allendowney.com/swampy.
 
+Copyright 2005 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
+
+
 Wrapper classes for use with tkinter.
 
 This module provides the following classes:
@@ -55,10 +59,6 @@ avoid keeping track of parent widgets explicitly.
     ITEM WRAPPERS:
 
     GuiCanvas provides wrappers for the canvas item methods.
-
-
-Copyright 2005 Allen B. Downey
-Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
 """
 
@@ -736,6 +736,11 @@ class GuiCanvas(Tkinter.Canvas):
         bbox = pair(bbox)
         bbox = self.invert(bbox)
         return BBox(bbox)
+
+    def scroll_config(self, tag=Tkinter.ALL):
+        """Configure the canvas so the scroll region covers the given tag."""
+        bbox = Tkinter.Canvas.bbox(self, tag)
+        self.configure(scrollregion=bbox)
 
     def move(self, item, dx, dy, transform=False):
         """Moves an item on the canvas.

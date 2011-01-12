@@ -11,7 +11,7 @@ import AmoebaWorld
 
 class Tests(unittest.TestCase):
 
-    def test_turtle_world(self):
+    def test_amoeba_world(self):
         aw = AmoebaWorld.AmoebaWorld(interactive=True)
         a = AmoebaWorld.Amoeba()
         aw.set_end_time('3.14')
