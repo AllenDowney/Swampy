@@ -31,7 +31,7 @@ class Tests(unittest.TestCase):
         cw.quit()
         
     def test_cell(self):
-        cw = CellWorld.CellWorld(cell_size=10)
+        cw = CellWorld.CellWorld(cell_size=10, interactive=True)
         cell = cw.make_cell(2, 3)
 
         tag = cell.draw()
