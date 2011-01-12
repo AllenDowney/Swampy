@@ -1,5 +1,20 @@
+"""This example is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
+
+Copyright 2011 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
+"""
 
 def draw(t, length, n):
+    """Draws a tree with the given trunk length and levels of recursion.
+
+    Turtle ends up back where he started.
+
+    Args:
+        t: Turtle
+        length: trunk length
+        n: int levels of recursion
+    """
     if n == 0:
         return
     angle = 50

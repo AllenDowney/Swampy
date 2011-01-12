@@ -1,55 +1,27 @@
 #!/usr/bin/python
 
-"""
-  Copyright 2005 Allen B. Downey
+"""This module is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
 
-    This file contains a simulator I wrote to demonstrate
-    synchronized, multithreaded programs in Python.  It goes
-    along with The Little Book of Semaphores.  It is
-    mostly for my own use; I don't support it, and it is not very
-    well documented.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, see http://www.gnu.org/licenses/gpl.html
-    or write to the Free Software Foundation, Inc., 51 Franklin St, 
-    Fifth Floor, Boston, MA  02110-1301  USA
+Copyright 2011 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
-from Gui import *
-from random import *
-from time import sleep
-
-import sys
 import copy
+import random
+import sys
 import string
+import time
 
-# get the version of Python
-v = sys.version.split()[0].split('.')
-major = int(v[0])
+from tkinter import N, S, E, W, TOP, BOTTOM, LEFT, RIGHT, END
+from Gui import Gui, GuiCanvas
 
-if major == 2:
-    all_thread_names = string.uppercase + string.lowercase
-else:
-    all_thread_names = string.ascii_uppercase + string.ascii_lowercase
-
-
-font = ("Courier", 12)
-FSU = 10                    # FSU, the fundamental Sync unit,
-                            # determines the size of most things.
+# the following definitions can be accessed in the simulator
 
 class Semaphore:
-    """this is the semaphore class used by threads running in
-    the simulator.  It maintains a FIFO queue.
+    """Represents a semaphore in the simulator.
+
+    Maintains a FIFO queue.
     """
     def __init__(self, n=0):
         self.n = n
@@ -81,15 +53,18 @@ class Semaphore:
 
 
 class RandomSemaphore(Semaphore):
-    """this is a variant of Semaphore that implements a random queue.
-    """
+    """Variant of Semaphore that implements a random queue."""
+
     def unblock(self):
-        thread = choice(self.queue)
+        thread = random.choice(self.queue)
         self.queue.remove(thread)
         thread.dequeue()
         thread.next_loop()
 
+
 class Lightswitch:
+    """Encapsulates the lightswitch pattern."""
+
     def __init__(self):
         self.counter = 0
         self.mutex = Semaphore(1)
@@ -108,23 +83,44 @@ class Lightswitch:
             semaphore.signal()
         self.mutex.signal()
 
+
 def pid():
+    """Gets the ID of the current thread."""
     return current_thread.name
 
+
 def num_threads():
+    """Gets the number of threads."""
     sync = current_thread.column.p
     return len(sync.threads)
 
 current_thread = None
 
 
-# Anything above this line can be accessed from code running
-# in the simulator.
+# make globals and locals for the simulator
+
 sim_globals = globals()
 sim_locals = locals()
 
+# anything defined after this point is not available inside the simulator
+
+# get the version of Python
+v = sys.version.split()[0].split('.')
+major = int(v[0])
+
+if major == 2:
+    all_thread_names = string.uppercase + string.lowercase
+else:
+    all_thread_names = string.ascii_uppercase + string.ascii_lowercase
+
+
+font = ("Courier", 12)
+FSU = 10                    # FSU, the fundamental Sync unit,
+                            # determines the size of most things.
 
 class Sync(Gui):
+    """Represents the thread simulator."""
+
     def __init__(self, filename=None):
         Gui.__init__(self)
         #self.geometry('1260x800+74+32')
@@ -132,7 +128,7 @@ class Sync(Gui):
         self.views = {}
         self.w = self
         self.threads = []
-        self.running = 0
+        self.running = False
         self.delay = 0.2
         self.setup()
         self.run_init()
@@ -140,10 +136,12 @@ class Sync(Gui):
             col.create_thread()
 
     def destroy(self):
-        self.running = 0
+        """Closes the top window."""
+        self.running = False
         Gui.destroy(self)
 
     def setup(self):
+        """Makes the GUI."""
         if self.filename:
             self.read_file(self.filename)
             return
@@ -156,6 +154,7 @@ class Sync(Gui):
         self.buttons()
 
     def buttons(self):
+        """Makes the buttons."""
         self.row([1,1,1,1,1])
         self.bu(text='Run', command=self.run)
         self.bu(text='Random Run', command=self.random_run)
@@ -164,48 +163,52 @@ class Sync(Gui):
         self.bu(text='Random Step', command=self.random_step)
         self.endfr()
 
-    # the Sync object keeps a list of threads, so new threads
-    # have to register themselves
     def register(self, thread):
+        """Adds a new thread."""
         self.threads.append(thread)
 
     def unregister(self, thread):
+        """Removes a thread."""
         self.threads.remove(thread)
 
-    # run and random_run both invoke run_helper, passing either
-    # step or random_step as a parameter.
-
     def run(self):
+        """Runs the simulator with round-robin scheduling."""
         self.run_helper(self.step)
 
+    def random_run(self):
+        """Runs the simulator with random scheduling."""
+        self.run_helper(self.random_step)
+        
+    def run_helper(self, step=None):
+        """Runs the threads until someone clears self.running."""
+        self.running = True
+        while self.running:
+            step()
+            self.update()
+            time.sleep(self.delay)
+
     def step(self):
+        """Advances all the threads in order"""
         for thread in self.threads:            
             thread.step_loop()
 
-    def random_run(self):
-        self.run_helper(self.random_step)
-        
     def random_step(self):
+        """Advances one random thread."""
         threads = [thread for thread in self.threads if not thread.queued]
         if not threads:
             print('There are currently no threads that can run.')
             return
-        thread = choice(threads)
+        thread = random.choice(threads)
         thread.step_loop()
 
-    def run_helper(self, step=None):
-        self.running = 1
-        while self.running:
-            step()
-            self.update()
-            sleep(self.delay)
-
     def stop(self):
-        self.running = 0
+        """Stops running."""
+        self.running = False
 
     def read_file(self, filename):
-        """read a file that contains code for the simulator
-        to execute.  Lines that start with ## do not appear
+        """Read a file that contains code for the simulator to execute.
+
+        Lines that start with ## do not appear
         in the display.  A line that starts with ## and
         contains the word thread indicates the beginning of
         a new column of code.
@@ -229,7 +232,7 @@ class Sync(Gui):
         self.buttons()
             
     def add_col(self, n=5):
-        "add a new column of code to the display"
+        """Adds a new column of code to the display."""
         self.pushfr(self.colfr)
         col = Column(self, LEFT, n)
         self.cols.append(col)
@@ -237,7 +240,7 @@ class Sync(Gui):
         return col
 
     def run_init(self):
-        "run the initialization code in the top column"
+        """Runs the initialization code in the top column."""
         self.clear_views()
         self.views = {}
 
@@ -253,23 +256,25 @@ class Sync(Gui):
         self.update_views()
 
     def update_views(self):
-        for key in self.views:
-            view = self.views[key]
+        """Loops through the views and updates them."""
+        for key, view in self.views.items():
             view.update(self.locals[key])
 
     def clear_views(self):
-        for key in self.views:
-            view = self.views[key]
+        """Loops through the views and clears them."""
+        for key, view in self.views.items():
             view.clear()
 
     def qu(self, **options):
+        """Makes a queue."""
         return self.widget(QueueCanvas, **options)
 
 
-# dictionary functions
 def subtract(d1, d2):
-    """ return a new dictionary containing all the keys from
-    d1 that are not in d2
+    """Subtracts two dictionaries.
+
+    Returns a new dictionary containing all the keys from
+    d1 that are not in d2.
     """
     d = {}
     for key in d1:
@@ -277,8 +282,11 @@ def subtract(d1, d2):
             d[key] = d1[key]
     return d
 
+
 def diff(d1, d2):
-    """return two dictionaries: the first contains all the keys
+    """Diffs two dictionaries.
+
+    Returns two dictionaries: the first contains all the keys
     from d1 that are not in d2; the second contains all the keys
     that are in both dictionaries, but which have different values.
     """
@@ -291,14 +299,19 @@ def diff(d1, d2):
             c[key] = d1[key]
     return d, c
 
-# the following classes define the composite objects that make
-# up the display: Row, TopRow, Column and TopColumn.  They are
-# all subclasses of Thing.
 
-# Each Thing keeps a reference to its immediate parent Thing (p)
-# and to the top-most thing (w).
+"""
+The following classes define the composite objects that make
+up the display: Row, TopRow, Column and TopColumn.  They are
+all subclasses of Thing.
+"""
         
 class Thing:
+    """Superclass of all display objects.
+ 
+    Each Thing keeps a reference to its immediate parent Thing (p)
+    and to the top-most thing (w).
+    """
     def __init__(self, p, *args, **options):
         self.p = p
         self.w = p.w
@@ -306,7 +319,9 @@ class Thing:
 
 
 class Row(Thing):
-    """each row contains two queues, runnable and queued,
+    """A row of code.
+
+    Each row contains two queues, runnable and queued,
     and an entry that contains a line of code.
     """
     def setup(self, text=''):
@@ -361,7 +376,9 @@ class Row(Thing):
 
 
 class TopRow(Row):
-    """the top row is special because there is no queue for
+    """Rows in the initialization code at the top.
+
+    The top row is special because there is no queue for
     queued threads, and the "runnable" queue is actually used
     to display the value of variables.
     """
@@ -372,8 +389,7 @@ class TopRow(Row):
 
 
 class Column(Thing):
-    """a column is a list of rows and a few buttons
-    """
+    """A list of rows and a few buttons."""
     def setup(self, side=TOP, n=0, Row=Row):
         self.fr = self.w.fr(side=side, bd=3)
         self.Row = Row
@@ -403,7 +419,9 @@ class Column(Thing):
 
 
 class TopColumn(Column):
-    """a top column is different from the other columns in
+    """The top column where the initialization code is.
+
+    The top column is different from the other columns in
     two ways: it has different buttons, and it uses the TopRow
     constructor to make new rows rather than the Row constructor.
     """
@@ -413,9 +431,7 @@ class TopColumn(Column):
                                  command=self.p.run_init)
 
 class QueueCanvas(GuiCanvas):
-    """a subclass of GuiCanvas used to display the
-    runnable and queued threads.
-    """
+    """Displays the runnable and queued threads."""
     def __init__(self, w, n=1, label='Queue'):
         self.n = n
         self.label = label
@@ -427,7 +443,7 @@ class QueueCanvas(GuiCanvas):
         self.setup()
         
     def setup(self):
-        self.text([3, 15], self.label, font=font, anchor=W, fill='gray80')
+        self.text([3, 15], self.label, font=font, anchor=W, fill='white')
         
     def add_thread(self, thread):
         self.undraw_queue()
@@ -470,8 +486,7 @@ class QueueCanvas(GuiCanvas):
 
 
 class Thread:
-    """this class represents simulated threads.
-    """
+    """Represents simulated threads."""
     names = all_thread_names
     next_name = 0
     colors = ['red', 'orange', 'yellow', 'greenyellow',
@@ -578,12 +593,10 @@ class Thread:
             if self.row == None: break
 
 
-def main(script, filename='sync_code.py', *args):
+def main(script, filename='mutex.py', *args):
     sync = Sync(filename)
     sync.mainloop()
- 
-# if we are running the program as a script (as opposed to
-# importing it, we should call main(), passing along
-# the command-line arguments
+
+
 if __name__ == '__main__':
     main(*sys.argv)

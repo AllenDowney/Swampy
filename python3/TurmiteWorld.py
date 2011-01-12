@@ -1,23 +1,30 @@
+"""This module is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
 
-from CellWorld import *
+Copyright 2011 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
+"""
+
+from tkinter import END
+from CellWorld import CellWorld
+from World import Animal, Interpreter
 
 class TurmiteWorld(CellWorld):
-    """TurmiteWorld provides a grid of cells that Turmites occupy
-    """
-    def __init__(self, csize=5):
-        CellWorld.__init__(self, csize)
+    """Provides a grid of cells that Turmites occupy."""
+
+    def __init__(self, canvas_size=600, cell_size=5):
+        CellWorld.__init__(self, canvas_size, cell_size)
         self.title('TurmiteWorld')
         
         # the interpreter executes user-provided code
         self.inter = Interpreter(self, globals())
+        self.setup()
 
     def setup(self):
-        self.ca_width = 600
-        self.ca_height = 600
-
+        """Makes the GUI."""
         self.row()
-        self.canvas = self.ca(width=self.ca_width, height=self.ca_height,
-                              bg='white', scale = [self.csize, self.csize])
+        self.make_canvas()
+
         # right frame
         self.col([0,0,1,0])
 
@@ -48,12 +55,12 @@ class TurmiteWorld(CellWorld):
         self.endcol()
 
     def make_turmite(self):
-        """callback for the Make Turmite button"""
+        """Makes a turmite."""
         turmite = Turmite(self)
+        return turmite
 
     def clear(self):
-        """callback for the Clean button: remove all the animals and
-        all the cells"""
+        """Removes all the animals and all the cells."""
         for animal in self.animals:
             animal.undraw()
         for cell in list(self.cells.values()):
@@ -64,17 +71,19 @@ class TurmiteWorld(CellWorld):
 
 
 class Turmite(Animal):
-    """represents a Turmite in TurmiteWorld"""
+    """Represents a Turmite (see http://en.wikipedia.org/wiki/Turmite).
+
+    Attributes:
+        dir: direction, one of [0, 1, 2, 3]
+    """
     
     def __init__(self, world):
         Animal.__init__(self, world)
         self.dir = 0
-        self.draw()
-        world.register(self)
-        
+        self.draw()        
 
     def draw(self):
-        """draw the Turmite"""
+        """Draw the Turmite."""
         # get the bounds of the cell
         cell = self.get_cell()
         bounds = world.cell_bounds(self.x, self.y)
@@ -83,11 +92,11 @@ class Turmite(Animal):
         # appropriate direction
         bounds = rotate(bounds, self.dir)
         mid = vmid(bounds[1], bounds[2])
-        self.tag = self.world.canvas.polygon([bounds[0], mid,
-                                                     bounds[3]], fill='red')
+        self.tag = self.world.canvas.polygon([bounds[0], mid, bounds[3]], 
+                                             fill='red')
 
     def fd(self, dist=1):
-        """move forward"""
+        """Moves forward."""
         if self.dir==0:
             self.x += dist
         elif self.dir==1:
@@ -99,16 +108,16 @@ class Turmite(Animal):
         self.redraw()
 
     def bk(self, dist=1):
-        """move back"""
+        """Moves back."""
         self.fd(-dist)
 
     def rt(self):
-        """turn right"""
+        """Turns right."""
         self.dir = (self.dir-1) % 4
         self.redraw()
 
     def lt(self):
-        """turn left"""
+        """Turns left."""
         self.dir = (self.dir+1) % 4
         self.redraw()
 
@@ -118,8 +127,9 @@ class Turmite(Animal):
         return world.get_cell(x,y) or world.make_cell(x,y) 
 
     def step(self):
-        """this step function implements the rules for Langton's
-        Ant (see http://mathworld.wolfram.com/LangtonsAnt.html)
+        """Implements the rules for Langton's Ant.
+
+        (see http://mathworld.wolfram.com/LangtonsAnt.html)
         """
         cell = self.get_cell()
         if cell.is_marked():
@@ -129,6 +139,27 @@ class Turmite(Animal):
         cell.toggle()
         self.fd()
 
+
+# the following are some useful vector operations
+
+def vadd(p1, p2):
+    """Adds vectors p1 and p2 (returns a new vector)."""
+    return [x+y for x,y in zip(p1, p2)]
+
+def vscale(p, s):
+    """Multiplies p by a scalar (returns a new vector)."""
+    return [x*s for x in p]
+
+def vmid(p1, p2):
+    """Returns a new vector that is the pointwise average of p1 and p2."""
+    return vscale(vadd(p1, p2), 0.5)
+
+def rotate(v, n=1):
+    """Rotates the elements of a sequence by (n) places.
+    Returns a new list.
+    """
+    n %= len(v)
+    return v[n:] + v[:n]
 
 
 if __name__ == '__main__':

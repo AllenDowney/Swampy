@@ -1,43 +1,60 @@
-from math import *
-from World import *
+"""This module is part of Swampy, a suite of programs available from
+allendowney.com/swampy.
+
+Copyright 2011 Allen B. Downey
+Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
+"""
+
+import math
+from World import World
+
 
 class CellWorld(World):
-    """a CellWorld contains cells that represent regions and animals
-    that move around between regions.
-    """
-    def __init__(self, size=500, csize=5):
+    """Contains cells and animals that move between cells."""
+    def __init__(self, canvas_size=500, cell_size=5, interactive=False):
         World.__init__(self)
         self.title('CellWorld')
-        self.delay = 0.0           # time in seconds to sleep after an update
-        self.size = size             # canvas size
-        self.csize = csize             # cell size
+        self.canvas_size = canvas_size
+        self.cell_size = cell_size    
 
-        # cells is the mapping from index tuples to Cell objects
+        # cells is a map from index tuples to Cell objects
         self.cells = {}
-        self.setup()
+
+        if interactive:
+            self.make_canvas()
+            self.make_control()
         
-    def setup(self):
-        """create the GUI
-        """
-        self.canvas = self.ca(width=self.size, height=self.size,
-                              bg='white', scale = [self.csize, self.csize])
+    def make_canvas(self):
+        """Creates the GUI."""
+        self.canvas = self.ca(width=self.canvas_size, 
+                              height=self.canvas_size,
+                              bg='white', 
+                              scale = [self.cell_size, self.cell_size])
+        
+    def make_control(self):
+        """Adds GUI elements that allow the user to change the scale."""
 
         self.la(text='Click or drag on the canvas to create cells.')
-        self.setup_scale()
-        
+
+        self.row([0,1,0])
+        self.la(text='Cell size: ')
+        self.cell_size_en = self.en(width=10, text=str(self.cell_size))
+        self.bu(text='resize', command=self.rescale)
+        self.endrow()
+
     def bind(self):
-        """create bindings for the canvas
-        """
+        """Creates bindings for the canvas."""
         self.canvas.bind('<ButtonPress-1>', self.click)
         self.canvas.bind('<B1-Motion>', self.click)
 
     def click(self, event):
-        """this event handler is executed when the user clicks or drags
-        on the canvas.  It creates a new cell or toggles an existing cell.
+        """Event handler for clicks and drags.
+
+        It creates a new cell or toggles an existing cell.
         """
         # convert the button click coordinates to an index tuple
         x, y = self.canvas.invert([event.x, event.y])
-        i, j = int(floor(x)), int(floor(y))
+        i, j = int(math.floor(x)), int(math.floor(y))
 
         # toggle the cell if it exists; create it otherwise
         cell = self.get_cell(i,j)
@@ -46,8 +63,14 @@ class CellWorld(World):
         else:
             self.make_cell(x, y)
 
+    def make_cell(self, i, j):
+        """Creates and returns a new cell at i,j."""
+        cell = Cell(self, i, j)
+        self.cells[i,j] = cell
+        return cell
+
     def cell_bounds(self, i, j):
-        """return the bounds of the cell with indices i, j"""
+        """Return the bounds of the cell with indices i, j."""
         p1 = [i, j]
         p2 = [i+1, j]
         p3 = [i+1, j+1]
@@ -56,7 +79,7 @@ class CellWorld(World):
         return bounds
 
     def get_cell(self, i, j, default=None):
-        """get the cell at i, j or return (default)"""
+        """Gets the cell at i, j or returns the default value."""
         cell = self.cells.get((i,j), default)
         return cell
 
@@ -64,53 +87,37 @@ class CellWorld(World):
     eight_neighbors = four_neighbors + [(1,1), (1,-1), (-1,1), (-1,-1)]
 
     def get_four_neighbors(self, cell, default=None):
-        """return the four Von Neumann neighbors of (cell)
-        """
+        """Return the four Von Neumann neighbors of a cell."""
         return self.get_neighbors(cell, default, CellWorld.four_neighbors)
         
     def get_eight_neighbors(self, cell, default=None):
-        """return the four Von Neumann neighbors of (cell)
-        """
+        """Returns the eight Moore neighbors of a cell."""
         return self.get_neighbors(cell, default, CellWorld.eight_neighbors)
         
     def get_neighbors(self, cell, default=None, deltas=[(0,0)]):
-        """return the neighbors of (cell) as determined (deltas), which
-        is a list of tuple offsets.
+        """Return the neighbors of a cell.
+
+        Args:
+           cell: Cell
+           deltas: a list of tuple offsets.
         """
         i, j = cell.indices
         cells = [self.get_cell(i+di, j+dj, default) for di, dj in deltas]
         return cells
         
-    def make_cell(self, i, j):
-        """create and return a new cell at i,j.
-        """
-        bounds = self.cell_bounds(i, j)
-        cell = Cell(self, bounds)
-        self.cells[i,j] = cell
-        return cell
-
-    def setup_scale(self, side=TOP):
-        """add GUI elements that allow the user to change the scale
-        (cell size)
-        """
-        self.row([0,1,0], side=side)
-        self.la(text='Cell size: ')
-        self.csize_en = self.en(width=10, text=str(self.csize))
-        self.bu(text='resize', command=self.rescale)
-        self.endrow()
-
     def rescale(self):
-        """this event handler reads the new scale from the GUI,
+        """Event handler that rescales the world.
+
+        Reads the new scale from the GUI,
         changes the canvas transform, and redraws the world.
         """
-        csize = self.csize_en.get()
-        csize = int(csize)
-        self.canvas.transforms[0].scale = [csize, csize]
+        cell_size = self.cell_size_en.get()
+        cell_size = int(cell_size)
+        self.canvas.transforms[0].scale = [cell_size, cell_size]
         self.redraw()
 
     def redraw(self):
-        """clear the canvas and redraw all cells and animals.
-        """
+        """Clears the canvas and redraws all cells and animals."""
         self.canvas.clear()
         for cell in self.cells.values():
             cell.draw()
@@ -119,9 +126,11 @@ class CellWorld(World):
 
 
 class Cell(object):
-    """represents a rectangular region in CellWorld"""
-    def __init__(self, world, bounds):
+    """A rectangular region in CellWorld"""
+    def __init__(self, world, i, j):
         self.world = world
+        self.indices = i, j
+        self.bounds = self.world.cell_bounds(i, j)
 
         # options used for a marked cell
         self.marked_options = dict(fill='black', outline='gray80')
@@ -130,11 +139,10 @@ class Cell(object):
         self.unmarked_options = dict(fill='yellow', outline='gray80')
 
         self.marked = False
-        self.bounds = bounds
         self.draw()
 
     def draw(self):
-        """draw the cell"""
+        """Draw the cell."""
         if self.marked:
             options = self.marked_options
         else:
@@ -144,65 +152,44 @@ class Cell(object):
         # element yields two opposing corners, which is what we
         # pass to Canvas.rectangle
         coords = self.bounds[::2]
-        self.tag = self.world.canvas.rectangle(coords, **options)
+        self.item = self.world.canvas.rectangle(coords, **options)
 
     def undraw(self):
-        """delete any items with this cell's tag"""
-        self.world.canvas.delete(self.tag)
+        """Delete any items with this cell's tag."""
+        self.item.delete()
+        self.item = None
         
-    def config(self, **options):
-        """configure this cell with the given options"""
-        self.world.canvas.itemconfig(self.tag, **options)
+    def get_config(self, option):
+        """Gets the configuration of this cell."""
+        return self.item.cget(option)
 
-    def cget(self, x, y, option):
-        """get the configuration of this cell"""
-        return self.world.canvas.itemconfig(self.tag, option)
+    def config(self, **options):
+        """Configure this cell with the given options."""
+        self.item.config(**options)
 
     def mark(self):
-        """mark this cell and configure it"""
+        """Marks this cell."""
         self.marked = True
         self.config(**self.marked_options)
         
     def unmark(self):
-        """unmark this cell and configure it"""
+        """Unmarks this cell."""
         self.marked = False
         self.config(**self.unmarked_options)
         
     def is_marked(self):
-        """check whether this cell is marked."""
+        """Checks whether this cell is marked."""
         return self.marked
 
     def toggle(self):
+        """Toggles the state of this cell."""
         if self.is_marked():
             self.unmark()
         else:
             self.mark()
 
-# the following are some random linear-algebra utilities
-# written as functions (not methods)
-
-def vadd(p1, p2):
-    "add vectors p1 and p2 (returns a new vector)"
-    return [x+y for x,y in zip(p1, p2)]
-
-def vscale(p, s):
-    "multiply p by a scalar (returns a new vector)"
-    return [x*s for x in p]
-
-def vmid(p1, p2):
-    "return a new vector that is the pointwise average of p1 and p2"
-    return vscale(vadd(p1, p2), 0.5)
-
-def rotate(v, n=1):
-    """rotate the elements of a sequence by (n) places.
-    returns a new list.
-    """
-    n %= len(v)
-    return v[n:] + v[:n]
-
-
 
 if __name__ == '__main__':
-    world = CellWorld()
+    world = CellWorld(interactive=True)
     world.bind()
     world.mainloop()
