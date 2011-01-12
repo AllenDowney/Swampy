@@ -19,34 +19,19 @@ classes, including classes defined in libraries and the Python
 interpreter.
 
 
-  Copyright 2005 Allen B. Downey
 
-    This file contains wrapper classes I use with tkinter.  It is
-    mostly for my own use; I don't support it, and it is not very
-    well documented.
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, see
-    http://www.gnu.org/licenses/gpl.html or write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
-    02110-1301 USA
-    
 """
 
 
 
-import inspect, traceback
-from Gui import *
+import inspect
+import sys
+import traceback
+
+import Tkinter
+from Tkinter import N, S, E, W, SW, HORIZONTAL, ALL
+
+from Gui import Gui, GuiCanvas, Point, BBox, underride, ScaleTransform
 
 # get the version of Python
 v = sys.version.split()[0].split('.')
@@ -153,7 +138,7 @@ class Thing(object):
         Thing.things_created += 1
         return object.__new__(cls)
     
-    def bbox(self):
+    def get_bbox(self):
         """return the bounding box of this object if it is drawn
         """
         return self.canvas.bbox(self.tags)
@@ -164,13 +149,13 @@ class Thing(object):
         that if the Thing is moved later, we can compute its new
         nominal position.
         """
-        self.offset = self.bbox().offset(pos)
+        self.offset = self.get_bbox().offset(pos)
 
     def pos(self):
         """Compute the nominal position of a Thing by getting the
         current bounding box and adding the offset.
         """
-        return self.bbox().pos(self.offset)
+        return self.get_bbox().pos(self.offset)
 
     def isdrawn(self):
         """return True if the object has been drawn"""
@@ -317,7 +302,7 @@ class Mapping(Thing):
         else:
             self.label = ''
 
-    def bbox(self):
+    def get_bbox(self):
         """the bbox of a Mapping is the bbox of its box item.
         This is different from other Things.
         """
@@ -357,7 +342,7 @@ class Mapping(Thing):
                 self.canvas.addtag_withtag(intag, binding.key.tags)
 
             # move down to the position for the next binding
-            p.y = binding.bbox().bottom + 1.8
+            p.y = binding.get_bbox().bottom + 1.8
 
         if len(self.bindings):
             # if there are any bindings, draw a box around them
@@ -383,9 +368,9 @@ class Mapping(Thing):
 
         # if the whole mapping is not in the right position, shift it.
         if flip == 1:
-            dx = pos.x - self.bbox().left
+            dx = pos.x - self.get_bbox().left
         else:
-            dx = pos.x - self.bbox().right
+            dx = pos.x - self.get_bbox().right
 
         self.canvas.move(self.tags, dx, 0, transform=True)
 
@@ -707,7 +692,7 @@ class ClassDiagramClass(Thing):
             p.y += 1
 
         # draw the box
-        bbox = self.bbox()
+        bbox = self.get_bbox()
         item = self.canvas.box(bbox, tags=tags, **self.boxoptions)
         self.boxitem = item
 
@@ -740,7 +725,7 @@ class ClassDiagramClass(Thing):
                 self.diag.add_arrow(a)
 
         # if the class is not in the right position, shift it.
-        dx = pos.x - self.bbox().left
+        dx = pos.x - self.get_bbox().left
         self.canvas.move(self.tags, dx, 0)
 
         return alldrawn
@@ -920,7 +905,7 @@ class Stack(Thing):
         
         for frame in self.frames:
             frame.draw(diag, p, flip, tags=tags)
-            bbox = self.bbox()
+            bbox = self.get_bbox()
             #p.y = bbox.bottom + 3
             p.x = bbox.right + 3
 
@@ -1332,7 +1317,8 @@ class ObjectDiagram(Diagram):
         thing.draw(self, Point([2,2]), flip=1)
 
         # configure the scroll region
-        bbox = Canvas.bbox(self.canvas, ALL)
+        bbox = self.canvas.bbox(ALL)
+        print bbox
         self.canvas.configure(scrollregion=bbox)
 
     def clear(self):
@@ -1383,7 +1369,7 @@ class ClassDiagram(Diagram):
         self.draw_arrows()
 
         # configure the scroll region
-        bbox = Canvas.bbox(self.canvas, ALL)
+        bbox = self.canvas.bbox(ALL)
         self.canvas.configure(scrollregion=bbox)
 
         
@@ -1399,8 +1385,8 @@ class ClassDiagram(Diagram):
             drawn = c.cdc.draw(self, p, tags)
             alldrawn.extend(drawn)
 
-            # change this so it finds the bottom-most bbox in drawn
-            bbox = c.cdc.bbox()
+            # TODO: change this so it finds the bottom-most bbox in drawn
+            bbox = c.cdc.get_bbox()
             
             for thing in alldrawn:
                 if thing is not c:
