@@ -6,7 +6,10 @@ coke.py         lumpy_test2.py  mutex.py        TurmiteWorld.py  World.py\
 danger.gif	words.txt
 
 VERSION = swampy.1.4
-DEST = /home/downey/public_html
+DEST = /home/downey/public_html/swampy
+
+setup:
+	python setup.py sdist --formats=zip
 
 all:	zip2 zip3 zipdoc dist
 
