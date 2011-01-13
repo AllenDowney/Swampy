@@ -86,7 +86,7 @@ class Turmite(Animal):
         """Draw the Turmite."""
         # get the bounds of the cell
         cell = self.get_cell()
-        bounds = world.cell_bounds(self.x, self.y)
+        bounds = self.world.cell_bounds(self.x, self.y)
 
         # draw a triangle inside the cell, pointing in the
         # appropriate direction
