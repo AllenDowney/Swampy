@@ -9,7 +9,7 @@ import Tkinter
 from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE
 
 from Gui import Callable
-from World import World, Animal
+from World import World, Animal, wait_for_user
 
 
 class TurtleWorld(World):
@@ -19,7 +19,9 @@ class TurtleWorld(World):
         self.title('TurtleWorld')
 
         # the interpreter executes user-provided code
-        self.make_interpreter(globals())
+        g = globals()
+        g['world'] = self
+        self.make_interpreter(g)
 
         # make the GUI
         self.setup()
@@ -56,7 +58,7 @@ class TurtleWorld(World):
         self.fr(side=BOTTOM)
         self.te_code = self.te(height=10, width=25, side=BOTTOM)
         self.te_code.insert(END, 'world.clear()\n')
-        self.te_code.insert(END, 'bob = Turtle(world)\n')
+        self.te_code.insert(END, 'bob = Turtle()\n')
         self.endfr()
 
         # run file
