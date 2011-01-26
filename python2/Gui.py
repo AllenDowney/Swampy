@@ -68,7 +68,7 @@ import Tkinter
 import tkFont
 
 from Tkinter import N, S, E, W
-from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END
+from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END, ALL
 
 
 class Gui(Tkinter.Tk):

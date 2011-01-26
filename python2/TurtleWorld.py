@@ -117,7 +117,20 @@ class Turtle(Animal):
         self.heading = 0
         self.pen = True
         self.color = 'red'
+        self.pen_color = 'blue'
         self.draw()
+
+    def get_x(self):
+        """Returns the current x coordinate."""
+        return self.x
+
+    def get_y(self):
+        """Returns the current y coordinate."""
+        return self.y
+
+    def get_heading(self):
+        """Returns the current heading in degrees.  0 is east."""
+        return self.heading
 
     def step(self):
         """Takes a step.
@@ -168,7 +181,7 @@ class Turtle(Animal):
 
         # if the pen is down, draw a line
         if self.pen:
-            self.world.canvas.line([p1, p2], fill='black')
+            self.world.canvas.line([p1, p2], fill=self.pen_color)
         self.redraw()
 
     def bk(self, dist=1):
@@ -203,6 +216,10 @@ class Turtle(Animal):
         self.color = color
         self.redraw()
 
+    def set_pen_color(self, color):
+        """Changes the pen color of the turtle."""
+        self.pen_color = color
+
 
 """Add the turtle methods to the module namespace
 so they can be invoked as simple functions (not methods).
@@ -215,6 +232,7 @@ pu = Turtle.pu
 pd = Turtle.pd
 die = Turtle.die
 set_color = Turtle.set_color
+set_pen_color = Turtle.set_pen_color
 
 
 class TurtleControl(object):

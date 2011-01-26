@@ -1,5 +1,7 @@
 PYDOC = pydoc
 
+DEST = /home/downey/public_html/greent/thinkpython
+
 pydoc:
 	$(PYDOC) -w Gui
 	$(PYDOC) -w World
@@ -9,6 +11,7 @@ pydoc:
 	$(PYDOC) -w AmoebaWorld
 	$(PYDOC) -w Sync
 	$(PYDOC) -w Lumpy
+	rsync -a *.html $(DEST)
 
 FILES = \
 AmoebaWorld.py       Gui_test.py        Lumpy_test.py    TurmiteWorld_test.py\
@@ -16,12 +19,13 @@ AmoebaWorld_test.py  lumpy_example1.py  mutex.py         turtle_code.py\
 CellWorld.py         lumpy_example2.py  Sync.py          TurtleWorld.py\
 CellWorld_test.py    lumpy_example3.py  Sync_test.py     World.py\
 Gui.py               Lumpy.py           TurmiteWorld.py  World_test.py\
-danger.gif           words.txt		TurtleWorld_test.py     sync_code
+danger.gif           words.txt		TurtleWorld_test.py
 
 
 
 python3:
-	cp -r $(FILES) ../python3
+	cp $(FILES) ../python3
+	cp sync_code/*.py ../python3/sync_code
 	cd ../python3; 2to3 -wn Gui.py
 	cd ../python3; 2to3 -wn World.py
 	cd ../python3; 2to3 -wn TurtleWorld.py
