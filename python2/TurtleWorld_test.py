@@ -33,6 +33,7 @@ class Tests(unittest.TestCase):
         t.pu()
         t.pd()
         t.set_color('papaya whip')
+        t.set_pen_color('yellow')
 
         TurtleWorld.fd(t, 10)
         TurtleWorld.bk(t, 10)
@@ -41,6 +42,16 @@ class Tests(unittest.TestCase):
         TurtleWorld.pu(t)
         TurtleWorld.pd(t)
         TurtleWorld.set_color(t, 'cyan')
+        TurtleWorld.set_pen_color(t, 'magenta')
+
+        x = t.get_x()
+        self.assertAlmostEquals(x, -9.0)
+
+        y = t.get_y()
+        self.assertAlmostEquals(y, 0.0)
+
+        heading = t.get_heading()
+        self.assertAlmostEquals(heading, -20)
 
         tw.quit()
 

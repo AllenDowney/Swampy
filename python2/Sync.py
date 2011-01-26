@@ -260,6 +260,7 @@ class Sync(Gui):
 
     def run_init(self):
         """Runs the initialization code in the top column."""
+        print 'running init'
         self.clear_views()
         self.views = {}
 
@@ -269,7 +270,6 @@ class Sync(Gui):
             if thread.row == None: break
 
         self.unregister(thread)
-        self.update_views()
 
     def update_views(self):
         """Loops through the views and updates them."""
@@ -574,7 +574,25 @@ class Thread:
 
     def skip_body(self):
         """Skips the body of a conditional."""
+        # get the current line
+        # get the next line
+        # compute the change in indent
+        # find the outdent
+        source = self.row.get()
+        head_indent = self.count_spaces(source)
+
         self.next_row()
+        source = self.row.get()
+        body_indent = self.count_spaces(source)
+
+        indent = body_indent - head_indent
+        print indent
+
+    def count_spaces(self, source):
+        """Returns the number of leading spaces after expanding tabs."""
+        s = source.expandtabs(4)
+        t = s.lstrip(' ')
+        return len(s) - len(t)
 
     def next_loop(self):
         """Moves to the next row, looping to the top if necessary."""
@@ -600,11 +618,23 @@ class Thread:
             return None
 
         source = self.row.get()
+        print self, source
 
         before = copy.copy(self.sync.locals)
 
         flag = self.exec_line(source, self.sync)
 
+        # see if any variables were defined or changed
+        after = self.sync.locals
+        defined, changed = diff_dict(after, before)
+
+        for key in defined:
+            self.sync.views[key] = self.row
+
+        if defined or changed:
+            self.sync.update_views()
+
+        # either skip to the next line or to the end of a false conditional
         if flag:
             self.next_row()
         else:
@@ -612,38 +642,46 @@ class Thread:
 
         return source
 
-        after = self.sync.locals
-        defined, changed = diff_dict(after, before)
-
-        for key in defined:
-            sync.views[key] = self.row
-
-        sync.update_views()
-
-        return source
-
     def exec_line(self, source, sync):
-        source = source.strip()
-        print self, source
+        """Runs a line of source code in the context of the given Sync.
 
+        Args:
+            source: source code from a Row
+            sync: Sync object
+
+        Returns:
+            if the line is an if statement, returns the result of
+            evaluating the condition
+        """
         global current_thread 
         current_thread = self
 
         try:
-            code = compile(source, '<user-provided code>', 'exec')
+            s = source.strip()
+            code = compile(s, '<user-provided code>', 'exec')
             exec code in sync.globals, sync.locals
             return True
         except SyntaxError as error:
             # this had better be an if statement
-            pass
-
-        flag = self.handle_conditional(source, sync)
-        return flag
+            flag = self.handle_conditional(source, sync)
+            return flag
 
     def handle_conditional(self, source, sync):
-        if not (source.startswith('if') and source.endswith(':')):
+        """Evaluates the condition part of an if statement.
+
+        Args:
+            source: source code from a Row
+            sync: Sync object
+
+        Returns:
+            if the line is an if statement, returns the result of
+            evaluating the condition; otherwise raises a SyntaxError
+        """
+        s = source.strip()
+        if not (s.startswith('if') and s.endswith(':')):
             raise SyntaxError('Python blocks must be if statements')
 
+        # pull out the condition
         condition = source[2:-1].strip()
         flag = eval(condition, sync.globals, sync.locals)
 

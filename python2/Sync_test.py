@@ -50,6 +50,12 @@ class Tests(unittest.TestCase):
         source = threadA.step()
         self.assertEqual(source, 'if counter == 0:')
 
+        source = threadA.step()
+        self.assertEqual(source, '    print True')
+
+        source = threadA.step()
+        self.assertEqual(source, 'if counter == 1:')
+
 
 if __name__ == '__main__':
     unittest.main()
