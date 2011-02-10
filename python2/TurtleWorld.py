@@ -141,6 +141,9 @@ class Turtle(Animal):
 
     def draw(self):
         """Draws the turtle."""
+        if not self.world:
+            return
+
         self.tag = 'Turtle%d' % id(self)
         lw = self.r/2
         

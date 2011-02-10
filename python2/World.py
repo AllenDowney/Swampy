@@ -196,7 +196,8 @@ class Animal(object):
     """
     def __init__(self, world=None):
         self.world = world or World.current_world
-        self.world.register(self)
+        if world:
+            self.world.register(self)
         self.x = 0
         self.y = 0
 
