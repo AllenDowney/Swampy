@@ -8,3 +8,22 @@ if counter == 0:
 
 if counter == 1:
     print False
+pass
+
+if counter == counter+1:
+    pass
+    pass
+else:
+    print False
+
+
+if True:
+    print True
+else:
+    print False
+
+pass
+
+
+
+

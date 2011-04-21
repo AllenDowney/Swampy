@@ -530,6 +530,7 @@ class Thread:
         self.column = column
         self.sync = column.p
         self.name, self.color = self.sync.get_name(name)
+        self.flag_map = {}
         self.sync.register(self)
         self.start()
 
@@ -586,7 +587,17 @@ class Thread:
         body_indent = self.count_spaces(source)
 
         indent = body_indent - head_indent
-        print indent
+
+        if indent <= 0:
+            raise SyntaxError('Body of if statement must be indented.')
+
+        while 1:
+            self.next_row()
+            source = self.row.get()
+            line_indent = self.count_spaces(source)
+            if line_indent <= head_indent:
+                break
+            
 
     def count_spaces(self, source):
         """Returns the number of leading spaces after expanding tabs."""
@@ -662,9 +673,12 @@ class Thread:
             exec code in sync.globals, sync.locals
             return True
         except SyntaxError as error:
-            # this had better be an if statement
-            flag = self.handle_conditional(source, sync)
-            return flag
+            # check whether it's a conditional statement
+            if s.startswith('if') or s.startswith('else'):
+                flag = self.handle_conditional(source, sync)
+                return flag
+            else:
+                raise error
 
     def handle_conditional(self, source, sync):
         """Evaluates the condition part of an if statement.
@@ -678,14 +692,28 @@ class Thread:
             evaluating the condition; otherwise raises a SyntaxError
         """
         s = source.strip()
-        if not (s.startswith('if') and s.endswith(':')):
-            raise SyntaxError('Python blocks must be if statements')
+        if not s.endswith(':'):
+            raise SyntaxError('Header must end with :')
 
-        # pull out the condition
-        condition = source[2:-1].strip()
-        flag = eval(condition, sync.globals, sync.locals)
+        if s.startswith('if'):
+            # evaluate the condition
+            condition = source[2:-1].strip()
+            flag = eval(condition, sync.globals, sync.locals)
 
-        return flag
+            # store the flag
+            indent = self.count_spaces(source)
+            self.flag_map[indent] = flag
+
+            return flag
+
+        else:
+            # see whether the condition was true
+            indent = self.count_spaces(source)
+            try:
+                flag = self.flag_map[indent]
+                return not flag
+            except KeyError:
+                raise SyntaxError('else does not match if')
 
     def step_loop(self, event=None):
         self.step()

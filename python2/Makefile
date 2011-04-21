@@ -21,28 +21,28 @@ CellWorld_test.py    lumpy_example3.py  Sync_test.py     World.py\
 Gui.py               Lumpy.py           TurmiteWorld.py  World_test.py\
 danger.gif           words.txt		TurtleWorld_test.py
 
-
+FLAGS = -wn -x import
 
 python3:
 	cp $(FILES) ../python3
 	cp sync_code/*.py ../python3/sync_code
-	cd ../python3; 2to3 -wn Gui.py
-	cd ../python3; 2to3 -wn World.py
-	cd ../python3; 2to3 -wn TurtleWorld.py
-	cd ../python3; 2to3 -wn CellWorld.py
-	cd ../python3; 2to3 -wn TurmiteWorld.py
-	cd ../python3; 2to3 -wn AmoebaWorld.py
-	cd ../python3; 2to3 -wn Lumpy.py
-	cd ../python3; 2to3 -wn Sync.py
+	cd ../python3; 2to3 $(FLAGS) Gui.py
+	cd ../python3; 2to3 $(FLAGS) World.py
+	cd ../python3; 2to3 $(FLAGS) TurtleWorld.py
+	cd ../python3; 2to3 $(FLAGS) CellWorld.py
+	cd ../python3; 2to3 $(FLAGS) TurmiteWorld.py
+	cd ../python3; 2to3 $(FLAGS) AmoebaWorld.py
+	cd ../python3; 2to3 $(FLAGS) Lumpy.py
+	cd ../python3; 2to3 $(FLAGS) Sync.py
 
-	cd ../python3; 2to3 -wn Gui_test.py
-	cd ../python3; 2to3 -wn World_test.py
-	cd ../python3; 2to3 -wn TurtleWorld_test.py
-	cd ../python3; 2to3 -wn CellWorld_test.py
-	cd ../python3; 2to3 -wn TurmiteWorld_test.py
-	cd ../python3; 2to3 -wn AmoebaWorld_test.py
-	cd ../python3; 2to3 -wn Lumpy_test.py
-	cd ../python3; 2to3 -wn Sync_test.py
+	cd ../python3; 2to3 $(FLAGS) Gui_test.py
+	cd ../python3; 2to3 $(FLAGS) World_test.py
+	cd ../python3; 2to3 $(FLAGS) TurtleWorld_test.py
+	cd ../python3; 2to3 $(FLAGS) CellWorld_test.py
+	cd ../python3; 2to3 $(FLAGS) TurmiteWorld_test.py
+	cd ../python3; 2to3 $(FLAGS) AmoebaWorld_test.py
+	cd ../python3; 2to3 $(FLAGS) Lumpy_test.py
+	cd ../python3; 2to3 $(FLAGS) Sync_test.py
 
 clean:
 	rm *~ *.pyc

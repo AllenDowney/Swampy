@@ -891,7 +891,7 @@ class ReferenceArrow(Arrow):
         self.item.coords([self.key.pos(), self.val.pos()])
 
 
-class ParentArrow(Thing):
+class ParentArrow(Arrow):
     """Represents an inheritance arrow.
 
     Shows an is-a relationship between classes in a class diagram.
@@ -927,7 +927,7 @@ class ParentArrow(Thing):
         canvas.lower(self.item)
 
 
-class ContainsArrow(Thing):
+class ContainsArrow(Arrow):
     """Represents a contains arrow.
 
     Shows a has-a relationship between classes in a class diagram.

@@ -11,7 +11,7 @@ import Sync
 
 class Tests(unittest.TestCase):
 
-    def test_sync_mutex(self):
+    def xtest_sync_mutex(self):
         sync = Sync.Sync('mutex.py')
 
         threads = sync.get_threads()
@@ -55,6 +55,24 @@ class Tests(unittest.TestCase):
 
         source = threadA.step()
         self.assertEqual(source, 'if counter == 1:')
+
+        source = threadA.step()
+        self.assertEqual(source, 'pass')
+
+        source = threadA.step()
+        source = threadA.step()
+        self.assertEqual(source, 'else:')
+
+        source = threadA.step()
+        self.assertEqual(source, '    print False')
+
+        source = threadA.step()
+        source = threadA.step()
+        self.assertEqual(source, '    print True')
+
+        source = threadA.step()
+        source = threadA.step()
+        self.assertEqual(source, 'pass')
 
 
 if __name__ == '__main__':
