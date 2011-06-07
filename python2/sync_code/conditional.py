@@ -1,4 +1,4 @@
-# mutual exclusion
+# test code for multi-line conditional statements
 counter = 0
 
 ## Thread code

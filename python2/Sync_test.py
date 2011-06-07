@@ -11,7 +11,7 @@ import Sync
 
 class Tests(unittest.TestCase):
 
-    def xtest_sync_mutex(self):
+    def test_sync_mutex(self):
         sync = Sync.Sync('mutex.py')
 
         threads = sync.get_threads()

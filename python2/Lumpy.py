@@ -972,6 +972,7 @@ class Stack(Thing):
         
         for frame in self.frames:
             frame.draw(diag, p, flip, tags=tags)
+
             bbox = self.get_bbox()
             #p.y = bbox.bottom + 3
             p.x = bbox.right + 3

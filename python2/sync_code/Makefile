@@ -4,6 +4,10 @@ rendez.py signal.py coke.py readwrite2.py
 MORE_FILES = sync.tgz rebar1.py rebar2.py rebar3.py 
 
 DEST = /home/downey/sync/code
+BOOK = /home/downey/lbos/trunk
+
+code:
+	rsync -ap book_code $(BOOK)
 
 distrib:
 	cp $(MORE_FILES) $(DEST)
