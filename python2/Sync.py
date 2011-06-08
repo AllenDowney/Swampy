@@ -709,7 +709,6 @@ class Thread:
         # find the outdent
         source = self.row.get()
         head_indent = self.count_spaces(source)
-        print head_indent, source
 
         self.next_row()
         source = self.row.get()

@@ -2,6 +2,7 @@
 customers = 0
 mutex = Semaphore(1)
 mutex2 = Semaphore(1)
+mutex3 = Semaphore(1)
 sofa = Semaphore(4)
 customer1 = Semaphore(0)
 customer2 = Semaphore(0)
@@ -40,15 +41,18 @@ sofa.signal()
 
 # getHairCut()
 
-mutex.wait()
+mutex3.wait()
     # pay()
     payment.signal()
     receipt.wait()
+mutex3.signal()
+
+mutex.wait()
     customers -= 1
 mutex.signal()
 
 ## Thread
-# barber
+# usher
 customer1.wait()
 mutex.wait()
     sem = queue1.pop(0)
@@ -56,6 +60,8 @@ mutex.wait()
     sem.wait()
 mutex.signal()
 
+## Thread
+# barber
 customer2.wait()
 mutex2.wait()
     sem2 = queue2.pop(0)
