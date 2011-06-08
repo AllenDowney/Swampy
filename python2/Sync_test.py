@@ -11,12 +11,12 @@ import Sync
 
 class Tests(unittest.TestCase):
 
-    def xtest_sync_mutex(self):
+    def test_sync_mutex(self):
         sync = Sync.Sync(['mutex.py'])
 
         threads = sync.get_threads()
         threadA = threads[0]
-        column = threadA.get_column()
+        column = threadA.column
 
         source = threadA.step()
         self.assertEqual(source, 'mutex.wait()')
@@ -42,7 +42,7 @@ class Tests(unittest.TestCase):
         source = threadA.exec_line('pid = pid()', sync)
         self.assertEqual(sync.locals['pid'], 'A')
 
-    def xtest_sync_conditional(self):
+    def test_sync_conditional(self):
         sync = Sync.Sync(['sync_code/conditional.py'])
         threads = sync.get_threads()
         threadA = threads[0]
@@ -90,7 +90,10 @@ class Tests(unittest.TestCase):
         self.assertEqual(source, '    counter += 1')
 
         source = threadA.step()
-        print source
+        self.assertEqual(source, 'while counter < 1:')
+
+        source = threadA.step()
+        self.assertEqual(source, 'pass')
 
 
 if __name__ == '__main__':

@@ -534,9 +534,15 @@ class Column(Widget):
         new = Thread(self)
         return new
 
-    # iterating through a Column is the same as iterating
-    # through its list of rows.
-    def __iter__(self): return self.rows.__iter__()
+    def next_row(self, row):
+        if row is None:
+            return self.rows[0]
+
+        index = self.rows.index(row)
+        try:
+            return self.rows[index+1]
+        except IndexError:
+            return None
 
 
 class TopColumn(Column):
@@ -648,9 +654,6 @@ class Thread:
         self.sync.register(self)
         self.start()
 
-    def get_column(self):
-        return self.column
-
     def __str__(self):
         return '<' + self.name + '>'
 
@@ -668,9 +671,11 @@ class Thread:
 
     def jump_to(self, row):
         """Removes this thread from its current row and moves it to row."""
-        self.row.remove_thread(self)
+        if self.row:
+            self.row.remove_thread(self)
         self.row = row
-        self.row.add_thread(self)
+        if self.row:
+            self.row.add_thread(self)
 
     def balk(self):
         self.row.remove_thread(self)
@@ -679,7 +684,6 @@ class Thread:
     def start(self):
         """Moves this thread to the top of the column."""
         self.queued = False
-        self.iter = self.column.__iter__()
         self.row = None
         self.next_loop()
 
@@ -694,17 +698,8 @@ class Thread:
         if self.queued:
             return
 
-        if self.row:
-            self.row.remove_thread(self)
-        else:
-            # this probably means we executed balk
-            self.iter = self.column.__iter__()
-
-        try:
-            self.row = self.iter.next()
-            self.row.add_thread(self)
-        except StopIteration:
-            self.row = None
+        row = self.column.next_row(self.row)
+        self.jump_to(row)
 
     def skip_body(self):
         """Skips the body of a conditional."""
