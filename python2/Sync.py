@@ -128,16 +128,15 @@ else:
 
 
 font = ("Courier", 12)
-FSU = 10                    # FSU, the fundamental Sync unit,
+FSU = 9                     # FSU, the fundamental Sync unit,
                             # determines the size of most things.
 
 class Sync(Gui):
     """Represents the thread simulator."""
 
-    def __init__(self, filename=None, options={}):
+    def __init__(self, args=['']):
         Gui.__init__(self)
-        self.filename = filename
-        self.options = options
+        self.parse_args(args)
         self.namer = Namer()
 
         self.locals = sim_locals
@@ -152,6 +151,22 @@ class Sync(Gui):
         self.run_init()
         for col in self.cols:
             col.create_thread()
+
+    def parse_args(self, args):
+        parser = optparse.OptionParser()
+        parser.add_option('-w', '--write', dest='write',
+                          action='store_true', default=False,
+                          help='Write thread code in code subdirectory?')
+        parser.add_option('-s', '--side', dest='initside',
+                          action='store_true', default=False,
+                          help='Move the initialization code to the left side?')
+
+        (self.options, args) = parser.parse_args(args)
+
+        if args:
+            self.filename = args[0]
+        else:
+            self.filename = ''
 
     def get_name(self, name=None):
         return self.namer.next(name)
@@ -278,7 +293,9 @@ class Sync(Gui):
         if not self.blocks:
             return
 
-        self.topcol = TopColumn(self)
+        side = LEFT if self.options.initside else TOP
+        self.topcol = TopColumn(self, side=side)
+            
         self.topcol.add_rows(self.blocks[0])
 
         self.colfr = self.fr()
@@ -627,6 +644,7 @@ class Thread:
         self.name, self.color = self.sync.get_name(name)
         self.namespace = Namespace()
         self.flag_map = {}
+        self.while_stack = []
         self.sync.register(self)
         self.start()
 
@@ -646,6 +664,12 @@ class Thread:
         """Removes this thread from queue."""
         self.queued = False
         self.row.dequeue_thread(self)
+        self.row.add_thread(self)
+
+    def jump_to(self, row):
+        """Removes this thread from its current row and moves it to row."""
+        self.row.remove_thread(self)
+        self.row = row
         self.row.add_thread(self)
 
     def balk(self):
@@ -690,6 +714,7 @@ class Thread:
         # find the outdent
         source = self.row.get()
         head_indent = self.count_spaces(source)
+        print head_indent, source
 
         self.next_row()
         source = self.row.get()
@@ -698,10 +723,13 @@ class Thread:
         indent = body_indent - head_indent
 
         if indent <= 0:
-            raise SyntaxError('Body of if statement must be indented.')
+            raise SyntaxError('Body of compound statement must be indented.')
 
         while True:
             self.next_row()
+            if self.row == None:
+                break
+
             source = self.row.get()
             line_indent = self.count_spaces(source)
             if line_indent <= head_indent:
@@ -731,6 +759,10 @@ class Thread:
         if self.queued:
             return None
 
+        if self.row == None:
+            return None
+
+        self.check_end_while()
         source = self.row.get()
         print self, source
 
@@ -779,16 +811,18 @@ class Thread:
             return True
         except SyntaxError as error:
             # check whether it's a conditional statement
-            if s.startswith('if') or s.startswith('else'):
-                flag = self.handle_conditional(source, sync)
+            keyword = s.split()[0]
+            if keyword in ['if', 'else:', 'while']:
+                flag = self.handle_conditional(keyword, source, sync)
                 return flag
             else:
                 raise error
 
-    def handle_conditional(self, source, sync):
+    def handle_conditional(self, keyword, source, sync):
         """Evaluates the condition part of an if statement.
 
         Args:
+            keyword: if, else or while
             source: source code from a Row
             sync: Sync object
 
@@ -800,9 +834,10 @@ class Thread:
         if not s.endswith(':'):
             raise SyntaxError('Header must end with :')
 
-        if s.startswith('if'):
+        if keyword in ['if']:
             # evaluate the condition
-            condition = s[2:-1].strip()
+            n = len(keyword)
+            condition = s[n:-1].strip()
             flag = eval(condition, sync.globals, sync.locals)
 
             # store the flag
@@ -811,7 +846,20 @@ class Thread:
 
             return flag
 
+        elif keyword in ['while']:
+            # evaluate the condition
+            n = len(keyword)
+            condition = s[n:-1].strip()
+            flag = eval(condition, sync.globals, sync.locals)
+
+            if flag:
+                indent = self.count_spaces(source)
+                self.while_stack.append((indent, self.row))
+
+            return flag
+
         else:
+            assert keyword == 'else:'
             # see whether the condition was true
             indent = self.count_spaces(source)
             try:
@@ -820,31 +868,34 @@ class Thread:
             except KeyError:
                 raise SyntaxError('else does not match if')
 
+    def check_end_while(self):
+        """Check if we are at the end of a while loop.
+
+        If so, jump to the top.
+        """
+        if not self.while_stack:
+            return
+
+        indent, row = self.while_stack[-1]
+
+        source = self.row.get()
+        if self.count_spaces(source) <= indent:
+            self.while_stack.pop()
+            self.jump_to(row)
+
     def step_loop(self, event=None):
         self.step()
         if self.row == None:
             self.start()
         
     def run(self):
-        while 1:
+        while True:
             self.step()
             if self.row == None: break
 
 
 def main():
-    parser = optparse.OptionParser()
-    parser.add_option('-w', '--write', dest='write',
-                      action='store_true', default=False,
-                      help='Write thread code in code subdirectory?')
-
-    (options, args) = parser.parse_args()
-
-    if args:
-        filename = args[0]
-    else:
-        filename = ''
-
-    sync = Sync(filename, options)
+    sync = Sync(sys.argv[1:])
     sync.mainloop()
 
 
