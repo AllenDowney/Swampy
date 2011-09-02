@@ -5,7 +5,6 @@ mutex2 = Semaphore(1)
 sofa = Semaphore(4)
 customer1 = Semaphore(0)
 customer2 = Semaphore(0)
-barber = Semaphore(0)
 payment = Semaphore(0)
 receipt = Semaphore(0)
 queue1 = []
