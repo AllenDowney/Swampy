@@ -19,7 +19,7 @@ AmoebaWorld_test.py  lumpy_example1.py  mutex.py         turtle_code.py\
 CellWorld.py         lumpy_example2.py  Sync.py          TurtleWorld.py\
 CellWorld_test.py    lumpy_example3.py  Sync_test.py     World.py\
 Gui.py               Lumpy.py           TurmiteWorld.py  World_test.py\
-danger.gif           words.txt		TurtleWorld_test.py
+danger.gif           words.txt		TurtleWorld_test.py color_list.py
 
 FLAGS = -wn -x import
 
@@ -34,6 +34,7 @@ python3:
 	cd ../python3; 2to3 $(FLAGS) AmoebaWorld.py
 	cd ../python3; 2to3 $(FLAGS) Lumpy.py
 	cd ../python3; 2to3 $(FLAGS) Sync.py
+	cd ../python3; 2to3 $(FLAGS) color_list.py
 
 	cd ../python3; 2to3 $(FLAGS) Gui_test.py
 	cd ../python3; 2to3 $(FLAGS) World_test.py
