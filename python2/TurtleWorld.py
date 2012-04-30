@@ -5,8 +5,7 @@ Copyright 2010 Allen B. Downey
 Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
-import Tkinter
-from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE
+from Tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE, SUNKEN
 
 from Gui import Callable
 from World import World, Animal, wait_for_user
@@ -252,7 +251,7 @@ class TurtleControl(object):
     def setup(self):
         w = self.turtle.world
 
-        self.frame = w.fr(bd=2, relief=Tkinter.SUNKEN,
+        self.frame = w.fr(bd=2, relief=SUNKEN,
                           padx=1, pady=1, expand=0)
         w.la(text='Turtle Control')
 

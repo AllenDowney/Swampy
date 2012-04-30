@@ -13,13 +13,17 @@ pydoc:
 	$(PYDOC) -w Lumpy
 	rsync -a *.html $(DEST)
 
-FILES = \
-AmoebaWorld.py       Gui_test.py        Lumpy_test.py    TurmiteWorld_test.py\
-AmoebaWorld_test.py  lumpy_example1.py  mutex.py         turtle_code.py\
-CellWorld.py         lumpy_example2.py  Sync.py          TurtleWorld.py\
-CellWorld_test.py    lumpy_example3.py  Sync_test.py     World.py\
-Gui.py               Lumpy.py           TurmiteWorld.py  World_test.py\
-danger.gif           words.txt		TurtleWorld_test.py color_list.py
+FILES = __init__.py \
+AmoebaWorld.py       mutex.py         turtle_code.py\
+CellWorld.py         Sync.py          TurtleWorld.py       World.py\
+Gui.py               Lumpy.py         TurmiteWorld.py  \
+danger.gif           words.txt	      color_list.py
+
+TESTS = Gui_test.py     Lumpy_test.py    	TurmiteWorld_test.py \
+AmoebaWorld_test.py  	World_test.py		TurtleWorld_test.py  \
+Sync_test.py		CellWorld_test.py
+
+SCRIPTS = lumpy_example1.py  lumpy_example2.py  lumpy_example3.py      \
 
 FLAGS = -wn -x import
 
@@ -44,6 +48,13 @@ python3:
 	cd ../python3; 2to3 $(FLAGS) AmoebaWorld_test.py
 	cd ../python3; 2to3 $(FLAGS) Lumpy_test.py
 	cd ../python3; 2to3 $(FLAGS) Sync_test.py
+
+PACKAGE = Swampy
+
+package:
+	rsync $(FILES) $(PACKAGE)/swampy
+	rsync $(TESTS) $(PACKAGE)/test
+	rsync $(SCRIPTS) $(PACKAGE)/bin
 
 clean:
 	rm *~ *.pyc

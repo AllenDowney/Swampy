@@ -702,10 +702,10 @@ class GuiCanvas(Tkinter.Canvas):
         """
         translator = {}
         for i in ['1', '2', '3']:
-            translator['<Press-'+i+'>'] = '<ButtonPress->' + i + '>'
+            translator['<Press-'+i+'>'] = '<ButtonPress-' + i + '>'
             translator['<Motion-'+i+'>'] = '<B' + i + '-Motion>'
-            translator['<Release-'+i+'>'] = '<ButtonRelease->' + i + '>'
-            translator['<Double-'+i+'>'] = '<Double-Button->' + i + '>'
+            translator['<Release-'+i+'>'] = '<ButtonRelease-' + i + '>'
+            translator['<Double-'+i+'>'] = '<Double-Button-' + i + '>'
         
         return translator.get(event, event)
 
