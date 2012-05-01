@@ -13,8 +13,12 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
 def structshape(ds):
-    """Returns a string that describes the shape of the given
-    data structure."""
+    """Returns a string that describes the shape of a data structure.
+
+    ds: any Python object
+
+    Returns: string
+    """
     typename = type(ds).__name__
 
     # handle sequences
@@ -46,7 +50,12 @@ def structshape(ds):
 
 
 def listrep(t):
-    """return a string representation of a list of type strings"""
+    """Returns a string representation of a list of type strings.
+
+    t: list of strings
+
+    Returns: string
+    """
     current = t[0]
     count = 0
     res = []
@@ -60,8 +69,14 @@ def listrep(t):
     append(res, current, count)
     return setrep(res)
 
+
 def setrep(s):
-    """return a string representation of a set of type strings"""
+    """Returns a string representation of a set of type strings.
+
+    s: set of strings
+
+    Returns: string
+    """
     rep = ', '.join(s)
     if len(s) == 1:
         return rep
@@ -69,10 +84,18 @@ def setrep(s):
         return '(' + rep + ')'
     return 
 
+
 def append(res, typestr, count):
-    """res is a list of type strings; this function adds a new
-    type string that represent (count) instances of type string
-    (typestr)"""
+    """Adds a new element to a list of type strings.
+
+    Modifies res.
+
+    res: list of type strings
+    typestr: the new type string
+    count: how many of the new type there are
+
+    Returns: None
+    """
     if count == 1:
         rep = typestr
     else:

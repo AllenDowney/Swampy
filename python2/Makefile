@@ -21,7 +21,7 @@ danger.gif           words.txt	      color_list.py        structshape.py
 
 TESTS = Gui_test.py     Lumpy_test.py    	TurmiteWorld_test.py \
 AmoebaWorld_test.py  	World_test.py		TurtleWorld_test.py  \
-Sync_test.py		CellWorld_test.py
+Sync_test.py		CellWorld_test.py       structshape_test.py
 
 SCRIPTS = lumpy_example1.py  lumpy_example2.py  lumpy_example3.py      \
 
