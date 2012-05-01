@@ -17,7 +17,7 @@ FILES = __init__.py \
 AmoebaWorld.py       mutex.py         turtle_code.py\
 CellWorld.py         Sync.py          TurtleWorld.py       World.py\
 Gui.py               Lumpy.py         TurmiteWorld.py  \
-danger.gif           words.txt	      color_list.py
+danger.gif           words.txt	      color_list.py        structshape.py
 
 TESTS = Gui_test.py     Lumpy_test.py    	TurmiteWorld_test.py \
 AmoebaWorld_test.py  	World_test.py		TurtleWorld_test.py  \
