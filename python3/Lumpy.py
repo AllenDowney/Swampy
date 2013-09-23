@@ -61,14 +61,14 @@ else:
 # of the fonts to define a length unit, so
 # changing the font sizes will cause the whole diagram to
 # scale up or down.
-font = ("Helvetica", 12)
-smallfont = ("Helvetica", 10)
+font = ("Helvetica", 10)
+smallfont = ("Helvetica", 9)
 
 
 class DiagCanvas(GuiCanvas):
     """Canvas for displaying Diagrams."""
     
-    def box(self, box, padx=0.5, pady=0.3, **options):
+    def box(self, box, padx=0.4, pady=0.2, **options):
         """Draws a rectangle with the given bounding box.
 
         Args:
@@ -336,11 +336,7 @@ class Mapping(Thing):
         lumpy.register(self, val)
         self.bindings = make_kvps(lumpy, list(val.items()))
         self.boxoptions = dict(outline='purple')
-
-        if lumpy.pedantic:
-            self.label = type(val).__name__
-        else:
-            self.label = ''
+        self.label = type(val).__name__
 
     def get_bbox(self):
         """Gets the bounding box for this Mapping.
@@ -448,10 +444,7 @@ class Sequence(Mapping):
         lumpy.register(self, val)
         self.bindings = make_bindings(lumpy, enumerate(val))
 
-        if lumpy.pedantic:
-            self.label = type(val).__name__
-        else:
-            self.label = ''
+        self.label = type(val).__name__
 
         # color code lists, tuples, and other sequences
         if isinstance(val, list):
@@ -659,7 +652,8 @@ class ClassDiagramClass(Thing):
         # have to wait until the Lumpy representation of the stack
         # is complete before we can go looking for instance vars.
         for key, val in list(classobj.__dict__.items()):
-            if vars != None and key not in vars: continue
+            if vars is not None and key not in vars:
+                continue
             
             if iscallable(val):
                 self.methods.append(val)
@@ -699,14 +693,7 @@ class ClassDiagramClass(Thing):
             p.y += 1
 
         # draw the class variables
-        cvars = self.cvars
-        try:
-            cvars.remove('__doc__')
-            cvars.remove('__module__')
-        except:
-            pass
-        
-        # draw the class variables
+        cvars = [var for var in self.cvars if not var.startswith('__')]
         if cvars:
             lines.append(p.y)
             p.y += 1
@@ -804,7 +791,7 @@ class Binding(Thing):
 
         (Rather than drawing the key inside the mapping.)
         """
-        p.x -= 0.7 * flip
+        p.x -= 0.5 * flip
         self.dot2 = Dot()
         self.dot2.draw(diag, p, -flip, tags=tags)
 
@@ -825,7 +812,7 @@ class Binding(Thing):
         self.dot.draw(diag, pos, flip, tags=tags)
         
         p = pos.copy()
-        p.x -= 0.7 * flip
+        p.x -= 0.5 * flip
 
         # if the key is a Simple, try to draw it inside the mapping;
         # otherwise, draw a reference to it
@@ -891,7 +878,7 @@ class ReferenceArrow(Arrow):
         self.item.coords([self.key.pos(), self.val.pos()])
 
 
-class ParentArrow(Thing):
+class ParentArrow(Arrow):
     """Represents an inheritance arrow.
 
     Shows an is-a relationship between classes in a class diagram.
@@ -927,7 +914,7 @@ class ParentArrow(Thing):
         canvas.lower(self.item)
 
 
-class ContainsArrow(Thing):
+class ContainsArrow(Arrow):
     """Represents a contains arrow.
 
     Shows a has-a relationship between classes in a class diagram.
@@ -972,6 +959,7 @@ class Stack(Thing):
         
         for frame in self.frames:
             frame.draw(diag, p, flip, tags=tags)
+
             bbox = self.get_bbox()
             #p.y = bbox.bottom + 3
             p.x = bbox.right + 3
@@ -1339,9 +1327,9 @@ class Diagram(object):
         # the frame at the top contains buttons
         self.lumpy.row([0,0,1], bg='white')
         self.lumpy.bu(text='Close', command=self.close)
-        self.lumpy.bu(text='Print to file:', command=self.printfile)
+        self.lumpy.bu(text='Print to file:', command=self.printfile_callback)
         self.en = self.lumpy.en(width=10, text='lumpy.ps')
-        self.en.bind('<Return>', self.printfile)
+        self.en.bind('<Return>', self.printfile_callback)
         self.la = self.lumpy.la(width=40)
         self.lumpy.endrow()
 
@@ -1371,15 +1359,26 @@ class Diagram(object):
         self.canvas.add_transform(transform)
         
 
-    def printfile(self, event=None):
-        """dump the contents of the canvas to the filename in the
-        filename entry.
+    def printfile_callback(self, event=None):
+        """Dumps the contents of the canvas to a file.
+
+        Gets the filename from the filename entry.
         """
         filename = self.en.get()
+        self.printfile(filename)
+
+    def printfile(self, filename):
+        """Dumps the contents of the canvas to a file.
+
+        filename: string output file name
+        """
+        # shrinkwrap the canvas
         bbox = self.canvas.bbox(ALL)
         width=bbox.right*self.unit
         height=bbox.bottom*self.unit
         self.canvas.config(width=width, height=height)
+
+        # write the file
         self.canvas.dump(filename)
         self.canvas.config(width=self.ca_width, height=self.ca_height)
         self.la.config(text='Wrote file ' + filename)

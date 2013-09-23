@@ -13,6 +13,7 @@ import math
 import random
 import time
 import threading
+import sys
 
 import Tkinter
 from Gui import Gui
@@ -39,6 +40,9 @@ class World(Gui):
         # list of animals that live in this world.
         self.animals = []
 
+        # if the user closes the window, shut down cleanly
+        self.protocol("WM_DELETE_WINDOW", self.quit)
+
     def wait_for_user(self):
         """Waits for user events and processes them."""
         try:
@@ -48,7 +52,7 @@ class World(Gui):
 
     def quit(self):
         """Shuts down the World."""
-        # setting exists tells other threads that the world is gone
+        # tell other threads that the world is gone
         self.exists = False
 
         # destroy closes the window
@@ -231,12 +235,8 @@ class Animal(object):
 
     def undraw(self):
         """Undraws the animal."""
-        try:
-            # delete the items on the canvas that have my tag...
+        if self.world.exists and hasattr(self, 'tag'):
             self.world.canvas.delete(self.tag)
-        except AttributeError:
-            # ...assuming the canvas and tag exist
-            pass
 
     def die(self):
         """Removes the animal from the world and undraws it."""
@@ -245,8 +245,9 @@ class Animal(object):
 
     def redraw(self):
         """Undraws and then redraws the animal."""
-        self.undraw()
-        self.draw()
+        if self.world.exists:
+            self.undraw()
+            self.draw()
 
     def polar(self, x, y, r, theta):
         """Converts polar coordinates to cartesian.

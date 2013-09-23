@@ -32,13 +32,13 @@ class Tests(unittest.TestCase):
         a2 = World.Animal()
         a2.x = 200
 
-        self.assertEquals(len(world.animals), 2)
+        self.assertEqual(len(world.animals), 2)
 
         def get_x(animal): return animal.x
 
         res = world.map_animals(get_x)
-        self.assertEquals(len(res), 2)
-        self.assertEquals(res[1], 200)
+        self.assertEqual(len(res), 2)
+        self.assertEqual(res[1], 200)
 
         world.step()
 
@@ -53,23 +53,23 @@ class Tests(unittest.TestCase):
         world.make_interpreter(globals())
 
         world.inter.run_code('x=3', 'user-provided code')
-        self.assertEquals(x, 3)
+        self.assertEqual(x, 3)
         
         thread = world.inter.run_code_thread('x=5', 'user-provided code')
         thread.join()
-        self.assertEquals(x, 5)
+        self.assertEqual(x, 5)
 
     def test_delay(self):
         world = World.World()
         animal = World.Animal()
 
         world.delay = 0.3
-        self.assertEquals(animal.delay, 0.3)
-        self.assertEquals(world.delay, 0.3)
+        self.assertEqual(animal.delay, 0.3)
+        self.assertEqual(world.delay, 0.3)
 
         animal.delay = 0.4
-        self.assertEquals(animal.delay, 0.4)
-        self.assertEquals(world.delay, 0.4)
+        self.assertEqual(animal.delay, 0.4)
+        self.assertEqual(world.delay, 0.4)
 
         
         

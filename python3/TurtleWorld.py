@@ -5,11 +5,10 @@ Copyright 2010 Allen B. Downey
 Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
-import tkinter
-from tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE
+from tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE, SUNKEN
 
 from Gui import Callable
-from World import World, Animal
+from World import World, Animal, wait_for_user
 
 
 class TurtleWorld(World):
@@ -19,7 +18,9 @@ class TurtleWorld(World):
         self.title('TurtleWorld')
 
         # the interpreter executes user-provided code
-        self.make_interpreter(globals())
+        g = globals()
+        g['world'] = self
+        self.make_interpreter(g)
 
         # make the GUI
         self.setup()
@@ -56,7 +57,7 @@ class TurtleWorld(World):
         self.fr(side=BOTTOM)
         self.te_code = self.te(height=10, width=25, side=BOTTOM)
         self.te_code.insert(END, 'world.clear()\n')
-        self.te_code.insert(END, 'bob = Turtle(world)\n')
+        self.te_code.insert(END, 'bob = Turtle()\n')
         self.endfr()
 
         # run file
@@ -115,7 +116,20 @@ class Turtle(Animal):
         self.heading = 0
         self.pen = True
         self.color = 'red'
+        self.pen_color = 'blue'
         self.draw()
+
+    def get_x(self):
+        """Returns the current x coordinate."""
+        return self.x
+
+    def get_y(self):
+        """Returns the current y coordinate."""
+        return self.y
+
+    def get_heading(self):
+        """Returns the current heading in degrees.  0 is east."""
+        return self.heading
 
     def step(self):
         """Takes a step.
@@ -126,6 +140,9 @@ class Turtle(Animal):
 
     def draw(self):
         """Draws the turtle."""
+        if not self.world:
+            return
+
         self.tag = 'Turtle%d' % id(self)
         lw = self.r/2
         
@@ -165,8 +182,8 @@ class Turtle(Animal):
         self.x, self.y = p2
 
         # if the pen is down, draw a line
-        if self.pen:
-            self.world.canvas.line([p1, p2], fill='black')
+        if self.pen and self.world.exists:
+            self.world.canvas.line([p1, p2], fill=self.pen_color)
         self.redraw()
 
     def bk(self, dist=1):
@@ -201,6 +218,10 @@ class Turtle(Animal):
         self.color = color
         self.redraw()
 
+    def set_pen_color(self, color):
+        """Changes the pen color of the turtle."""
+        self.pen_color = color
+
 
 """Add the turtle methods to the module namespace
 so they can be invoked as simple functions (not methods).
@@ -213,6 +234,7 @@ pu = Turtle.pu
 pd = Turtle.pd
 die = Turtle.die
 set_color = Turtle.set_color
+set_pen_color = Turtle.set_pen_color
 
 
 class TurtleControl(object):
@@ -229,7 +251,7 @@ class TurtleControl(object):
     def setup(self):
         w = self.turtle.world
 
-        self.frame = w.fr(bd=2, relief=tkinter.SUNKEN,
+        self.frame = w.fr(bd=2, relief=SUNKEN,
                           padx=1, pady=1, expand=0)
         w.la(text='Turtle Control')
 

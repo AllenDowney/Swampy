@@ -7,21 +7,29 @@ Copyright 2011 Allen B. Downey
 Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
+import optparse
+import os
 import copy
 import random
 import sys
 import string
 import time
 
-from tkinter import N, S, E, W, TOP, BOTTOM, LEFT, RIGHT, END
-from Gui import Gui, GuiCanvas
-
 # the following definitions can be accessed in the simulator
+
+current_thread = None
+
+def noop(*args):
+    """A handy function taht does nothing.""" 
+
+def balk():
+    """Jumps to the top of the column."""
+    current_thread.balk()
 
 class Semaphore:
     """Represents a semaphore in the simulator.
 
-    Maintains a FIFO queue.
+    Maintains a random queue.
     """
     def __init__(self, n=0):
         self.n = n
@@ -47,17 +55,19 @@ class Semaphore:
                 self.unblock()
 
     def unblock(self):
-        thread = self.queue.pop(0)
+        """Chooses a random thread and unblocks it."""
+        thread = random.choice(self.queue)
+        self.queue.remove(thread)
         thread.dequeue()
         thread.next_loop()
 
 
-class RandomSemaphore(Semaphore):
-    """Variant of Semaphore that implements a random queue."""
+class FifoSemaphore(Semaphore):
+    """Semaphore that implements a FIFO queue."""
 
     def unblock(self):
-        thread = random.choice(self.queue)
-        self.queue.remove(thread)
+        """Chooses the first thread and unblocks it."""
+        thread = self.queue.pop(0)
         thread.dequeue()
         thread.next_loop()
 
@@ -94,15 +104,18 @@ def num_threads():
     sync = current_thread.column.p
     return len(sync.threads)
 
-current_thread = None
 
 
 # make globals and locals for the simulator
 
-sim_globals = globals()
-sim_locals = locals()
+sim_globals = copy.copy(globals())
+sim_locals = dict()
 
 # anything defined after this point is not available inside the simulator
+
+from tkinter import N, S, E, W, TOP, BOTTOM, LEFT, RIGHT, END
+from Gui import Gui, GuiCanvas
+
 
 # get the version of Python
 v = sys.version.split()[0].split('.')
@@ -115,16 +128,20 @@ else:
 
 
 font = ("Courier", 12)
-FSU = 10                    # FSU, the fundamental Sync unit,
+FSU = 9                     # FSU, the fundamental Sync unit,
                             # determines the size of most things.
 
 class Sync(Gui):
     """Represents the thread simulator."""
 
-    def __init__(self, filename=None):
+    def __init__(self, args=['']):
         Gui.__init__(self)
-        #self.geometry('1260x800+74+32')
-        self.filename = filename
+        self.parse_args(args)
+        self.namer = Namer()
+
+        self.locals = sim_locals
+        self.globals = sim_globals
+        
         self.views = {}
         self.w = self
         self.threads = []
@@ -135,6 +152,34 @@ class Sync(Gui):
         for col in self.cols:
             col.create_thread()
 
+    def parse_args(self, args):
+        parser = optparse.OptionParser()
+        parser.add_option('-w', '--write', dest='write',
+                          action='store_true', default=False,
+                          help='Write thread code in code subdirectory?')
+        parser.add_option('-s', '--side', dest='initside',
+                          action='store_true', default=False,
+                          help='Move the initialization code to the left side?')
+
+        (self.options, args) = parser.parse_args(args)
+
+        if args:
+            self.filename = args[0]
+        else:
+            self.filename = ''
+
+    def get_name(self, name=None):
+        return self.namer.next(name)
+
+    def get_threads(self):
+        return self.threads
+
+    def set_global(self, **kwds):
+        self.globals.update(kwds)
+
+    def get_global(self, attr):
+        return self.globals[attr]
+
     def destroy(self):
         """Closes the top window."""
         self.running = False
@@ -144,12 +189,15 @@ class Sync(Gui):
         """Makes the GUI."""
         if self.filename:
             self.read_file(self.filename)
+            self.make_columns()
+            if self.options.write:
+                self.write_files(self.filename)
             return
 
         self.topcol = Column(self, n=5)
         self.colfr = self.fr()
         self.cols = [Column(self, LEFT, n=5) for i in range(2)]
-        self.bu(RIGHT, text='Add\ncolumn', command=self.add_col)
+        self.bu(side=RIGHT, text='Add\ncolumn', command=self.add_col)
         self.endfr()
         self.buttons()
 
@@ -209,28 +257,84 @@ class Sync(Gui):
         """Read a file that contains code for the simulator to execute.
 
         Lines that start with ## do not appear
-        in the display.  A line that starts with ## and
-        contains the word thread indicates the beginning of
+        in the display.
+
+        A line that starts with "## thread" indicates the beginning of
         a new column of code.
+
+        Returns a list of blocks where each block is a list of lines.
         """
-        col = self.topcol = TopColumn(self)
+        def is_new_thread(line):
+            if line[0:2] != '##':
+                return False
+
+            words = line.strip('#').split()
+            word = words[0].lower()
+            return word == 'thread'
+
+        self.blocks = []
+        block = []
+        self.blocks.append(block)
+
+        fp = open(filename)
+        for line in fp:
+            line = line.rstrip()
+
+            if is_new_thread(line):
+                block = []
+                self.blocks.append(block)
+            else:
+                block.append(line)
+
+        fp.close()
+
+    def make_columns(self):
+        """Adds the code in self.blocks to the GUI."""
+        if not self.blocks:
+            return
+
+        side = LEFT if self.options.initside else TOP
+        self.topcol = TopColumn(self, side=side)
+            
+        self.topcol.add_rows(self.blocks[0])
+
         self.colfr = self.fr()
         self.cols = []
         self.endfr()
         
-        fp = open(filename)
-        for line in fp:
-            line = line.rstrip()
-            if line == '': continue
-            if line[0:2] == '##':
-                words = line.strip('#').split()
-                if words[0].lower() == 'thread':
-                    col = self.add_col(0)
-                continue
-            col.add_row(line)
-        fp.close()
+        for block in self.blocks[1:]:
+            col = self.add_col(0)
+            col.add_rows(block)
+
         self.buttons()
-            
+
+    def write_files(self, filename, dirname='book_code'):
+        """Writes the code into separate files for the init and threads.
+
+        filename: name of the file we read
+        dirname: name of the destination subdirectory
+
+        Destination is a subdirectory of the directory the filename is in.
+        """
+        path, filename = os.path.split(filename)
+
+        dest = os.path.join(path, dirname, filename)
+
+        block = self.blocks[0]
+        self.write_file(block, dest, 0)
+
+        for i, block in enumerate(self.blocks[1:]):
+            self.write_file(block, dest, i+1)
+
+    def write_file(self, block, filename, suffix=0):
+        trim_block(block)
+
+        name = '%s.%s' % (filename, str(suffix))
+        fp = open(name, 'w')
+        for line in block:
+            fp.write(line + '\n')
+        fp.close()
+
     def add_col(self, n=5):
         """Adds a new column of code to the display."""
         self.pushfr(self.colfr)
@@ -241,19 +345,19 @@ class Sync(Gui):
 
     def run_init(self):
         """Runs the initialization code in the top column."""
+        if not self.topcol.num_rows():
+            return
+
+        print('running init')
         self.clear_views()
         self.views = {}
 
-        self.locals = copy.copy(sim_locals)
-        self.globals = copy.copy(sim_globals)
-        
         thread = Thread(self.topcol, name='0')
-        while 1:
+        while True:
             thread.step()
             if thread.row == None: break
 
         self.unregister(thread)
-        self.update_views()
 
     def update_views(self):
         """Loops through the views and updates them."""
@@ -283,7 +387,7 @@ def subtract(d1, d2):
     return d
 
 
-def diff(d1, d2):
+def diff_dict(d1, d2):
     """Diffs two dictionaries.
 
     Returns two dictionaries: the first contains all the keys
@@ -300,16 +404,25 @@ def diff(d1, d2):
     return d, c
 
 
+def trim_block(block):
+    """Removes comments from the beginning and empty lines from the end."""
+    if block and block[0].startswith('#'):
+        block.pop(0)
+
+    while block and not block[-1].strip():
+        block.pop(-1)
+
+    
 """
 The following classes define the composite objects that make
 up the display: Row, TopRow, Column and TopColumn.  They are
-all subclasses of Thing.
+all subclasses of Widget.
 """
         
-class Thing:
+class Widget:
     """Superclass of all display objects.
  
-    Each Thing keeps a reference to its immediate parent Thing (p)
+    Each Widget keeps a reference to its immediate parent Widget (p)
     and to the top-most thing (w).
     """
     def __init__(self, p, *args, **options):
@@ -318,7 +431,7 @@ class Thing:
         self.setup(*args, **options)
 
 
-class Row(Thing):
+class Row(Widget):
     """A row of code.
 
     Each row contains two queues, runnable and queued,
@@ -388,7 +501,7 @@ class TopRow(Row):
         self.runnable.delete('all')
 
 
-class Column(Thing):
+class Column(Widget):
     """A list of rows and a few buttons."""
     def setup(self, side=TOP, n=0, Row=Row):
         self.fr = self.w.fr(side=side, bd=3)
@@ -403,6 +516,14 @@ class Column(Thing):
         self.w.endrow()
         self.w.endfr()
 
+    def num_rows(self):
+        return len(self.rows)
+
+    def add_rows(self, block, keep_blanks=False):
+        for line in block:
+            if line or keep_blanks:
+                self.add_row(line)
+
     def add_row(self, text=''):
         self.w.pushfr(self.fr)
         row = self.Row(self, text)
@@ -413,9 +534,15 @@ class Column(Thing):
         new = Thread(self)
         return new
 
-    # iterating through a Column is the same as iterating
-    # through its list of rows.
-    def __iter__(self): return self.rows.__iter__()
+    def next_row(self, row):
+        if row is None:
+            return self.rows[0]
+
+        index = self.rows.index(row)
+        try:
+            return self.rows[index+1]
+        except IndexError:
+            return None
 
 
 class TopColumn(Column):
@@ -484,119 +611,287 @@ class QueueCanvas(GuiCanvas):
         tag = self.text([15, 15], text, font=font)
         return tag
 
+class Namer(object):
+    def __init__(self):
+        self.names = all_thread_names
+        self.next_name = 0
+        self.colors = ['red', 'orange', 'yellow', 'greenyellow',
+                  'green', 'mediumseagreen', 'skyblue',
+                  'violet', 'magenta']
+        self.next_color = 0
+
+    def next(self, name=None):
+        if name == None:
+            name = self.names[self.next_name]
+            self.next_name += 1
+            self.next_name %= len(self.names)
+
+            color = self.colors[self.next_color]
+            self.next_color += 1
+            self.next_color %= len(self.colors)
+            return name, color
+        else:
+            return name, 'white'
+        
+
+class Namespace:
+    """Used to store thread-local variables.
+
+    Inside the simulator, self refers to the thread's namespace.
+    """
+
 
 class Thread:
     """Represents simulated threads."""
-    names = all_thread_names
-    next_name = 0
-    colors = ['red', 'orange', 'yellow', 'greenyellow',
-              'green', 'mediumseagreen', 'skyblue',
-              'violet', 'magenta']
-    next_color = 0
 
     def __init__(self, column, name=None):
         self.column = column
-        if name == None:
-            self.name = Thread.names[Thread.next_name]
-            Thread.next_name += 1
-            Thread.next_name %= len(Thread.names)
-
-            self.color = Thread.colors[Thread.next_color]
-            Thread.next_color += 1
-            Thread.next_color %= len(Thread.colors)
-        else:
-            self.name = name
-            self.color = 'white'
-
-        sync = self.column.p
-        sync.register(self)
+        self.sync = column.p
+        self.name, self.color = self.sync.get_name(name)
+        self.namespace = Namespace()
+        self.flag_map = {}
+        self.while_stack = []
+        self.sync.register(self)
         self.start()
 
     def __str__(self):
         return '<' + self.name + '>'
 
     def enqueue(self):
+        """Puts this thread into queue."""
         self.queued = True
         self.row.remove_thread(self)
         self.row.enqueue_thread(self)
 
     def dequeue(self):
+        """Removes this thread from queue."""
         self.queued = False
         self.row.dequeue_thread(self)
         self.row.add_thread(self)
 
+    def jump_to(self, row):
+        """Removes this thread from its current row and moves it to row."""
+        if self.row:
+            self.row.remove_thread(self)
+        self.row = row
+        if self.row:
+            self.row.add_thread(self)
+
+    def balk(self):
+        self.row.remove_thread(self)
+        self.row = None
+
     def start(self):
+        """Moves this thread to the top of the column."""
         self.queued = False
-        self.iter = self.column.__iter__()
         self.row = None
         self.next_loop()
 
-    def next_row(self):
-        "move this thread to the next row in the column"
-        if self.queued: return
-        if self.row:
-            self.row.remove_thread(self)
-        try:
-            self.row = next(self.iter)
-            self.row.add_thread(self)
-        except StopIteration:
-            self.row = None
-
     def next_loop(self):
-        "move to the next row, looping to the top if necessary"
+        """Moves to the next row, looping to the top if necessary."""
         self.next_row()
-        if self.row == None: self.start()
+        if self.row == None:
+            self.start()
+
+    def next_row(self):
+        """Moves this thread to the next row in the column."""
+        if self.queued:
+            return
+
+        row = self.column.next_row(self.row)
+        self.jump_to(row)
+
+    def skip_body(self):
+        """Skips the body of a conditional."""
+        # get the current line
+        # get the next line
+        # compute the change in indent
+        # find the outdent
+        source = self.row.get()
+        head_indent = self.count_spaces(source)
+
+        self.next_row()
+        source = self.row.get()
+        body_indent = self.count_spaces(source)
+
+        indent = body_indent - head_indent
+
+        if indent <= 0:
+            raise SyntaxError('Body of compound statement must be indented.')
+
+        while True:
+            self.next_row()
+            if self.row == None:
+                break
+
+            source = self.row.get()
+            line_indent = self.count_spaces(source)
+            if line_indent <= head_indent:
+                break
+            
+
+    def count_spaces(self, source):
+        """Returns the number of leading spaces after expanding tabs."""
+        s = source.expandtabs(4)
+        t = s.lstrip(' ')
+        return len(s) - len(t)
 
     def step(self, event=None):
-        """execute the current line of code, then move to the next row.
+        """Executes the current line of code, then moves to the next row.
+
         The current limitation of this simulator is that each row
         has to contain a complete Python statement.  Also, each line
         of code is executed atomically.
+
+        Args:
+            event: unused, provided so that this method can be used
+                   as a binding callback
+
+        Returns:
+            line of code that executed or None
         """
-        if self.queued: return
+        if self.queued:
+            return None
+
+        if self.row == None:
+            return None
+
+        self.check_end_while()
         source = self.row.get()
-        source = source.strip()
         print(self, source)
 
-        code = compile(source, '<user-provided code>', 'exec')
+        before = copy.copy(self.sync.locals)
 
-        # debugging code for catching certain exceptions
-        # try:
-        # except:
-        #     (type, value, traceback) = sys.exc_info()
-        #     print traceback
-        #     print type, value
-        #     self.next()
-        #     return
+        flag = self.exec_line(source, self.sync)
 
-        global current_thread        
+        # see if any variables were defined or changed
+        after = self.sync.locals
+        defined, changed = diff_dict(after, before)
+
+        for key in defined:
+            self.sync.views[key] = self.row
+
+        if defined or changed:
+            self.sync.update_views()
+
+        # either skip to the next line or to the end of a false conditional
+        if flag:
+            self.next_row()
+        else:
+            self.skip_body()
+
+        return source
+
+    def exec_line(self, source, sync):
+        """Runs a line of source code in the context of the given Sync.
+
+        Args:
+            source: source code from a Row
+            sync: Sync object
+
+        Returns:
+            if the line is an if statement, returns the result of
+            evaluating the condition
+        """
+        global current_thread 
         current_thread = self
 
-        sync = self.column.p
-        before = copy.copy(sync.locals)
-        exec(code, sync.globals, sync.locals)
+        sync.globals['self'] = self.namespace
 
-        defined, changed = diff(sync.locals, before)
-        for key in defined:
-            sync.views[key] = self.row
+        try:
+            s = source.strip()
+            code = compile(s, '<user-provided code>', 'exec')
+            exec(code, sync.globals, sync.locals)
+            return True
+        except SyntaxError as error:
+            # check whether it's a conditional statement
+            keyword = s.split()[0]
+            if keyword in ['if', 'else:', 'while']:
+                flag = self.handle_conditional(keyword, source, sync)
+                return flag
+            else:
+                raise error
 
-        sync.update_views()
-        self.next_row()
+    def handle_conditional(self, keyword, source, sync):
+        """Evaluates the condition part of an if statement.
+
+        Args:
+            keyword: if, else or while
+            source: source code from a Row
+            sync: Sync object
+
+        Returns:
+            if the line is an if statement, returns the result of
+            evaluating the condition; otherwise raises a SyntaxError
+        """
+        s = source.strip()
+        if not s.endswith(':'):
+            raise SyntaxError('Header must end with :')
+
+        if keyword in ['if']:
+            # evaluate the condition
+            n = len(keyword)
+            condition = s[n:-1].strip()
+            flag = eval(condition, sync.globals, sync.locals)
+
+            # store the flag
+            indent = self.count_spaces(source)
+            self.flag_map[indent] = flag
+
+            return flag
+
+        elif keyword in ['while']:
+            # evaluate the condition
+            n = len(keyword)
+            condition = s[n:-1].strip()
+            flag = eval(condition, sync.globals, sync.locals)
+
+            if flag:
+                indent = self.count_spaces(source)
+                self.while_stack.append((indent, self.row))
+
+            return flag
+
+        else:
+            assert keyword == 'else:'
+            # see whether the condition was true
+            indent = self.count_spaces(source)
+            try:
+                flag = self.flag_map[indent]
+                return not flag
+            except KeyError:
+                raise SyntaxError('else does not match if')
+
+    def check_end_while(self):
+        """Check if we are at the end of a while loop.
+
+        If so, jump to the top.
+        """
+        if not self.while_stack:
+            return
+
+        indent, row = self.while_stack[-1]
+
+        source = self.row.get()
+        if self.count_spaces(source) <= indent:
+            self.while_stack.pop()
+            self.jump_to(row)
 
     def step_loop(self, event=None):
         self.step()
-        if self.row == None: self.start()
+        if self.row == None:
+            self.start()
         
     def run(self):
-        while 1:
+        while True:
             self.step()
             if self.row == None: break
 
 
-def main(script, filename='mutex.py', *args):
-    sync = Sync(filename)
+def main():
+    sync = Sync(sys.argv[1:])
     sync.mainloop()
 
 
 if __name__ == '__main__':
-    main(*sys.argv)
+    main()

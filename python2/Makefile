@@ -17,7 +17,10 @@ FILES = __init__.py \
 AmoebaWorld.py       mutex.py         turtle_code.py\
 CellWorld.py         Sync.py          TurtleWorld.py       World.py\
 Gui.py               Lumpy.py         TurmiteWorld.py  \
-danger.gif           words.txt	      color_list.py        structshape.py
+danger.gif           words.txt	      color_list.py        structshape.py \
+AmoebaWorld_test.py  Lumpy_test.py        TurmiteWorld_test.py \
+CellWorld_test.py    structshape_test.py  TurtleWorld_test.py \
+Gui_test.py          Sync_test.py         World_test.py
 
 TESTS = Gui_test.py     Lumpy_test.py    	TurmiteWorld_test.py \
 AmoebaWorld_test.py  	World_test.py		TurtleWorld_test.py  \
@@ -26,6 +29,12 @@ Sync_test.py		CellWorld_test.py       structshape_test.py
 SCRIPTS = lumpy_example1.py  lumpy_example2.py  lumpy_example3.py      \
 
 FLAGS = -wn -x import
+
+color:
+	rsync color_list.py /home/downey/public_html/greent/complexity
+	rsync color_list.py /home/downey/public_html/greent/thinkpython
+	rsync color_list.py /home/downey/public_html/greent/thinkpython/code
+	rsync color_list.py /home/downey/public_html/color
 
 python3:
 	cp $(FILES) ../python3
@@ -48,13 +57,27 @@ python3:
 	cd ../python3; 2to3 $(FLAGS) AmoebaWorld_test.py
 	cd ../python3; 2to3 $(FLAGS) Lumpy_test.py
 	cd ../python3; 2to3 $(FLAGS) Sync_test.py
+	cd ../python3; 2to3 $(FLAGS) structshape_test.py
 
-PACKAGE = Swampy
+PACKAGE = swampy
+
+# to update Swampy on PyPI
+# cd ~/swampy/trunk/python2/swampy
+# emacs CHANGES.txt setup.py
+# cd back to this directory
+# make package
+# make dist
 
 package:
 	rsync $(FILES) $(PACKAGE)/swampy
 	rsync $(TESTS) $(PACKAGE)/test
 	rsync $(SCRIPTS) $(PACKAGE)/bin
+
+install:
+	cd $(PACKAGE); sudo python setup.py install
+
+dist:
+	cd $(PACKAGE); python setup.py sdist upload
 
 clean:
 	rm *~ *.pyc

@@ -19,7 +19,8 @@ class Tests(unittest.TestCase):
         self.assertEqual(structshape(t2), 'list of 3 list of 2 int')
 
         t3 = [1, 2, 3, 4.0, '5', '6', [7], [8], 9]
-        self.assertEqual(structshape(t3), 'list of (3 int, float, 2 str, 2 list of int, int)')
+        self.assertEqual(structshape(t3), 
+                         'list of (3 int, float, 2 str, 2 list of int, int)')
 
         class Point:
             """trivial object type"""

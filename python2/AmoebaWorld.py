@@ -159,6 +159,7 @@ class Amoeba(Animal):
         self.size = 0.5
         self.color1 = 'violet'
         self.color2 = 'medium orchid'
+        self.tag = 'Amoeba%d' % id(self)
 
     def move(self, x, y):
         """Moves the amoeba and redraws."""
@@ -173,7 +174,6 @@ class Amoeba(Animal):
         thetas = range(0, 360, 30)
         coords = self.poly_coords(self.x, self.y, thetas, self.size)
 
-        self.tag = 'Amoeba%d' % id(self)
         slime = 'lavender'
 
         # draw the slime outline which will be left behind

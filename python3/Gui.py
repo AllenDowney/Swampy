@@ -68,7 +68,7 @@ import tkinter
 import tkinter.font
 
 from tkinter import N, S, E, W
-from tkinter import TOP, BOTTOM, LEFT, RIGHT, END
+from tkinter import TOP, BOTTOM, LEFT, RIGHT, END, ALL
 
 
 class Gui(tkinter.Tk):
@@ -702,10 +702,10 @@ class GuiCanvas(tkinter.Canvas):
         """
         translator = {}
         for i in ['1', '2', '3']:
-            translator['<Press-'+i+'>'] = '<ButtonPress->' + i + '>'
+            translator['<Press-'+i+'>'] = '<ButtonPress-' + i + '>'
             translator['<Motion-'+i+'>'] = '<B' + i + '-Motion>'
-            translator['<Release-'+i+'>'] = '<ButtonRelease->' + i + '>'
-            translator['<Double-'+i+'>'] = '<Double-Button->' + i + '>'
+            translator['<Release-'+i+'>'] = '<ButtonRelease-' + i + '>'
+            translator['<Double-'+i+'>'] = '<Double-Button-' + i + '>'
         
         return translator.get(event, event)
 

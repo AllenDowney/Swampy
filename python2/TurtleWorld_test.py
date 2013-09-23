@@ -45,13 +45,13 @@ class Tests(unittest.TestCase):
         TurtleWorld.set_pen_color(t, 'magenta')
 
         x = t.get_x()
-        self.assertAlmostEquals(x, -9.0)
+        self.assertAlmostEqual(x, -9.0)
 
         y = t.get_y()
-        self.assertAlmostEquals(y, 0.0)
+        self.assertAlmostEqual(y, 0.0)
 
         heading = t.get_heading()
-        self.assertAlmostEquals(heading, -20)
+        self.assertAlmostEqual(heading, -20)
 
         tw.quit()
 

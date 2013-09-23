@@ -1,9 +1,11 @@
-""" Code example from Complexity and Computation, a book about
-exploring complexity science with Python.  Available free from
+"""Code for handling color names and RGB codes.
 
-http://greenteapress.com/complexity
+This module is part of Swampy, and used in Think Python and
+Think Complexity, by Allen Downey.
 
-Copyright 2011 Allen B. Downey.
+http://greenteapress.com
+
+Copyright 2013 Allen B. Downey.
 Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
@@ -793,7 +795,48 @@ def make_color_dict(colors=COLORS):
     return d
 
 
+def read_colors():
+    """Returns color information in two data structures.
+
+    The format of RGB strings is '#RRGGBB'.
+
+    color_dict: map from color name to RGB string
+    rgbs: list of (rgb, names) pairs, where rgb is an RGB code and
+          names is a sorted list of color names
+    """
+    color_dict = make_color_dict()
+    rgbs = invert_dict(color_dict).items()
+    rgbs.sort()
+    for rgb, names in rgbs:
+        names.sort()
+    return color_dict, rgbs
+
+
+def invert_dict(d):
+    """Returns a dictionary that maps from values to lists of keys.
+
+    d: dict
+
+    returns: dict
+    """
+    inv = dict()
+    for key in d:
+        val = d[key]
+        if val not in inv:
+            inv[val] = [key]
+        else:
+            inv[val].append(key)
+    return inv
+
+
 if __name__ == '__main__':
     color_dict = make_color_dict()
     for name, rgb in color_dict.iteritems():
-        print rgb, name
+        print name, rgb
+
+    color_dict, rgbs = read_colors()
+    for name, rgb in color_dict.iteritems():
+        print name, rgb
+
+    for rgb, names in rgbs:
+        print rgb, names

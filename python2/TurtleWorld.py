@@ -182,7 +182,7 @@ class Turtle(Animal):
         self.x, self.y = p2
 
         # if the pen is down, draw a line
-        if self.pen:
+        if self.pen and self.world.exists:
             self.world.canvas.line([p1, p2], fill=self.pen_color)
         self.redraw()
 

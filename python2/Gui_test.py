@@ -16,7 +16,7 @@ class Tests(unittest.TestCase):
         gui = Gui.Gui()
         fr = gui.fr()
         endfr = gui.endfr()
-        self.assertEquals(gui, endfr)
+        self.assertEqual(gui, endfr)
 
         row = gui.row()
         gui.rowweights([1,2,3])
@@ -26,7 +26,7 @@ class Tests(unittest.TestCase):
 
         popfr = gui.popfr()
 
-        self.assertEquals(popfr, row)
+        self.assertEqual(popfr, row)
         
         en = gui.en()
 
@@ -60,61 +60,61 @@ class Tests(unittest.TestCase):
     def test_options(self):
         d = dict(a=1, b=2, c=3)
         res = Gui.pop_options(d, ['b'])
-        self.assertEquals(len(res), 1)
-        self.assertEquals(len(d), 2)
+        self.assertEqual(len(res), 1)
+        self.assertEqual(len(d), 2)
 
         res = Gui.get_options(d, ['a', 'c'])
-        self.assertEquals(len(res), 2)
-        self.assertEquals(len(d), 2)
+        self.assertEqual(len(res), 2)
+        self.assertEqual(len(d), 2)
         
         res = Gui.remove_options(d, ['c'])
-        self.assertEquals(len(d), 1)
+        self.assertEqual(len(d), 1)
 
         d = dict(side=1, column=2, other=3)
         options, packopts, gridopts = Gui.split_options(d)
-        self.assertEquals(len(options), 1)
-        self.assertEquals(len(packopts), 1)
-        self.assertEquals(len(gridopts), 1)
+        self.assertEqual(len(options), 1)
+        self.assertEqual(len(packopts), 1)
+        self.assertEqual(len(gridopts), 1)
 
         Gui.override(d, side=2)
-        self.assertEquals(d['side'], 2)
+        self.assertEqual(d['side'], 2)
  
         Gui.underride(d, column=3, fill=4)
-        self.assertEquals(d['column'], 2)
-        self.assertEquals(d['fill'], 4)
+        self.assertEqual(d['column'], 2)
+        self.assertEqual(d['fill'], 4)
        
         
     def test_bbox(self):
         bbox = Gui.BBox([[100, 200], [300, 500]])
-        self.assertEquals(bbox.left, 100)
-        self.assertEquals(bbox.right, 300)
-        self.assertEquals(bbox.top, 200)
-        self.assertEquals(bbox.bottom, 500)
+        self.assertEqual(bbox.left, 100)
+        self.assertEqual(bbox.right, 300)
+        self.assertEqual(bbox.top, 200)
+        self.assertEqual(bbox.bottom, 500)
 
-        self.assertEquals(bbox.width(), 200)
-        self.assertEquals(bbox.height(), 300)
+        self.assertEqual(bbox.width(), 200)
+        self.assertEqual(bbox.height(), 300)
 
         # TODO: upperleft, lowerright, midright, midleft, center, union
 
         t = bbox.flatten()
-        self.assertEquals(t[0], 100)
+        self.assertEqual(t[0], 100)
 
         pairs = [pair for pair in Gui.pairiter(t)]
-        self.assertEquals(len(pairs), 2)
+        self.assertEqual(len(pairs), 2)
 
         seq = Gui.flatten(pairs)
-        self.assertEquals(len(seq), 4)
+        self.assertEqual(len(seq), 4)
         
     def test_point(self):
         point = Gui.Point([100, 200])
-        self.assertEquals(point.x, 100)
-        self.assertEquals(point.y, 200)
+        self.assertEqual(point.x, 100)
+        self.assertEqual(point.y, 200)
 
     def test_canvas(self):
         gui = Gui.Gui()
         ca = gui.ca()
-        self.assertEquals(ca.width, 100)
-        self.assertEquals(ca.height, 100)
+        self.assertEqual(ca.width, 100)
+        self.assertEqual(ca.height, 100)
 
         point = [50, 50]
         box = [[100, 200], [300, 500]]

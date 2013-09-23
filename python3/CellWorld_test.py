@@ -20,10 +20,10 @@ class Tests(unittest.TestCase):
         self.assertTrue(cell is got)
 
         neighbors = cw.get_four_neighbors(cell)
-        self.assertEquals(len(neighbors), 4)
+        self.assertEqual(len(neighbors), 4)
 
         neighbors = cw.get_eight_neighbors(cell)
-        self.assertEquals(len(neighbors), 8)
+        self.assertEqual(len(neighbors), 8)
 
         cw.rescale()
 
