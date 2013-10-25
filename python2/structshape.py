@@ -12,21 +12,29 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
 """
 
-def structshape(ds):
+def structshape(ds, pending=None):
     """Returns a string that describes the shape of a data structure.
 
     ds: any Python object
 
     Returns: string
     """
+    if pending is None:
+        pending = set()
+
+    if id(ds) in pending:
+        return 'infinity'
+
+    pending = pending | set([id(ds)])
+
     typename = type(ds).__name__
 
     # handle sequences
-    sequence = (list, tuple, set, type(iter('')))
+    sequence = (list, tuple, set, frozenset, type(iter('')))
     if isinstance(ds, sequence):
         t = []
         for i, x in enumerate(ds):
-            t.append(structshape(x))
+            t.append(structshape(x, pending))
         rep = '%s of %s' % (typename, listrep(t))
         return rep
 
@@ -35,8 +43,8 @@ def structshape(ds):
         keys = set()
         vals = set()
         for k, v in ds.items():
-            keys.add(structshape(k))
-            vals.add(structshape(v))
+            keys.add(structshape(k, pending))
+            vals.add(structshape(v, pending))
         rep = '%s of %d %s->%s' % (typename, len(ds), 
                                    setrep(keys), setrep(vals))
         return rep
@@ -56,6 +64,9 @@ def listrep(t):
 
     Returns: string
     """
+    if len(t) == 0:
+        return 'empty'
+
     current = t[0]
     count = 0
     res = []
@@ -104,6 +115,8 @@ def append(res, typestr, count):
 
 
 if __name__ == '__main__':
+    t = []
+    print structshape(t)
 
     t = [1,2,3]
     print structshape(t)
@@ -131,3 +144,7 @@ if __name__ == '__main__':
 
     it = iter('abc')
     print structshape(it)
+
+    t = []
+    t.append(t)
+    print structshape(t)
