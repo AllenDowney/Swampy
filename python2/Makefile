@@ -99,7 +99,7 @@ python3:
 # emacs CHANGES.txt setup.py
 # update the version number below
 # maybe also emacs MANIFEST
-# cd back to this directory
+# cd ..
 # make package
 # make dist
 
@@ -109,7 +109,7 @@ python3:
 # cd ~/public_html/greent; sh back
 
 PACKAGE = swampy
-ZIP = swampy-2.1.5.zip
+ZIP = swampy-2.1.7.zip
 
 package:
 	rsync $(FILES) $(PACKAGE)/swampy
