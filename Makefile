@@ -1,16 +1,6 @@
 
-FILES = \
-AmoebaWorld.py       lumpy_example2.py  TurmiteWorld_test.py\
-AmoebaWorld_test.py  lumpy_example3.py  turtle_code.py\
-CellWorld.py         Lumpy.py           TurtleWorld.py\
-CellWorld_test.py    Lumpy_test.py      TurtleWorld_test.py\
-Gui.py               mutex.py           World.py\
-Gui_test.py          Sync.py            World_test.py\
-__init__.py          Sync_test.py\
-lumpy_example1.py    TurmiteWorld.py \
-danger.gif	     words.txt
 
-VERSION = swampy-2.1
+VERSION = swampy-2.1.5
 DEST = /home/downey/public_html/swampy
 
 all:
@@ -37,7 +27,7 @@ distrib:
 	cp python2/*.html $(DEST)
 	cp dist/swampy-*.zip swampy-*.zip $(DEST)
 
-DIR = swampy.1.4.doc
+DIR = swampy.2.1.5.doc
 zipdoc:
 	mkdir $(DIR) 
 	cd doc; cp * ../$(DIR)
