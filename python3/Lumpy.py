@@ -27,11 +27,8 @@ interpreter.
 
 """
 
-
-
 import inspect
 import sys
-import traceback
 
 import tkinter
 from tkinter import N, S, E, W, SW, HORIZONTAL, ALL, LAST
@@ -39,30 +36,30 @@ from tkinter import N, S, E, W, SW, HORIZONTAL, ALL, LAST
 from Gui import Gui, GuiCanvas, Point, BBox, underride, ScaleTransform
 
 # get the version of Python
-v = sys.version.split()[0].split('.')
-major = int(v[0])
+VERSION = sys.version.split()[0].split('.')
+MAJOR = int(VERSION[0])
 
-if major < 2:
+if MAJOR < 2:
     print('You must have at least Python version 2.0 to run Lumpy.')
     sys.exit()
 
-minor = int(v[1])
-if major == 2 and minor < 4:
+MINOR = int(VERSION[1])
+if MAJOR == 2 and MINOR < 4:
     # TODO: provide a substitute implementation of set
     pass
         
-if major == 2:
-    tkinter_module = Tkinter
+if MAJOR == 2:
+    TKINTER_MODULE = Tkinter
 else:
-    tkinter_module = tkinter
+    TKINTER_MODULE = tkinter
 
 # most text uses the font specified below; some labels
 # in object diagrams use smallfont.  Lumpy uses the size
 # of the fonts to define a length unit, so
 # changing the font sizes will cause the whole diagram to
 # scale up or down.
-font = ("Helvetica", 10)
-smallfont = ("Helvetica", 9)
+FONT = ("Helvetica", 10)
+SMALLFONT = ("Helvetica", 9)
 
 
 class DiagCanvas(GuiCanvas):
@@ -102,7 +99,7 @@ class DiagCanvas(GuiCanvas):
             text: string
             dx, dy: offset
         """
-        underride(options, fill='black', font=font, anchor=W)
+        underride(options, fill='black', font=FONT, anchor=W)
         x, y = pos
         x += dx
         y += dy
@@ -118,7 +115,7 @@ class DiagCanvas(GuiCanvas):
 
         Draws the text, measures them, and then deletes them.
         """
-        pos = Point([0,0])
+        pos = Point([0, 0])
         tags = 'temp'
         for s in t:
             self.offset_text(pos, s, tags=tags, **options)
@@ -128,16 +125,24 @@ class DiagCanvas(GuiCanvas):
         return bbox
     
 
-nextid = 0
-def make_tags(prefix='Tag'):
-    """Return a tuple with a single element: a tag string.
-    
-    Uses the given prefix and a unique id as a suffix.
-    """
-    global nextid
-    nextid += 1
-    id = '%s%d' % (prefix, nextid)
-    return id,
+class MakeTag(object):
+    """Encapsulates a unique Tag generator."""
+
+    nextid = 0
+
+    @classmethod
+    def make_tag(cls, prefix='Tag'):
+        """Return a tuple with a single element: a tag string.
+
+        Uses the given prefix and a unique id as a suffix.
+
+        prefix: string
+
+        returns: string
+        """
+        cls.nextid += 1
+        tag = '%s%d' % (prefix, cls.nextid)
+        return tag,
 
 
 class Thing(object):
@@ -219,7 +224,7 @@ class Thing(object):
         # the tag of each thing it belongs to.  This convention
         # makes it possible to move entire structures with one
         # move command.
-        self.tags = make_tags(self.__class__.__name__)
+        self.tags = MakeTag.make_tag(self.__class__.__name__)
         tags += self.tags
 
         # invoke drawme in the child class
@@ -229,6 +234,9 @@ class Thing(object):
             
         self.set_offset(pos)
         return drawn
+
+    def drawme(self, diag, pos, flip, tags):
+        raise ValueError('Unimplemented method.')
 
     def bind(self, tags=None):
         """Create bindings for the items with the given tags."""
@@ -280,6 +288,7 @@ class Dot(Thing):
 
 class Simple(Thing):
     """Represents a simple value like a number or a string."""
+
     def __init__(self, lumpy, val):
         lumpy.register(self, val)
         self.val = val
@@ -312,7 +321,7 @@ class Index(Simple):
     target of a reference (since it is not really a value at
     run-time).
     """
-    def __init__(self, lumpy, val):
+    def __init__(self, _, val):
         self.val = val
 
     def drawme(self, diag, pos, flip, tags=tuple()):
@@ -396,7 +405,7 @@ class Mapping(Thing):
         if self.label:
             p = bbox.upperleft()
             item = self.canvas.offset_text(p, self.label, anchor=SW,
-                              font=smallfont, tags=tags)
+                              font=SMALLFONT, tags=tags)
             # make the label clickable
             self.bind(item)
 
@@ -440,6 +449,7 @@ class Mapping(Thing):
 
 class Sequence(Mapping):
     """Represents a sequence type (mostly lists and tuples)."""
+
     def __init__(self, lumpy, val):
         lumpy.register(self, val)
         self.bindings = make_bindings(lumpy, enumerate(val))
@@ -483,7 +493,7 @@ class Instance(Mapping):
         else:
             # otherwise, display all of the instance variables
             if hasdict(val):
-                it = iter(val.__dict__.items())
+                it = list(val.__dict__.items())
             elif hasslots(val):
                 it = [(k, getattr(val, k)) for k in val.__slots__]
             else:
@@ -499,7 +509,7 @@ class Instance(Mapping):
                 seq += make_bindings(lumpy, enumerate(val))
 
             if isinstance(val, dict):
-                seq += make_bindings(lumpy, iter(val.items()))
+                seq += make_bindings(lumpy, list(val.items()))
 
         # if this instance has a name attribute, show it
         attr = '__name__'
@@ -527,7 +537,7 @@ class Instance(Mapping):
 class Frame(Mapping):
     """Represents a frame."""
     def __init__(self, lumpy, frame):
-        it = iter(frame.locals.items())
+        it = list(frame.locals.items())
         self.bindings = make_bindings(lumpy, it)
         self.label = frame.func
         self.boxoptions = dict(outline='blue')
@@ -644,15 +654,15 @@ class ClassDiagramClass(Thing):
         # vars contains the list of instance variables that
         # will be shown; otherwise it is None.
         try:
-            vars = lumpy.instance_vars[classobj]
+            variables = lumpy.instance_vars[classobj]
         except KeyError:
-            vars = None
+            variables = None
 
         # we can get methods and class variables now, but we
         # have to wait until the Lumpy representation of the stack
         # is complete before we can go looking for instance vars.
         for key, val in list(classobj.__dict__.items()):
-            if vars is not None and key not in vars:
+            if variables is not None and key not in variables:
                 continue
             
             if iscallable(val):
@@ -705,8 +715,8 @@ class ClassDiagramClass(Thing):
         # if this is a restricted (or opaque) class, remove
         # unwanted instance vars from self.ivars
         try:
-            vars = self.lumpy.instance_vars[self.classobj]
-            self.ivars.intersection_update(vars)
+            variables = self.lumpy.instance_vars[self.classobj]
+            self.ivars.intersection_update(variables)
         except KeyError:
             pass
             
@@ -786,26 +796,26 @@ class Binding(Thing):
         """
         self.vals.append(val)
 
-    def draw_key(self, diag, p, flip, tags):
+    def draw_key(self, diag, pos, flip, tags):
         """Draws a reference to a previously-drawn key.
 
         (Rather than drawing the key inside the mapping.)
         """
-        p.x -= 0.5 * flip
+        pos.x -= 0.5 * flip
         self.dot2 = Dot()
-        self.dot2.draw(diag, p, -flip, tags=tags)
+        self.dot2.draw(diag, pos, -flip, tags=tags)
 
         # only the things we have drawn so far should
         # be handles for this binding
         self.bind()
 
         if not self.key.isdrawn():
-            p.x -= 2.0 * flip
-            self.key.draw(diag, p, -flip, tags=tags)
+            pos.x -= 2.0 * flip
+            self.key.draw(diag, pos, -flip, tags=tags)
+
         a = ReferenceArrow(self.lumpy, self.dot2, self.key, fill='orange')
         diag.add_arrow(a)
         
-
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
         self.dot = Dot()
@@ -1044,10 +1054,10 @@ class Snapframe(object):
         (self.arg_names,
          self.args,
          self.kwds,
-         locals) = inspect.getargvalues(frame)
+         locs) = inspect.getargvalues(frame)
 
         # make a copy of the dictionary of local vars
-        self.locals = dict(locals)
+        self.locals = dict(locs)
 
         # the function name for the top-most frame is __main__
         if self.func == '?':
@@ -1075,7 +1085,7 @@ class Snapshot(object):
         st = inspect.stack()
         frames = [Snapframe(tup) for tup in st[3:]]
         frames.reverse()
-        self.frames=frames
+        self.frames = frames
 
     def spew(self):
         """Prints the frames in this snapshot."""
@@ -1133,7 +1143,7 @@ class Lumpy(Gui):
 
         # any object that belongs to a class in the Tkinter module
         # is opaque (the name of the module depends on the Python version)
-        self.opaque_module(tkinter_module)
+        self.opaque_module(TKINTER_MODULE)
 
         # by default, class objects and module objects are opaque
         classobjtype = type(Lumpy)
@@ -1147,11 +1157,11 @@ class Lumpy(Gui):
 
         self.make_reference()
 
-    def restrict_class(self, classobj, vars=None):
-        """Restricts a class so that only the given vars are shown."""
-        if vars == None:
-            vars = []
-        self.instance_vars[classobj] = vars
+    def restrict_class(self, classobj, variables=None):
+        """Restricts a class so that only the given variables are shown."""
+        if variables == None:
+            variables = []
+        self.instance_vars[classobj] = variables
 
     def opaque_class(self, classobj):
         """Restricts a class so that no variables are shown."""
@@ -1322,10 +1332,10 @@ class Diagram(object):
 
         # push the frame for the toplevel window
         self.lumpy.pushfr(self.tl)
-        self.lumpy.col([0,1])
+        self.lumpy.col([0, 1])
 
         # the frame at the top contains buttons
-        self.lumpy.row([0,0,1], bg='white')
+        self.lumpy.row([0, 0, 1], bg='white')
         self.lumpy.bu(text='Close', command=self.close)
         self.lumpy.bu(text='Print to file:', command=self.printfile_callback)
         self.en = self.lumpy.en(width=10, text='lumpy.ps')
@@ -1374,8 +1384,8 @@ class Diagram(object):
         """
         # shrinkwrap the canvas
         bbox = self.canvas.bbox(ALL)
-        width=bbox.right*self.unit
-        height=bbox.bottom*self.unit
+        width = bbox.right*self.unit
+        height = bbox.bottom*self.unit
         self.canvas.config(width=width, height=height)
 
         # write the file
@@ -1403,7 +1413,7 @@ class Diagram(object):
         for arrow in self.arrows:
             arrow.update()
             i += 1
-            if n and i>n: break
+            if n and i > n: break
 
 
 class ObjectDiagram(Diagram):
@@ -1414,7 +1424,7 @@ class ObjectDiagram(Diagram):
 
     def draw(self, thing):
         """Draws the top-level Thing."""
-        drawn = thing.draw(self, Point([2,2]), flip=1)
+        drawn = thing.draw(self, Point([2, 2]), flip=1)
 
         # configure the scroll region
         self.canvas.scroll_config()
@@ -1425,9 +1435,6 @@ class ObjectDiagram(Diagram):
         self.arrows = []
         self.tl.deiconify()
         self.canvas.delete(ALL)
-
-    def update_snapshot(self, snapshot):
-        pass
 
 
 class ClassDiagram(Diagram):
@@ -1443,7 +1450,7 @@ class ClassDiagram(Diagram):
         Includes the classes in self.classes,
         or if there are none, then all the classes Lumpy has seen.
         """
-        pos = Point([2,2])
+        pos = Point([2, 2])
 
         if self.classes == None:
             classes = self.lumpy.get_class_list()
@@ -1545,7 +1552,7 @@ def main(script, *args, **kwds):
         func_b(x, y, t, long_name)
 
     def func_b(a, b, s, name):
-        d = dict(a=1, b=(1,2,3))
+        d = dict(a=1, b=(1, 2, 3))
         cell = Cell()
         cell.car = 1
         cell.cdr = cell
@@ -1558,12 +1565,12 @@ def main(script, *args, **kwds):
         d[c] = 7
         d[7] = t
         d[t] = c.cdr
-        lumpy.object_diagram()
+        LUMPY.object_diagram()
 
     func_a(17)
 
 
 if __name__ == '__main__':
-    lumpy = Lumpy()
-    lumpy.make_reference()
+    LUMPY = Lumpy()
+    LUMPY.make_reference()
     main(*sys.argv)
