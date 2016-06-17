@@ -121,6 +121,7 @@ install:
 	cd $(PACKAGE); sudo python setup.py install
 
 dist:
+	rsync $(FILES) $(DEST)/code
 	cd $(PACKAGE); rsync $(ZIP) $(DEST)
 	cd $(PACKAGE); python setup.py sdist --formats gztar,zip upload
 	cd /home/downey/public_html/greent; sh back
