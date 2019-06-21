@@ -15,7 +15,7 @@ It includes the following modules:
 
 * Lumpy: a program that generates UML object and class diagrams from a Python program.
 
-A description of the project and documentation is available at (http://www.greenteapress.com/swampy)
+A description of the project and documentation is available at (http://www.greenteapress.com/wp/swampy)
 
 
 
