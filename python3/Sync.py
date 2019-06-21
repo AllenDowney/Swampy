@@ -19,23 +19,28 @@ import time
 
 current_thread = None
 
+
 def noop(*args):
-    """A handy function taht does nothing.""" 
+    """A handy function taht does nothing."""
+
 
 def balk():
     """Jumps to the top of the column."""
     current_thread.balk()
+
 
 class Semaphore:
     """Represents a semaphore in the simulator.
 
     Maintains a random queue.
     """
+
     def __init__(self, n=0):
         self.n = n
         self.queue = []
 
-    def __str__(self): return str(self.n)
+    def __str__(self):
+        return str(self.n)
 
     def wait(self):
         self.n -= 1
@@ -105,7 +110,6 @@ def num_threads():
     return len(sync.threads)
 
 
-
 # make globals and locals for the simulator
 
 sim_globals = copy.copy(globals())
@@ -114,11 +118,11 @@ sim_locals = dict()
 # anything defined after this point is not available inside the simulator
 
 from tkinter import N, S, E, W, TOP, BOTTOM, LEFT, RIGHT, END
-from Gui import Gui, GuiCanvas
+from .Gui import Gui, GuiCanvas
 
 
 # get the version of Python
-v = sys.version.split()[0].split('.')
+v = sys.version.split()[0].split(".")
 major = int(v[0])
 
 if major == 2:
@@ -128,20 +132,21 @@ else:
 
 
 font = ("Courier", 12)
-FSU = 9                     # FSU, the fundamental Sync unit,
-                            # determines the size of most things.
+FSU = 9  # FSU, the fundamental Sync unit,
+# determines the size of most things.
+
 
 class Sync(Gui):
     """Represents the thread simulator."""
 
-    def __init__(self, args=['']):
+    def __init__(self, args=[""]):
         Gui.__init__(self)
         self.parse_args(args)
         self.namer = Namer()
 
         self.locals = sim_locals
         self.globals = sim_globals
-        
+
         self.views = {}
         self.w = self
         self.threads = []
@@ -154,19 +159,29 @@ class Sync(Gui):
 
     def parse_args(self, args):
         parser = optparse.OptionParser()
-        parser.add_option('-w', '--write', dest='write',
-                          action='store_true', default=False,
-                          help='Write thread code in code subdirectory?')
-        parser.add_option('-s', '--side', dest='initside',
-                          action='store_true', default=False,
-                          help='Move the initialization code to the left side?')
+        parser.add_option(
+            "-w",
+            "--write",
+            dest="write",
+            action="store_true",
+            default=False,
+            help="Write thread code in code subdirectory?",
+        )
+        parser.add_option(
+            "-s",
+            "--side",
+            dest="initside",
+            action="store_true",
+            default=False,
+            help="Move the initialization code to the left side?",
+        )
 
         (self.options, args) = parser.parse_args(args)
 
         if args:
             self.filename = args[0]
         else:
-            self.filename = ''
+            self.filename = ""
 
     def get_name(self, name=None):
         return self.namer.next(name)
@@ -197,18 +212,18 @@ class Sync(Gui):
         self.topcol = Column(self, n=5)
         self.colfr = self.fr()
         self.cols = [Column(self, LEFT, n=5) for i in range(2)]
-        self.bu(side=RIGHT, text='Add\ncolumn', command=self.add_col)
+        self.bu(side=RIGHT, text="Add\ncolumn", command=self.add_col)
         self.endfr()
         self.buttons()
 
     def buttons(self):
         """Makes the buttons."""
-        self.row([1,1,1,1,1])
-        self.bu(text='Run', command=self.run)
-        self.bu(text='Random Run', command=self.random_run)
-        self.bu(text='Stop', command=self.stop)
-        self.bu(text='Step', command=self.step)
-        self.bu(text='Random Step', command=self.random_step)
+        self.row([1, 1, 1, 1, 1])
+        self.bu(text="Run", command=self.run)
+        self.bu(text="Random Run", command=self.random_run)
+        self.bu(text="Stop", command=self.stop)
+        self.bu(text="Step", command=self.step)
+        self.bu(text="Random Step", command=self.random_step)
         self.endfr()
 
     def register(self, thread):
@@ -226,7 +241,7 @@ class Sync(Gui):
     def random_run(self):
         """Runs the simulator with random scheduling."""
         self.run_helper(self.random_step)
-        
+
     def run_helper(self, step=None):
         """Runs the threads until someone clears self.running."""
         self.running = True
@@ -237,14 +252,14 @@ class Sync(Gui):
 
     def step(self):
         """Advances all the threads in order"""
-        for thread in self.threads:            
+        for thread in self.threads:
             thread.step_loop()
 
     def random_step(self):
         """Advances one random thread."""
         threads = [thread for thread in self.threads if not thread.queued]
         if not threads:
-            print('There are currently no threads that can run.')
+            print("There are currently no threads that can run.")
             return
         thread = random.choice(threads)
         thread.step_loop()
@@ -264,13 +279,14 @@ class Sync(Gui):
 
         Returns a list of blocks where each block is a list of lines.
         """
+
         def is_new_thread(line):
-            if line[0:2] != '##':
+            if line[0:2] != "##":
                 return False
 
-            words = line.strip('#').split()
+            words = line.strip("#").split()
             word = words[0].lower()
-            return word == 'thread'
+            return word == "thread"
 
         self.blocks = []
         block = []
@@ -295,20 +311,20 @@ class Sync(Gui):
 
         side = LEFT if self.options.initside else TOP
         self.topcol = TopColumn(self, side=side)
-            
+
         self.topcol.add_rows(self.blocks[0])
 
         self.colfr = self.fr()
         self.cols = []
         self.endfr()
-        
+
         for block in self.blocks[1:]:
             col = self.add_col(0)
             col.add_rows(block)
 
         self.buttons()
 
-    def write_files(self, filename, dirname='book_code'):
+    def write_files(self, filename, dirname="book_code"):
         """Writes the code into separate files for the init and threads.
 
         filename: name of the file we read
@@ -324,15 +340,15 @@ class Sync(Gui):
         self.write_file(block, dest, 0)
 
         for i, block in enumerate(self.blocks[1:]):
-            self.write_file(block, dest, i+1)
+            self.write_file(block, dest, i + 1)
 
     def write_file(self, block, filename, suffix=0):
         trim_block(block)
 
-        name = '%s.%s' % (filename, str(suffix))
-        fp = open(name, 'w')
+        name = "%s.%s" % (filename, str(suffix))
+        fp = open(name, "w")
         for line in block:
-            fp.write(line + '\n')
+            fp.write(line + "\n")
         fp.close()
 
     def add_col(self, n=5):
@@ -348,14 +364,15 @@ class Sync(Gui):
         if not self.topcol.num_rows():
             return
 
-        print('running init')
+        print("running init")
         self.clear_views()
         self.views = {}
 
-        thread = Thread(self.topcol, name='0')
+        thread = Thread(self.topcol, name="0")
         while True:
             thread.step()
-            if thread.row == None: break
+            if thread.row == None:
+                break
 
         self.unregister(thread)
 
@@ -406,25 +423,27 @@ def diff_dict(d1, d2):
 
 def trim_block(block):
     """Removes comments from the beginning and empty lines from the end."""
-    if block and block[0].startswith('#'):
+    if block and block[0].startswith("#"):
         block.pop(0)
 
     while block and not block[-1].strip():
         block.pop(-1)
 
-    
+
 """
 The following classes define the composite objects that make
 up the display: Row, TopRow, Column and TopColumn.  They are
 all subclasses of Widget.
 """
-        
+
+
 class Widget:
     """Superclass of all display objects.
  
     Each Widget keeps a reference to its immediate parent Widget (p)
     and to the top-most thing (w).
     """
+
     def __init__(self, p, *args, **options):
         self.p = p
         self.w = p.w
@@ -437,18 +456,20 @@ class Row(Widget):
     Each row contains two queues, runnable and queued,
     and an entry that contains a line of code.
     """
-    def setup(self, text=''):
+
+    def setup(self, text=""):
         self.tag = None
-        self.fr = self.w.row([0,0,1])
+        self.fr = self.w.row([0, 0, 1])
         self.queued = self.w.qu(side=LEFT, n=3)
-        self.runnable = self.w.qu(side=LEFT, n=3, label='Run')
+        self.runnable = self.w.qu(side=LEFT, n=3, label="Run")
         self.en = self.w.en(side=LEFT, font=font)
-        self.en.bind('<Key>', self.keystroke)
+        self.en.bind("<Key>", self.keystroke)
         self.w.endrow()
         self.put(text)
 
     def update(self, val):
-        if self.tag: self.clear()
+        if self.tag:
+            self.clear()
         text = str(val)
         self.tag = self.runnable.display_text(text)
 
@@ -458,11 +479,11 @@ class Row(Widget):
     def keystroke(self, event=None):
         "resize the entry whenever the user types a character"
         self.entry_size()
-        
+
     def entry_size(self):
         "resize the entry"
         text = self.get()
-        width = self.en.cget('width')
+        width = self.en.cget("width")
         l = len(text) + 2
         if l > width:
             self.en.configure(width=l)
@@ -495,24 +516,24 @@ class TopRow(Row):
     queued threads, and the "runnable" queue is actually used
     to display the value of variables.
     """
-    def setup(self, text=''):
+
+    def setup(self, text=""):
         Row.setup(self, text)
         self.queued.destroy()
-        self.runnable.delete('all')
+        self.runnable.delete("all")
 
 
 class Column(Widget):
     """A list of rows and a few buttons."""
+
     def setup(self, side=TOP, n=0, Row=Row):
         self.fr = self.w.fr(side=side, bd=3)
         self.Row = Row
         self.rows = [self.Row(self) for i in range(n)]
 
-        self.buttons = self.w.row([1,1], side=BOTTOM)
-        self.bu1 = self.w.bu(text='Create thread',
-                                 command=self.create_thread)
-        self.bu2 = self.w.bu(text='Add row',
-                             command=self.add_row)
+        self.buttons = self.w.row([1, 1], side=BOTTOM)
+        self.bu1 = self.w.bu(text="Create thread", command=self.create_thread)
+        self.bu2 = self.w.bu(text="Add row", command=self.add_row)
         self.w.endrow()
         self.w.endfr()
 
@@ -524,7 +545,7 @@ class Column(Widget):
             if line or keep_blanks:
                 self.add_row(line)
 
-    def add_row(self, text=''):
+    def add_row(self, text=""):
         self.w.pushfr(self.fr)
         row = self.Row(self, text)
         self.w.popfr()
@@ -540,7 +561,7 @@ class Column(Widget):
 
         index = self.rows.index(row)
         try:
-            return self.rows[index+1]
+            return self.rows[index + 1]
         except IndexError:
             return None
 
@@ -552,26 +573,27 @@ class TopColumn(Column):
     two ways: it has different buttons, and it uses the TopRow
     constructor to make new rows rather than the Row constructor.
     """
+
     def setup(self, side=TOP, n=0, Row=TopRow):
         Column.setup(self, side, n, Row)
-        self.bu1.configure(text='Run initialization',
-                                 command=self.p.run_init)
+        self.bu1.configure(text="Run initialization", command=self.p.run_init)
+
 
 class QueueCanvas(GuiCanvas):
     """Displays the runnable and queued threads."""
-    def __init__(self, w, n=1, label='Queue'):
+
+    def __init__(self, w, n=1, label="Queue"):
         self.n = n
         self.label = label
         width = 2 * n * FSU
         height = 3 * FSU
-        GuiCanvas.__init__(self, w, width=width, height=height,
-                           transforms=[])
+        GuiCanvas.__init__(self, w, width=width, height=height, transforms=[])
         self.threads = []
         self.setup()
-        
+
     def setup(self):
-        self.text([3, 15], self.label, font=font, anchor=W, fill='white')
-        
+        self.text([3, 15], self.label, font=font, anchor=W, fill="white")
+
     def add_thread(self, thread):
         self.undraw_queue()
         self.threads.append(thread)
@@ -588,21 +610,21 @@ class QueueCanvas(GuiCanvas):
         r = 0.9 * FSU
         for thread in self.threads:
             self.draw_thread(thread, x, y, r)
-            x += 1.5*r
+            x += 1.5 * r
             if x > self.get_width():
                 x = FSU
-                y += 1.5*r
-        
+                y += 1.5 * r
+
     def undraw_queue(self):
         for thread in self.threads:
             self.delete(thread.tag)
 
-    def draw_thread(self, thread, x=FSU, y=FSU, r=0.9*FSU):
-        thread.tag = 'Thread' + thread.name
+    def draw_thread(self, thread, x=FSU, y=FSU, r=0.9 * FSU):
+        thread.tag = "Thread" + thread.name
         self.circle([x, y], r, fill=thread.color, tags=thread.tag)
-        font=('Courier', int(r+3))
+        font = ("Courier", int(r + 3))
         self.text([x, y], thread.name, font=font, tags=thread.tag)
-        self.tag_bind(thread.tag, '<Button-1>', thread.step_loop)
+        self.tag_bind(thread.tag, "<Button-1>", thread.step_loop)
 
     def undraw_thread(self, thread):
         self.delete(thread.tag)
@@ -611,13 +633,22 @@ class QueueCanvas(GuiCanvas):
         tag = self.text([15, 15], text, font=font)
         return tag
 
+
 class Namer(object):
     def __init__(self):
         self.names = all_thread_names
         self.next_name = 0
-        self.colors = ['red', 'orange', 'yellow', 'greenyellow',
-                  'green', 'mediumseagreen', 'skyblue',
-                  'violet', 'magenta']
+        self.colors = [
+            "red",
+            "orange",
+            "yellow",
+            "greenyellow",
+            "green",
+            "mediumseagreen",
+            "skyblue",
+            "violet",
+            "magenta",
+        ]
         self.next_color = 0
 
     def next(self, name=None):
@@ -631,8 +662,8 @@ class Namer(object):
             self.next_color %= len(self.colors)
             return name, color
         else:
-            return name, 'white'
-        
+            return name, "white"
+
 
 class Namespace:
     """Used to store thread-local variables.
@@ -655,7 +686,7 @@ class Thread:
         self.start()
 
     def __str__(self):
-        return '<' + self.name + '>'
+        return "<" + self.name + ">"
 
     def enqueue(self):
         """Puts this thread into queue."""
@@ -717,7 +748,7 @@ class Thread:
         indent = body_indent - head_indent
 
         if indent <= 0:
-            raise SyntaxError('Body of compound statement must be indented.')
+            raise SyntaxError("Body of compound statement must be indented.")
 
         while True:
             self.next_row()
@@ -728,12 +759,11 @@ class Thread:
             line_indent = self.count_spaces(source)
             if line_indent <= head_indent:
                 break
-            
 
     def count_spaces(self, source):
         """Returns the number of leading spaces after expanding tabs."""
         s = source.expandtabs(4)
-        t = s.lstrip(' ')
+        t = s.lstrip(" ")
         return len(s) - len(t)
 
     def step(self, event=None):
@@ -793,20 +823,20 @@ class Thread:
             if the line is an if statement, returns the result of
             evaluating the condition
         """
-        global current_thread 
+        global current_thread
         current_thread = self
 
-        sync.globals['self'] = self.namespace
+        sync.globals["self"] = self.namespace
 
         try:
             s = source.strip()
-            code = compile(s, '<user-provided code>', 'exec')
+            code = compile(s, "<user-provided code>", "exec")
             exec(code, sync.globals, sync.locals)
             return True
         except SyntaxError as error:
             # check whether it's a conditional statement
             keyword = s.split()[0]
-            if keyword in ['if', 'else:', 'while']:
+            if keyword in ["if", "else:", "while"]:
                 flag = self.handle_conditional(keyword, source, sync)
                 return flag
             else:
@@ -825,10 +855,10 @@ class Thread:
             evaluating the condition; otherwise raises a SyntaxError
         """
         s = source.strip()
-        if not s.endswith(':'):
-            raise SyntaxError('Header must end with :')
+        if not s.endswith(":"):
+            raise SyntaxError("Header must end with :")
 
-        if keyword in ['if']:
+        if keyword in ["if"]:
             # evaluate the condition
             n = len(keyword)
             condition = s[n:-1].strip()
@@ -840,7 +870,7 @@ class Thread:
 
             return flag
 
-        elif keyword in ['while']:
+        elif keyword in ["while"]:
             # evaluate the condition
             n = len(keyword)
             condition = s[n:-1].strip()
@@ -853,14 +883,14 @@ class Thread:
             return flag
 
         else:
-            assert keyword == 'else:'
+            assert keyword == "else:"
             # see whether the condition was true
             indent = self.count_spaces(source)
             try:
                 flag = self.flag_map[indent]
                 return not flag
             except KeyError:
-                raise SyntaxError('else does not match if')
+                raise SyntaxError("else does not match if")
 
     def check_end_while(self):
         """Check if we are at the end of a while loop.
@@ -881,11 +911,12 @@ class Thread:
         self.step()
         if self.row == None:
             self.start()
-        
+
     def run(self):
         while True:
             self.step()
-            if self.row == None: break
+            if self.row == None:
+                break
 
 
 def main():
@@ -893,5 +924,5 @@ def main():
     sync.mainloop()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

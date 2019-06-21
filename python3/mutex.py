@@ -8,4 +8,3 @@ mutex.wait()
 # critical section
 counter += 1
 mutex.signal()
-

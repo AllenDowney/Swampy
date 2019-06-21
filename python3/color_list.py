@@ -771,25 +771,26 @@ COLORS = """
 
 """
 
+
 def make_color_dict(colors=COLORS):
     """Returns a dictionary that maps color names to RGB strings.
 
     The format of RGB strings is '#RRGGBB'.
     """
     # regular expressions to match numbers and color names
-    number = r'(\d+)'
-    space = r'[ \t]*'
-    name = r'([ \w]+)'
+    number = r"(\d+)"
+    space = r"[ \t]*"
+    name = r"([ \w]+)"
     pattern = space + (number + space) * 3 + name
     prog = re.compile(pattern)
 
     # read the file
     d = dict()
-    for line in colors.split('\n'):
+    for line in colors.split("\n"):
         ro = prog.match(line)
         if ro:
             r, g, b, name = ro.groups()
-            rgb = '#%02x%02x%02x' % (int(r), int(g), int(b))
+            rgb = "#%02x%02x%02x" % (int(r), int(g), int(b))
             d[name] = rgb
 
     return d
@@ -829,7 +830,7 @@ def invert_dict(d):
     return inv
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     color_dict = make_color_dict()
     for name, rgb in color_dict.items():
         print(name, rgb)

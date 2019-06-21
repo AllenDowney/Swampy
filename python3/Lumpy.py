@@ -33,21 +33,21 @@ import sys
 import tkinter
 from tkinter import N, S, E, W, SW, HORIZONTAL, ALL, LAST
 
-from Gui import Gui, GuiCanvas, Point, BBox, underride, ScaleTransform
+from .Gui import Gui, GuiCanvas, Point, BBox, underride, ScaleTransform
 
 # get the version of Python
-VERSION = sys.version.split()[0].split('.')
+VERSION = sys.version.split()[0].split(".")
 MAJOR = int(VERSION[0])
 
 if MAJOR < 2:
-    print('You must have at least Python version 2.0 to run Lumpy.')
+    print("You must have at least Python version 2.0 to run Lumpy.")
     sys.exit()
 
 MINOR = int(VERSION[1])
 if MAJOR == 2 and MINOR < 4:
     # TODO: provide a substitute implementation of set
     pass
-        
+
 if MAJOR == 2:
     TKINTER_MODULE = Tkinter
 else:
@@ -64,7 +64,7 @@ SMALLFONT = ("Helvetica", 9)
 
 class DiagCanvas(GuiCanvas):
     """Canvas for displaying Diagrams."""
-    
+
     def box(self, box, padx=0.4, pady=0.2, **options):
         """Draws a rectangle with the given bounding box.
 
@@ -74,7 +74,7 @@ class DiagCanvas(GuiCanvas):
         """
 
         # underride sets default values only if the called hasn't
-        underride(options, outline='black')
+        underride(options, outline="black")
         box.left -= padx
         box.top -= pady
         box.right += padx
@@ -99,31 +99,31 @@ class DiagCanvas(GuiCanvas):
             text: string
             dx, dy: offset
         """
-        underride(options, fill='black', font=FONT, anchor=W)
+        underride(options, fill="black", font=FONT, anchor=W)
         x, y = pos
         x += dx
         y += dy
         return self.text([x, y], text, **options)
-        
+
     def dot(self, pos, r=0.2, **options):
         """Draws a dot at the given position with radius r."""
-        underride(options, fill='white', outline='orange')
+        underride(options, fill="white", outline="orange")
         return self.circle(pos, r, **options)
-        
+
     def measure(self, t, **options):
         """Finds the bounding box of the list of words.
 
         Draws the text, measures them, and then deletes them.
         """
         pos = Point([0, 0])
-        tags = 'temp'
+        tags = "temp"
         for s in t:
             self.offset_text(pos, s, tags=tags, **options)
             pos.y += 1
         bbox = self.bbox(tags)
         self.delete(tags)
         return bbox
-    
+
 
 class MakeTag(object):
     """Encapsulates a unique Tag generator."""
@@ -131,7 +131,7 @@ class MakeTag(object):
     nextid = 0
 
     @classmethod
-    def make_tag(cls, prefix='Tag'):
+    def make_tag(cls, prefix="Tag"):
         """Return a tuple with a single element: a tag string.
 
         Uses the given prefix and a unique id as a suffix.
@@ -141,8 +141,8 @@ class MakeTag(object):
         returns: string
         """
         cls.nextid += 1
-        tag = '%s%d' % (prefix, cls.nextid)
-        return tag,
+        tag = "%s%d" % (prefix, cls.nextid)
+        return (tag,)
 
 
 class Thing(object):
@@ -152,6 +152,7 @@ class Thing(object):
     or set of items in a diagram.  A Thing can only be drawn in
     one Diagram at a time.
     """
+
     things_created = 0
     things_drawn = 0
 
@@ -159,11 +160,11 @@ class Thing(object):
         """Override __new__ so we can count the number of Things."""
         Thing.things_created += 1
         return object.__new__(cls)
-    
+
     def get_bbox(self):
         """Returns the bounding box of this object if it is drawn."""
         return self.canvas.bbox(self.tags)
-    
+
     def set_offset(self, pos):
         """Sets the offset attribute.
 
@@ -183,7 +184,7 @@ class Thing(object):
 
     def isdrawn(self):
         """Return True if the object has been drawn."""
-        return hasattr(self, 'drawn')
+        return hasattr(self, "drawn")
 
     def draw(self, diag, pos, flip, tags=tuple()):
         """Draws this Thing at the given position.
@@ -218,7 +219,7 @@ class Thing(object):
             print(Thing.things_drawn)
 
             # uncomment this to see things as they are drawn
-            #self.diag.lumpy.update()
+            # self.diag.lumpy.update()
 
         # each thing has a list of tags: its own tag plus
         # the tag of each thing it belongs to.  This convention
@@ -231,12 +232,12 @@ class Thing(object):
         drawn = self.drawme(diag, pos, flip, tags)
         if drawn == None:
             drawn = [self]
-            
+
         self.set_offset(pos)
         return drawn
 
     def drawme(self, diag, pos, flip, tags):
-        raise ValueError('Unimplemented method.')
+        raise ValueError("Unimplemented method.")
 
     def bind(self, tags=None):
         """Create bindings for the items with the given tags."""
@@ -268,19 +269,20 @@ class Thing(object):
 
         self.canvas.move(self.tags, dx, dy)
         self.diag.update_arrows()
-  
+
     def up(self, event):
         """Release the object being dragged.
 
         Callback invoked when the user releases the button.
         """
-        event.widget.unbind ("<B1-Motion>")
-        event.widget.unbind ("<ButtonRelease-1>")
+        event.widget.unbind("<B1-Motion>")
+        event.widget.unbind("<ButtonRelease-1>")
         self.diag.update_arrows()
 
 
 class Dot(Thing):
     """Represents a dot in a diagram."""
+
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
         self.canvas.dot(pos, tags=tags)
@@ -296,19 +298,19 @@ class Simple(Thing):
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
         p = pos.copy()
-        p.x += 0.1 * flip        
-        anchor = {1:W, -1:E}
+        p.x += 0.1 * flip
+        anchor = {1: W, -1: E}
 
         # put quotes around strings; for everything else, use
         # the standard str representation
         val = self.val
         maxlen = 30
         if isinstance(val, str):
-            val = val.strip('\n')
+            val = val.strip("\n")
             label = "'%s'" % val[0:maxlen]
         else:
             label = str(val)
-        
+
         self.canvas.offset_text(p, label, tags=tags, anchor=anchor[flip])
         self.bind()
 
@@ -321,17 +323,18 @@ class Index(Simple):
     target of a reference (since it is not really a value at
     run-time).
     """
+
     def __init__(self, _, val):
         self.val = val
 
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
         p = pos.copy()
-        p.x += 0.1 * flip        
-        anchor = {1:W, -1:E}
+        p.x += 0.1 * flip
+        anchor = {1: W, -1: E}
 
         label = str(self.val)
-        
+
         self.canvas.offset_text(p, label, tags=tags, anchor=anchor[flip])
         self.bind()
 
@@ -341,10 +344,11 @@ class Mapping(Thing):
 
     Sequence and Instance inherit from Mapping.
     """
+
     def __init__(self, lumpy, val):
         lumpy.register(self, val)
         self.bindings = make_kvps(lumpy, list(val.items()))
-        self.boxoptions = dict(outline='purple')
+        self.boxoptions = dict(outline="purple")
         self.label = type(val).__name__
 
     def get_bbox(self):
@@ -361,7 +365,7 @@ class Mapping(Thing):
 
         # intag is attached to items that should be considered
         # inside the box
-        intag = self.tags[0] + 'inside'
+        intag = self.tags[0] + "inside"
 
         # draw the bindings
         for binding in self.bindings:
@@ -371,7 +375,7 @@ class Mapping(Thing):
             # draw the binding
             binding.draw(diag, p, flip, tags=tags)
 
-            # apply intag to the dots 
+            # apply intag to the dots
             self.canvas.addtag_withtag(intag, binding.dot.tags)
             if drawn:
                 # if the key was already drawn, then the binding
@@ -394,8 +398,9 @@ class Mapping(Thing):
         else:
             # otherwise just draw a box
             bbox = BBox([p.copy(), p.copy()])
-            item = self.canvas.box(bbox, padx=0.4, pady=0.4, tags=tags,
-                              **self.boxoptions)
+            item = self.canvas.box(
+                bbox, padx=0.4, pady=0.4, tags=tags, **self.boxoptions
+            )
 
         # make the box clickable
         self.bind(item)
@@ -404,8 +409,9 @@ class Mapping(Thing):
         # put the label above the box
         if self.label:
             p = bbox.upperleft()
-            item = self.canvas.offset_text(p, self.label, anchor=SW,
-                              font=SMALLFONT, tags=tags)
+            item = self.canvas.offset_text(
+                p, self.label, anchor=SW, font=SMALLFONT, tags=tags
+            )
             # make the label clickable
             self.bind(item)
 
@@ -438,14 +444,14 @@ class Mapping(Thing):
 
         Args:
             cls: is the Class of the object that contains this mapping.
-        """        
+        """
         if isinstance(val, Instance) and val.cls is not None:
             cls.add_hasa(val.cls)
         elif isinstance(val, Sequence):
             val.scan_bindings(cls)
         elif isinstance(val, Mapping):
             val.scan_bindings(cls)
-        
+
 
 class Sequence(Mapping):
     """Represents a sequence type (mostly lists and tuples)."""
@@ -458,11 +464,11 @@ class Sequence(Mapping):
 
         # color code lists, tuples, and other sequences
         if isinstance(val, list):
-            self.boxoptions = dict(outline='green1')
+            self.boxoptions = dict(outline="green1")
         elif isinstance(val, tuple):
-            self.boxoptions = dict(outline='green4')
+            self.boxoptions = dict(outline="green4")
         else:
-            self.boxoptions = dict(outline='green2')
+            self.boxoptions = dict(outline="green2")
 
 
 class Instance(Mapping):
@@ -470,6 +476,7 @@ class Instance(Mapping):
 
     Anything with a __dict__ is treated as an Instance.
     """
+
     def __init__(self, lumpy, val):
         lumpy.register(self, val)
 
@@ -481,7 +488,7 @@ class Instance(Mapping):
         else:
             class_or_type = type(val)
             self.cls = None
-            
+
         self.label = class_or_type.__name__
 
         if class_or_type in lumpy.instance_vars:
@@ -497,10 +504,13 @@ class Instance(Mapping):
             elif hasslots(val):
                 it = [(k, getattr(val, k)) for k in val.__slots__]
             else:
-                t = [k for k, v in type(val).__dict__.items()
-                     if str(v).find('attribute') == 1]
+                t = [
+                    k
+                    for k, v in type(val).__dict__.items()
+                    if str(v).find("attribute") == 1
+                ]
                 it = [(k, getattr(val, k)) for k in t]
-            
+
             seq = make_bindings(lumpy, it)
 
             # and if the object extends list, tuple or dict,
@@ -512,12 +522,12 @@ class Instance(Mapping):
                 seq += make_bindings(lumpy, list(val.items()))
 
         # if this instance has a name attribute, show it
-        attr = '__name__'
+        attr = "__name__"
         if hasname(val):
             seq += make_bindings(lumpy, [[attr, val.__name__]])
 
         self.bindings = seq
-        self.boxoptions = dict(outline='red')
+        self.boxoptions = dict(outline="red")
 
     def scan_bindings(self, cls):
         """Look for references to other types.
@@ -536,12 +546,13 @@ class Instance(Mapping):
 
 class Frame(Mapping):
     """Represents a frame."""
+
     def __init__(self, lumpy, frame):
         it = list(frame.locals.items())
         self.bindings = make_bindings(lumpy, it)
         self.label = frame.func
-        self.boxoptions = dict(outline='blue')
-    
+        self.boxoptions = dict(outline="blue")
+
 
 class Class(Instance):
     """Represents a Class.
@@ -550,13 +561,14 @@ class Class(Instance):
     object diagram, and contains a ClassDiagramClass, which
     controls how the Class appears in a class diagram.
     """
+
     def __init__(self, lumpy, classobj):
         Instance.__init__(self, lumpy, classobj)
         self.cdc = ClassDiagramClass(lumpy, classobj)
         self.cdc.cls = self
-        
+
         lumpy.classes.append(self)
-        
+
         self.classobj = classobj
         self.module = classobj.__module__
         self.bases = classobj.__bases__
@@ -585,7 +597,7 @@ class Class(Instance):
         # height and depth are used to lay out the tree
         self.height = None
         self.depth = None
-        
+
     def add_child(self, child):
         """Adds a child.
 
@@ -614,7 +626,7 @@ class Class(Instance):
             return
         for child in self.childs:
             child.set_height()
-            
+
         heights = [child.height for child in self.childs]
         self.height = max(heights) + 1
 
@@ -631,13 +643,14 @@ class Class(Instance):
             return
         for parent in self.parents:
             parent.set_depth()
-            
+
         depths = [parent.depth for parent in self.parents]
         self.depth = max(depths) + 1
 
 
 class ClassDiagramClass(Thing):
     """Represents a class as it appears in a class diagram."""
+
     def __init__(self, lumpy, classobj):
         self.lumpy = lumpy
         self.classobj = classobj
@@ -645,7 +658,7 @@ class ClassDiagramClass(Thing):
         # self.methods is the list of methods defined in this class.
         # self.cvars is the list of class variables.
         # self.ivars is a set of instance variables.
-        
+
         self.methods = []
         self.cvars = []
         self.ivars = set()
@@ -664,19 +677,18 @@ class ClassDiagramClass(Thing):
         for key, val in list(classobj.__dict__.items()):
             if variables is not None and key not in variables:
                 continue
-            
+
             if iscallable(val):
                 self.methods.append(val)
             else:
                 self.cvars.append(key)
 
-        key = lambda x: x.__class__.__name__ + "."  + x.__name__
+        key = lambda x: x.__class__.__name__ + "." + x.__name__
         self.methods.sort(key=key)
         self.cvars.sort()
 
-        self.boxoptions = dict(outline='blue')
-        self.lineoptions = dict(fill='blue')
-
+        self.boxoptions = dict(outline="blue")
+        self.lineoptions = dict(fill="blue")
 
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
@@ -703,7 +715,7 @@ class ClassDiagramClass(Thing):
             p.y += 1
 
         # draw the class variables
-        cvars = [var for var in self.cvars if not var.startswith('__')]
+        cvars = [var for var in self.cvars if not var.startswith("__")]
         if cvars:
             lines.append(p.y)
             p.y += 1
@@ -719,7 +731,7 @@ class ClassDiagramClass(Thing):
             self.ivars.intersection_update(variables)
         except KeyError:
             pass
-            
+
         # draw the instance variables
         ivars = list(self.ivars)
         ivars.sort()
@@ -753,7 +765,7 @@ class ClassDiagramClass(Thing):
         if childs:
             q = pos.copy()
             q.x = bbox.right + 8
-            
+
             drawn = self.diag.draw_classes(childs, q, tags)
             alldrawn.extend(drawn)
 
@@ -777,13 +789,14 @@ class ClassDiagramClass(Thing):
         """
         x, y = bbox.midright()
         x += 0.1
-        coords = [[x, y], [x+size, y+size], [x+size, y-size], [x, y]]
+        coords = [[x, y], [x + size, y + size], [x + size, y - size], [x, y]]
         item = self.canvas.line(coords, tags=tags, **self.lineoptions)
         return item
 
 
 class Binding(Thing):
     """Represents the binding between a key or variable and a value."""
+
     def __init__(self, lumpy, key, val):
         lumpy.register(self, (key, val))
         self.key = key
@@ -813,14 +826,14 @@ class Binding(Thing):
             pos.x -= 2.0 * flip
             self.key.draw(diag, pos, -flip, tags=tags)
 
-        a = ReferenceArrow(self.lumpy, self.dot2, self.key, fill='orange')
+        a = ReferenceArrow(self.lumpy, self.dot2, self.key, fill="orange")
         diag.add_arrow(a)
-        
+
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
         self.dot = Dot()
         self.dot.draw(diag, pos, flip, tags=tags)
-        
+
         p = pos.copy()
         p.x -= 0.5 * flip
 
@@ -835,22 +848,23 @@ class Binding(Thing):
                 self.bind()
                 self.dot2 = None
             else:
-                self.draw_key(diag, p, flip, tags)                
+                self.draw_key(diag, p, flip, tags)
         else:
-            self.draw_key(diag, p, flip, tags)                
+            self.draw_key(diag, p, flip, tags)
 
         p = pos.copy()
         p.x += 2.0 * flip
 
         for val in self.vals:
             val.draw(diag, p, flip, tags=tags)
-            a = ReferenceArrow(self.lumpy, self.dot, val, fill='orange')
+            a = ReferenceArrow(self.lumpy, self.dot, val, fill="orange")
             diag.add_arrow(a)
             p.y += 1
 
 
 class Arrow(Thing):
     """Parent class for arrows."""
+
     def update(self):
         """Redraws this arrow after something moves."""
         if not hasdiag(self):
@@ -858,16 +872,16 @@ class Arrow(Thing):
         self.diag.canvas.delete(self.item)
         self.draw(self.diag)
 
-    
 
 class ReferenceArrow(Arrow):
     """Represents a reference in an object diagram."""
+
     def __init__(self, lumpy, key, val, **options):
         self.lumpy = lumpy
         self.key = key
         self.val = val
         self.options = options
-        
+
     def draw(self, diag):
         """Draw the Thing.
 
@@ -876,9 +890,7 @@ class ReferenceArrow(Arrow):
         """
         self.diag = diag
         canvas = diag.canvas
-        self.item = canvas.arrow(self.key.pos(),
-                                 self.val.pos(),
-                                 **self.options)
+        self.item = canvas.arrow(self.key.pos(), self.val.pos(), **self.options)
         self.item.lower()
 
     def update(self):
@@ -893,13 +905,14 @@ class ParentArrow(Arrow):
 
     Shows an is-a relationship between classes in a class diagram.
     """
+
     def __init__(self, lumpy, parent, child, **options):
         self.lumpy = lumpy
         self.parent = parent
         self.child = child
-        underride(options, fill='blue')
+        underride(options, fill="blue")
         self.options = options
-        
+
     def draw(self, diag):
         """Draw the Thing.
 
@@ -929,13 +942,14 @@ class ContainsArrow(Arrow):
 
     Shows a has-a relationship between classes in a class diagram.
     """
+
     def __init__(self, lumpy, parent, child, **options):
         self.lumpy = lumpy
         self.parent = parent
         self.child = child
-        underride(options, fill='orange', arrow=LAST)
+        underride(options, fill="orange", arrow=LAST)
         self.options = options
-        
+
     def draw(self, diag):
         """Draw the Thing.
 
@@ -948,7 +962,7 @@ class ContainsArrow(Arrow):
         if not child.isdrawn():
             self.item = None
             return
-        
+
         canvas = diag.canvas
         p = canvas.bbox(parent.boxitem).midleft()
         q = canvas.bbox(child.boxitem).midright()
@@ -959,19 +973,20 @@ class ContainsArrow(Arrow):
 
 class Stack(Thing):
     """Represents the call stack."""
+
     def __init__(self, lumpy, snapshot):
         self.lumpy = lumpy
         self.frames = [Frame(lumpy, frame) for frame in snapshot.frames]
-    
+
     def drawme(self, diag, pos, flip, tags=tuple()):
         """Draws the Thing."""
         p = pos.copy()
-        
+
         for frame in self.frames:
             frame.draw(diag, p, flip, tags=tags)
 
             bbox = self.get_bbox()
-            #p.y = bbox.bottom + 3
+            # p.y = bbox.bottom + 3
             p.x = bbox.right + 3
 
 
@@ -980,8 +995,7 @@ def make_bindings(lumpy, iterator):
 
     The keys are made into Index objects.
     """
-    seq = [Binding(lumpy, Index(lumpy, k), make_thing(lumpy, v))
-           for k, v in iterator]
+    seq = [Binding(lumpy, Index(lumpy, k), make_thing(lumpy, v)) for k, v in iterator]
     return seq
 
 
@@ -990,8 +1004,9 @@ def make_kvps(lumpy, iterator):
     
     The keys are made into Thing objects.
     """
-    seq = [Binding(lumpy, make_thing(lumpy, k), make_thing(lumpy, v))
-           for k, v in iterator]
+    seq = [
+        Binding(lumpy, make_thing(lumpy, k), make_thing(lumpy, v)) for k, v in iterator
+    ]
     return seq
 
 
@@ -1022,7 +1037,7 @@ def make_thing(lumpy, val):
 
     # check the type of the value and dispatch accordingly
     if type(val) == type(Lumpy) or type(val) == type(type(int)):
-        thing = Class(lumpy, val)  
+        thing = Class(lumpy, val)
     elif hasdict(val) or hasslots(val):
         thing = Instance(lumpy, val)
     elif isinstance(val, (list, tuple)):
@@ -1039,29 +1054,43 @@ def make_thing(lumpy, val):
 
 
 # the following are short functions that check for certain attributes
-def hasname(obj): return hasattr(obj, '__name__')
-def hasclass(obj): return hasattr(obj, '__class__')
-def hasdict(obj): return hasattr(obj, '__dict__')
-def hasslots(obj): return hasattr(obj, '__slots__')
-def hasdiag(obj): return hasattr(obj, 'diag')
-def iscallable(obj): return hasattr(obj, '__call__')
+def hasname(obj):
+    return hasattr(obj, "__name__")
+
+
+def hasclass(obj):
+    return hasattr(obj, "__class__")
+
+
+def hasdict(obj):
+    return hasattr(obj, "__dict__")
+
+
+def hasslots(obj):
+    return hasattr(obj, "__slots__")
+
+
+def hasdiag(obj):
+    return hasattr(obj, "diag")
+
+
+def iscallable(obj):
+    return hasattr(obj, "__call__")
 
 
 class Snapframe(object):
     """A snapshot of a call frame."""
+
     def __init__(self, tup):
         frame, filename, lineno, self.func, lines, index = tup
-        (self.arg_names,
-         self.args,
-         self.kwds,
-         locs) = inspect.getargvalues(frame)
+        (self.arg_names, self.args, self.kwds, locs) = inspect.getargvalues(frame)
 
         # make a copy of the dictionary of local vars
         self.locals = dict(locs)
 
         # the function name for the top-most frame is __main__
-        if self.func == '?':
-            self.func = '__main__'
+        if self.func == "?":
+            self.func = "__main__"
 
     def subtract(self, other):
         """Deletes the keys in other from self."""
@@ -1100,7 +1129,7 @@ class Snapshot(object):
         f1 = self.frames[0]
         f2 = ref.frames[0]
         f1.subtract(f2)
-                    
+
 
 class Lumpy(Gui):
     """Container for the program state and its representations."""
@@ -1137,9 +1166,9 @@ class Lumpy(Gui):
         # the following classes are opaque by default
         self.opaque_class(Lumpy)
         self.opaque_class(object)
-        self.opaque_class(type(make_thing))    # function
+        self.opaque_class(type(make_thing))  # function
         self.opaque_class(Exception)
-        self.opaque_class(set)                 # I don't remember why
+        self.opaque_class(set)  # I don't remember why
 
         # any object that belongs to a class in the Tkinter module
         # is opaque (the name of the module depends on the Python version)
@@ -1182,7 +1211,7 @@ class Lumpy(Gui):
 
         If the class is not restricted, raise an exception."""
         del self.instance_vars[classobj]
-        
+
     def opaque_module(self, modobj):
         """Makes all classes defined in this module opaque."""
         for var, val in modobj.__dict__.items():
@@ -1213,11 +1242,11 @@ class Lumpy(Gui):
         """
         self.snapshot = Snapshot()
         self.snapshot.clean(self.ref)
-        
+
         self.values = {}
         self.classes = []
         self.stack = Stack(self, self.snapshot)
-                
+
     def register(self, thing, val):
         """Associates a value with the Thing that represents it.
 
@@ -1227,7 +1256,7 @@ class Lumpy(Gui):
         thing.lumpy = self
         thing.val = val
         self.values[id(val)] = thing
-    
+
     def lookup(self, val):
         """Check whether a value is already represented by a Thing.
 
@@ -1284,7 +1313,7 @@ class Lumpy(Gui):
         for val in list(self.values.values()):
             if isinstance(val, Instance) and val.cls is not None:
                 val.scan_bindings(val.cls)
-            
+
         # if there is already a class diagram, clear it; otherwise
         # create one
         if self.cd:
@@ -1312,21 +1341,21 @@ class Lumpy(Gui):
 
 class Diagram(object):
     """Parent class for ClassDiagram and ObjectDiagram."""
+
     def __init__(self, lumpy, title):
         self.lumpy = lumpy
         self.arrows = []
 
         self.tl = lumpy.tl()
         self.tl.title(title)
-        self.tl.geometry('+0+0')
+        self.tl.geometry("+0+0")
         self.tl.protocol("WM_DELETE_WINDOW", self.close)
         self.setup()
 
     def ca(self, width=100, height=100, **options):
         """make a canvas for the diagram"""
-        return self.lumpy.widget(DiagCanvas, width=width, height=height,
-                                 **options)
-        
+        return self.lumpy.widget(DiagCanvas, width=width, height=height, **options)
+
     def setup(self):
         """create the gui for the diagram"""
 
@@ -1335,27 +1364,27 @@ class Diagram(object):
         self.lumpy.col([0, 1])
 
         # the frame at the top contains buttons
-        self.lumpy.row([0, 0, 1], bg='white')
-        self.lumpy.bu(text='Close', command=self.close)
-        self.lumpy.bu(text='Print to file:', command=self.printfile_callback)
-        self.en = self.lumpy.en(width=10, text='lumpy.ps')
-        self.en.bind('<Return>', self.printfile_callback)
+        self.lumpy.row([0, 0, 1], bg="white")
+        self.lumpy.bu(text="Close", command=self.close)
+        self.lumpy.bu(text="Print to file:", command=self.printfile_callback)
+        self.en = self.lumpy.en(width=10, text="lumpy.ps")
+        self.en.bind("<Return>", self.printfile_callback)
         self.la = self.lumpy.la(width=40)
         self.lumpy.endrow()
 
         # the grid contains the canvas and scrollbars
         self.lumpy.gr(2, [1, 0])
-        
+
         self.ca_width = 1000
         self.ca_height = 500
-        self.canvas = self.ca(self.ca_width, self.ca_height, bg='white')
+        self.canvas = self.ca(self.ca_width, self.ca_height, bg="white")
 
-        yb = self.lumpy.sb(command=self.canvas.yview, sticky=N+S)
-        xb = self.lumpy.sb(command=self.canvas.xview, orient=HORIZONTAL,
-                         sticky=E+W)
-        self.canvas.configure(xscrollcommand=xb.set, yscrollcommand=yb.set,
-                              scrollregion=(0, 0, 800, 800))
-        
+        yb = self.lumpy.sb(command=self.canvas.yview, sticky=N + S)
+        xb = self.lumpy.sb(command=self.canvas.xview, orient=HORIZONTAL, sticky=E + W)
+        self.canvas.configure(
+            xscrollcommand=xb.set, yscrollcommand=yb.set, scrollregion=(0, 0, 800, 800)
+        )
+
         self.lumpy.endgr()
         self.lumpy.endcol()
         self.lumpy.popfr()
@@ -1363,11 +1392,10 @@ class Diagram(object):
         # measure some sample letters to get the text height
         # and set the scale factor for the canvas accordingly
         self.canvas.clear_transforms()
-        bbox = self.canvas.measure(['bdfhklgjpqy'])
+        bbox = self.canvas.measure(["bdfhklgjpqy"])
         self.unit = 1.0 * bbox.height()
         transform = ScaleTransform([self.unit, self.unit])
         self.canvas.add_transform(transform)
-        
 
     def printfile_callback(self, event=None):
         """Dumps the contents of the canvas to a file.
@@ -1384,15 +1412,15 @@ class Diagram(object):
         """
         # shrinkwrap the canvas
         bbox = self.canvas.bbox(ALL)
-        width = bbox.right*self.unit
-        height = bbox.bottom*self.unit
+        width = bbox.right * self.unit
+        height = bbox.bottom * self.unit
         self.canvas.config(width=width, height=height)
 
         # write the file
         self.canvas.dump(filename)
         self.canvas.config(width=self.ca_width, height=self.ca_height)
-        self.la.config(text='Wrote file ' + filename)
-        
+        self.la.config(text="Wrote file " + filename)
+
     def close(self):
         """close the window and exit"""
         self.tl.withdraw()
@@ -1413,14 +1441,15 @@ class Diagram(object):
         for arrow in self.arrows:
             arrow.update()
             i += 1
-            if n and i > n: break
+            if n and i > n:
+                break
 
 
 class ObjectDiagram(Diagram):
     """Represents an object diagram."""
 
     def __init__(self, lumpy=None):
-        Diagram.__init__(self, lumpy, 'Object Diagram')
+        Diagram.__init__(self, lumpy, "Object Diagram")
 
     def draw(self, thing):
         """Draws the top-level Thing."""
@@ -1441,7 +1470,7 @@ class ClassDiagram(Diagram):
     """Represents a class diagram."""
 
     def __init__(self, lumpy, classes=None):
-        Diagram.__init__(self, lumpy, 'Class Diagram')
+        Diagram.__init__(self, lumpy, "Class Diagram")
         self.classes = classes
 
     def draw(self):
@@ -1475,7 +1504,7 @@ class ClassDiagram(Diagram):
             drawn = self.draw_classes(roots, pos)
         else:
             drawn = self.draw_classes(classes, pos)
-            
+
         self.draw_arrows()
 
         # configure the scroll region
@@ -1498,13 +1527,13 @@ class ClassDiagram(Diagram):
 
             # TODO: change this so it finds the bottom-most bbox in drawn
             bbox = c.cdc.get_bbox()
-            
+
             for thing in alldrawn:
                 if thing is not c:
                     # can't use bbox.union because it assumes that
                     # the positive y direction is UP
                     bbox = union(bbox, thing.get_bbox())
-            
+
             p.y = bbox.bottom + 2
 
         for c in classes:
@@ -1527,10 +1556,10 @@ def union(one, other):
     return BBox([[left, top], [right, bottom]])
 
 
-
 ###########################
 # test code below this line
 ###########################
+
 
 def main(script, *args, **kwds):
     class Cell:
@@ -1546,7 +1575,7 @@ def main(script, *args, **kwds):
         t.append(t)
         y = None
         z = 1
-        long_name = 'allen'
+        long_name = "allen"
         d = dict(a=1, b=2)
 
         func_b(x, y, t, long_name)
@@ -1570,7 +1599,7 @@ def main(script, *args, **kwds):
     func_a(17)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     LUMPY = Lumpy()
     LUMPY.make_reference()
     main(*sys.argv)

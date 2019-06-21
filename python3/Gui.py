@@ -205,14 +205,16 @@ class Gui(tkinter.Tk):
         space, but parameters i and j can specify the row
         and column explicitly.
         """
-        if i == None: i = self.frame.i
-        if j == None: j = self.frame.j
+        if i == None:
+            i = self.frame.i
+        if j == None:
+            j = self.frame.j
         widget.grid(row=i, column=j, **options)
 
         # increment j by 1, or by columnspan
         # if the widget spans more than one column.
         try:
-            incr = options['columnspan']
+            incr = options["columnspan"]
         except KeyError:
             incr = 1
 
@@ -232,7 +234,7 @@ class Gui(tkinter.Tk):
         """Makes an entry widget."""
 
         # pull the text option out
-        text = options.pop('text', '')
+        text = options.pop("text", "")
 
         # create the entry and insert the text
         en = self.widget(tkinter.Entry, **options)
@@ -243,7 +245,7 @@ class Gui(tkinter.Tk):
         """Makes a canvas widget."""
         return self.widget(GuiCanvas, width=width, height=height, **options)
 
-    def la(self, text='', **options):
+    def la(self, text="", **options):
         """Makes a label widget."""
         return self.widget(tkinter.Label, text=text, **options)
 
@@ -251,22 +253,21 @@ class Gui(tkinter.Tk):
         """Makes a listbox."""
         return self.widget(tkinter.Listbox, **options)
 
-    def bu(self, text='', command=None, **options):
+    def bu(self, text="", command=None, **options):
         """Makes a button"""
-        return self.widget(tkinter.Button, text=text, command=command, 
-                           **options)
+        return self.widget(tkinter.Button, text=text, command=command, **options)
 
     def mb(self, **options):
         """Makes a menubutton"""
         underride(options, relief=tkinter.RAISED)
         mb = self.widget(tkinter.Menubutton, **options)
         mb.menu = tkinter.Menu(mb, tearoff=False)
-        mb['menu'] = mb.menu
+        mb["menu"] = mb.menu
         return mb
 
-    def mi(self, mb, text='', **options):
+    def mi(self, mb, text="", **options):
         """Makes a menu item"""
-        mb.menu.add_command(label=text, **options)        
+        mb.menu.add_command(label=text, **options)
 
     def te(self, **options):
         """Makes a text entry"""
@@ -278,14 +279,14 @@ class Gui(tkinter.Tk):
 
     def cb(self, **options):
         """Makes a checkbutton."""
-        
+
         # if the user didn't provide a variable, create one
         try:
-            var = options['variable']
+            var = options["variable"]
         except KeyError:
             var = tkinter.IntVar()
             override(options, variable=var)
-            
+
         w = self.widget(tkinter.Checkbutton, **options)
         w.swampy_var = var
         return w
@@ -294,12 +295,13 @@ class Gui(tkinter.Tk):
         """Makes a radiobutton"""
 
         w = self.widget(tkinter.Radiobutton, **options)
-        w.swampy_var = options['variable']
-        w.swampy_val = options['value']
+        w.swampy_var = options["variable"]
+        w.swampy_val = options["value"]
         return w
 
     class ScrollableText(object):
         """A frame with a text entry and a scrollbar."""
+
         def __init__(self, gui, **options):
             self.frame = gui.row(**options)
             self.text = gui.te(wrap=tkinter.WORD)
@@ -313,18 +315,21 @@ class Gui(tkinter.Tk):
 
     class ScrollableCanvas(object):
         """A grid with a canvas and two scrollbars."""
+
         def __init__(self, gui, width=200, height=200, **options):
             self.grid = gui.gr(2, **options)
-            self.canvas = gui.ca(width=width, height=height, bg='white')
+            self.canvas = gui.ca(width=width, height=height, bg="white")
 
-            self.yb = gui.sb(command=self.canvas.yview, sticky=N+S)
-            self.xb = gui.sb(command=self.canvas.xview, 
-                             orient=tkinter.HORIZONTAL,
-                             sticky=E+W)
+            self.yb = gui.sb(command=self.canvas.yview, sticky=N + S)
+            self.xb = gui.sb(
+                command=self.canvas.xview, orient=tkinter.HORIZONTAL, sticky=E + W
+            )
 
-            self.canvas.configure(xscrollcommand=self.xb.set,
-                                  yscrollcommand=self.yb.set,
-                                  scrollregion=(0, 0, 400, 400))
+            self.canvas.configure(
+                xscrollcommand=self.xb.set,
+                yscrollcommand=self.yb.set,
+                scrollregion=(0, 0, 400, 400),
+            )
             gui.endgr()
 
     def sc(self, **options):
@@ -348,7 +353,7 @@ class Gui(tkinter.Tk):
         Returns:
             new widget
         """
-        underride(options, fill=tkinter.BOTH, expand=1, sticky=N+S+E+W)
+        underride(options, fill=tkinter.BOTH, expand=1, sticky=N + S + E + W)
 
         # roll the positional arguments into the option dictionary,
         # then divide into options for the widget constructor, pack
@@ -357,7 +362,7 @@ class Gui(tkinter.Tk):
 
         # Makes the widget and either pack or grid it
         widget = constructor(self.frame, **widopt)
-        if hasattr(self.frame, 'gridding'):
+        if hasattr(self.frame, "gridding"):
             self.grid(widget, **gridopt)
         else:
             widget.pack(**packopt)
@@ -413,6 +418,7 @@ def remove_options(options, names):
         if name in options:
             del options[name]
 
+
 def split_options(options):
     """Splits an options dictionary into into pack options and grid options.
 
@@ -423,11 +429,19 @@ def split_options(options):
 
     Returns: tuple of (widget options, pack options, grid options)
     """
-    
-    packnames = ['side', 'fill', 'expand', 'anchor',
-                 'padx', 'pady', 'ipadx', 'ipady']
-    gridnames = ['column', 'columnspan', 'row', 'rowspan',
-                 'padx', 'pady', 'ipadx', 'ipady', 'sticky']
+
+    packnames = ["side", "fill", "expand", "anchor", "padx", "pady", "ipadx", "ipady"]
+    gridnames = [
+        "column",
+        "columnspan",
+        "row",
+        "rowspan",
+        "padx",
+        "pady",
+        "ipadx",
+        "ipady",
+        "sticky",
+    ]
 
     # some options appear in both packopts
     # and gridopts, so that's why I didn't use pop_options.
@@ -452,7 +466,6 @@ def override(d, **kwds):
     d.update(kwds)
 
 
-
 class BBox(list):
     """List of coordinates, where each coordinate is a pair or a Point.
 
@@ -464,6 +477,7 @@ class BBox(list):
     Creating a new bounding box makes a _shallow_ copy of
     the list of coordinates.  For a deep copy, use Bbox.copy().
     """
+
     __slots__ = ()
 
     def copy(self):
@@ -471,11 +485,18 @@ class BBox(list):
         return BBox(t)
 
     # top, bottom, left, and right can be accessed as attributes
-    def setleft(self, val): self[0][0] = val 
-    def settop(self, val): self[0][1] = val 
-    def setright(self, val): self[1][0] = val 
-    def setbottom(self, val): self[1][1] = val 
-    
+    def setleft(self, val):
+        self[0][0] = val
+
+    def settop(self, val):
+        self[0][1] = val
+
+    def setright(self, val):
+        self[1][0] = val
+
+    def setbottom(self, val):
+        self[1][1] = val
+
     left = property(lambda self: self[0][0], setleft)
     top = property(lambda self: self[0][1], settop)
     right = property(lambda self: self[1][0], setright)
@@ -484,7 +505,7 @@ class BBox(list):
     def width(self):
         """Returns the width of the bbox."""
         return self.right - self.left
-    
+
     def height(self):
         """Returns the height of the bbox."""
         return self.bottom - self.top
@@ -495,7 +516,7 @@ class BBox(list):
         Usually the upper left
         """
         return Point(self[0])
-    
+
     def lowerright(self):
         """Returns the second corner of the bbox.
 
@@ -520,7 +541,7 @@ class BBox(list):
         x = (self.left + self.right) / 2.0
         y = (self.top + self.bottom) / 2.0
         return Point([x, y])
-        
+
     def union(self, other):
         """Returns a new bbox that covers self and other.
         
@@ -541,11 +562,11 @@ class BBox(list):
         Returns:
             Point
         """
-        return Point([pos[0]-self.left, pos[1]-self.top])
+        return Point([pos[0] - self.left, pos[1] - self.top])
 
     def pos(self, offset):
         """Returns the position at the given offset from the upper-left"""
-        return Point([offset[0]+self.left, offset[1]+self.top])
+        return Point([offset[0] + self.left, offset[1] + self.top])
 
     def flatten(self):
         """Returns a list of four coordinates."""
@@ -558,14 +579,18 @@ class Point(list):
     Because Point inherits __init__ from list, it makes a copy
     of the argument to the constructor.
     """
+
     __slots__ = ()
 
     copy = lambda pos: Point(pos)
 
     # x and y can be accessed as attributes
-    def setx(pos, val): pos[0] = val 
-    def sety(pos, val): pos[1] = val 
-    
+    def setx(pos, val):
+        pos[0] = val
+
+    def sety(pos, val):
+        pos[1] = val
+
     x = property(lambda pos: pos[0], setx)
     y = property(lambda pos: pos[1], sety)
 
@@ -573,15 +598,21 @@ class Point(list):
 # pairiter, pair and flatten are utilities for dealing with
 # lists of coordinates
 
+
 def pairiter(seq):
     """Returns an iterator that yields consecutive pairs from seq."""
     it = iter(seq)
     while True:
-        yield [next(it), next(it)]
+        try:
+            yield [next(it), next(it)]
+        except (RuntimeError, StopIteration):
+            return
+
 
 def pair(seq):
     """Returns a list of consecutive pairs from seq."""
     return [x for x in pairiter(seq)]
+
 
 def flatten(seq):
     """Concatenates the elements of seq.
@@ -608,7 +639,8 @@ class GuiCanvas(tkinter.Canvas):
     to Tkinter tags) so you can perform subsequent operations by
     invoking methods on the Items, rather than the Canvas.
     """
-    def __init__(self, w, scale=[1,1], transforms=None, **options):
+
+    def __init__(self, w, scale=[1, 1], transforms=None, **options):
         tkinter.Canvas.__init__(self, w, **options)
         if transforms != None:
             self.transforms = transforms
@@ -617,15 +649,15 @@ class GuiCanvas(tkinter.Canvas):
 
     def get_width(self):
         """Gets the nominal width of this canvas."""
-        x = int(self.cget('width'))
-        
+        x = int(self.cget("width"))
+
         # winfo would return the actual width
         # x = self.winfo_width()
         return x
 
     def get_height(self):
         """Gets the nominal height of this canvas."""
-        x = int(self.cget('height'))
+        x = int(self.cget("height"))
 
         # winfo would return the actual height
         # x = self.winfo_height()
@@ -649,8 +681,8 @@ class GuiCanvas(tkinter.Canvas):
         if index == None:
             self.transforms.append(transform)
         else:
-            self.transforms.insert(index, transform)            
-            
+            self.transforms.insert(index, transform)
+
     def trans(self, coords):
         """Applies each of the transforms for this canvas, in order."""
         for trans in self.transforms:
@@ -671,7 +703,7 @@ class GuiCanvas(tkinter.Canvas):
             coords: Point object or list of coordinates.
         """
         return self.invert(coords)
-        
+
     def canvas_itemcoords(self, item, coords=None):
         """Gets and sets item coordinates, with translation.
 
@@ -685,7 +717,7 @@ class GuiCanvas(tkinter.Canvas):
             coords = flatten(coords)
             tkinter.Canvas.coords(self, item, *coords)
         else:
-            #get the coordinates and invert them
+            # get the coordinates and invert them
             coords = tkinter.Canvas.coords(self, item)
             coords = pair(coords)
             coords = self.invert(coords)
@@ -701,17 +733,17 @@ class GuiCanvas(tkinter.Canvas):
             Tkinter event string
         """
         translator = {}
-        for i in ['1', '2', '3']:
-            translator['<Press-'+i+'>'] = '<ButtonPress-' + i + '>'
-            translator['<Motion-'+i+'>'] = '<B' + i + '-Motion>'
-            translator['<Release-'+i+'>'] = '<ButtonRelease-' + i + '>'
-            translator['<Double-'+i+'>'] = '<Double-Button-' + i + '>'
-        
+        for i in ["1", "2", "3"]:
+            translator["<Press-" + i + ">"] = "<ButtonPress-" + i + ">"
+            translator["<Motion-" + i + ">"] = "<B" + i + "-Motion>"
+            translator["<Release-" + i + ">"] = "<ButtonRelease-" + i + ">"
+            translator["<Double-" + i + ">"] = "<Double-Button-" + i + ">"
+
         return translator.get(event, event)
 
     def clear(self):
         """Deletes all items on the canvas."""
-        self.delete('all')
+        self.delete("all")
 
     def bbox(self, item):
         """Compute the bounding box of the given item.
@@ -752,24 +784,24 @@ class GuiCanvas(tkinter.Canvas):
             transform: boolean, whether to transform dx, dy
         """
         if transform:
-            coords = [[0,0], [dx,dy]]
+            coords = [[0, 0], [dx, dy]]
             p1, p2 = self.trans(coords)
             dx = p2.x - p1.x
             dy = p2.y - p1.y
         tkinter.Canvas.move(self, item, dx, dy)
-        
 
     # the following are wrappers for the item creation methods
     # inherited from the Canvas class.
 
-    def arc(self, coords, start=0, extent=90, fill='', **options):
+    def arc(self, coords, start=0, extent=90, fill="", **options):
         """Makes an arc item.
 
         with bounding box (coords), sweeping out angle
         (extent) starting at (start) both in degrees.
         """
-        tag = self.create_arc(self.trans(coords), options,
-                                start=start, extent=extent, fill=fill)
+        tag = self.create_arc(
+            self.trans(coords), options, start=start, extent=extent, fill=fill
+        )
         return Item(self, tag)
 
     def bitmap(self, coord, bitmap, **options):
@@ -790,7 +822,7 @@ class GuiCanvas(tkinter.Canvas):
         tag = self.create_image(self.trans([coord]), options, image=image)
         return Item(self, tag)
 
-    def line(self, coords, fill='black', **options):
+    def line(self, coords, fill="black", **options):
         """Makes a polyline.
 
         with vertices at each point in (coords)
@@ -799,7 +831,7 @@ class GuiCanvas(tkinter.Canvas):
         tag = self.create_line(self.trans(coords), options, fill=fill)
         return Item(self, tag)
 
-    def oval(self, coords, fill='', **options):
+    def oval(self, coords, fill="", **options):
         """Makes an oval.
 
         with bounding box (coords) and fill color (fill)
@@ -807,17 +839,17 @@ class GuiCanvas(tkinter.Canvas):
         tag = self.create_oval(self.trans(coords), options, fill=fill)
         return Item(self, tag)
 
-    def circle(self, coord, r, fill='', **options):
+    def circle(self, coord, r, fill="", **options):
         """Makes a circle.
 
         with center at (x, y) and radius (r)
         """
         x, y = coord
-        coords = self.trans([[x-r, y-r], [x+r, y+r]])
+        coords = self.trans([[x - r, y - r], [x + r, y + r]])
         tag = self.create_oval(coords, options, fill=fill)
         return Item(self, tag)
-    
-    def polygon(self, coords, fill='', **options):
+
+    def polygon(self, coords, fill="", **options):
         """Makes a closed polygon.
 
         with vertices at each point in (coords)
@@ -826,22 +858,21 @@ class GuiCanvas(tkinter.Canvas):
         tag = self.create_polygon(self.trans(coords), options, fill=fill)
         return Item(self, tag)
 
-    def rectangle(self, coords, fill='', **options):
+    def rectangle(self, coords, fill="", **options):
         """Makes an oval.
 
         with bounding box (coords) and fill color (fill)
         """
         tag = self.create_rectangle(self.trans(coords), options, fill=fill)
         return Item(self, tag)
-    
-    def text(self, coord, text='', fill='black', **options):
+
+    def text(self, coord, text="", fill="black", **options):
         """Makes a text item.
 
         with the given text and fill color.
         The default anchor is center.
         """
-        tag = self.create_text(self.trans([coord]), options,
-                               text=text, fill=fill)
+        tag = self.create_text(self.trans([coord]), options, text=text, fill=fill)
         return Item(self, tag)
 
     def window(self, coord, widget, **options):
@@ -849,18 +880,18 @@ class GuiCanvas(tkinter.Canvas):
         tag = self.create_text(self.trans([coord]), options, window=widget)
         return Item(self, tag)
 
-    def dump(self, filename='canvas.eps'):
+    def dump(self, filename="canvas.eps"):
         """Create a PostScipt file and dumps the contents of the canvas."""
         bbox = tkinter.Canvas.bbox(self, ALL)
         if bbox:
             x, y, width, height = bbox
         else:
             x, y, width, height = 0, 0, 100, 100
-            
+
         width -= x
         height -= y
         ps = self.postscript(x=x, y=y, width=width, height=height)
-        fp = open(filename, 'w')
+        fp = open(filename, "w")
         fp.write(ps)
         fp.close()
 
@@ -877,13 +908,14 @@ class Item(object):
     each Item object contains a canvas and a tag.  When you
     invoke methods on the Item, it invokes methods on its canvas.
     """
+
     def __init__(self, canvas, tag):
         self.canvas = canvas
         self.tag = tag
 
     def __str__(self):
         return str(self.tag)
-        
+
     # the following are wrappers for canvas methods
 
     def delete(self):
@@ -893,7 +925,7 @@ class Item(object):
     def cget(self, *args):
         """Looks up the value of the given option for this item."""
         return self.canvas.itemcget(self.tag, *args)
-        
+
     def config(self, **options):
         """Reconfigures this item with the given options."""
         self.canvas.itemconfig(self.tag, **options)
@@ -918,8 +950,8 @@ class Item(object):
         For the event specifier, you can use Tkinter format,
         as in <Button-1>, or you can leave out the angle brackets.
         """
-        if event[0] != '<':
-            event = '<' + event + '>'
+        if event[0] != "<":
+            event = "<" + event + ">"
         event = self.canvas.translate_event(event)
         self.canvas.tag_bind(self.tag, event, *args)
 
@@ -971,6 +1003,7 @@ class Transform(object):
 
     Subclasses should implement trans() and invert().
     """
+
     def trans_list(self, points, func=None):
         """Applies (func) to a list of points.
 
@@ -987,7 +1020,7 @@ class Transform(object):
     def invert_list(self, points):
         """Applies the inverse transform to the list of points."""
         return self.trans_list(points, self.invert)
-    
+
 
 class CanvasTransform(Transform):
     """Transform for Cartesian coordinates.
@@ -996,13 +1029,14 @@ class CanvasTransform(Transform):
     the canvas, the positive y-axis is up, and the coordinate
     [1, 1] maps to the point specified by scale.
     """
-    def __init__(self, ca, scale=[1,1]):
-        self.shift = [ca.get_width()/2, ca.get_height()/2]
+
+    def __init__(self, ca, scale=[1, 1]):
+        self.shift = [ca.get_width() / 2, ca.get_height() / 2]
         self.scale = scale
-    
+
     def trans(self, p):
-        x =  p[0] * self.scale[0] + self.shift[0]
-        y =  p[1] * -self.scale[1] + self.shift[1]
+        x = p[0] * self.scale[0] + self.shift[0]
+        y = p[1] * -self.scale[1] + self.shift[1]
         return [x, y]
 
     def invert(self, p):
@@ -1017,9 +1051,10 @@ class ScaleTransform(Transform):
     The origin is half a unit from the upper-left corner; the y axis
     points down.
     """
+
     def __init__(self, scale=[1, 1]):
         self.scale = scale
-    
+
     def trans(self, p):
         x = p[0] * self.scale[0]
         y = p[1] * self.scale[1]
@@ -1033,6 +1068,7 @@ class ScaleTransform(Transform):
 
 class RotateTransform(Transform):
     """Rotates the coordinate system."""
+
     def __init__(self, theta):
         """Rotates the coordinate system (theta) radians counterclockwise."""
         self.theta = theta
@@ -1045,10 +1081,10 @@ class RotateTransform(Transform):
         """
         s = sin(theta)
         c = cos(theta)
-        x =   c * p[0] + s * p[1]
-        y =  -s * p[0] + c * p[1]
+        x = c * p[0] + s * p[1]
+        y = -s * p[0] + c * p[1]
         return [x, y]
-    
+
     def trans(self, p):
         return self._rotate(p, self.theta)
 
@@ -1064,12 +1100,12 @@ class SwirlTransform(RotateTransform):
     """
 
     def trans(self, p):
-        d = sqrt(p[0]*p[0] + p[1]*p[1])
-        return self.rotate(p, self.theta*d)
+        d = sqrt(p[0] * p[0] + p[1] * p[1])
+        return self.rotate(p, self.theta * d)
 
     def invert(self, p):
-        d = sqrt(p[0]*p[0] + p[1]*p[1])
-        return self.rotate(p, -self.theta*d)
+        d = sqrt(p[0] * p[0] + p[1] * p[1])
+        return self.rotate(p, -self.theta * d)
 
 
 class Callable(object):
@@ -1081,6 +1117,7 @@ class Callable(object):
     with one change: if call is invoked with args and kwds, they
     are added to the args and kwds stored in the Callable.
     """
+
     def __init__(self, func, *args, **kwds):
         self.func = func
         self.args = args
@@ -1089,7 +1126,7 @@ class Callable(object):
     def __call__(self, *args, **kwds):
         d = dict(self.kwds)
         d.update(kwds)
-        return self.func(*self.args+args, **d)
+        return self.func(*self.args + args, **d)
 
     def __str__(self):
         return self.func.__name__
@@ -1098,36 +1135,37 @@ class Callable(object):
 def tk_example():
     """Creates a simple GUI using only tkinter functions."""
     tk = Tk()
-    
+
     def hello():
-        ca.create_text(100, 100, text='hello', fill='blue')
-    
-    ca = Canvas(tk, bg='white')
+        ca.create_text(100, 100, text="hello", fill="blue")
+
+    ca = Canvas(tk, bg="white")
     ca.pack(side=LEFT)
 
     fr = Frame(tk)
     fr.pack(side=LEFT)
 
-    bu1 = Button(fr, text='Hello', command=hello)
+    bu1 = Button(fr, text="Hello", command=hello)
     bu1.pack()
-    bu2 = Button(fr, text='Quit', command=tk.quit)
+    bu2 = Button(fr, text="Quit", command=tk.quit)
     bu2.pack()
-    
+
     tk.mainloop()
 
 
 def gui_example():
     """Creates the same GUI as the previous function using Gui.py"""
+
     def hello():
-        ca.text([0,0], 'hello', 'blue')
+        ca.text([0, 0], "hello", "blue")
 
     gui = Gui()
     gui.row()
-    ca = gui.ca(bg='white')
-    
+    ca = gui.ca(bg="white")
+
     gui.col()
-    gui.bu(text='Hello', command=hello)
-    gui.bu(text='Quit', command=gui.quit)
+    gui.bu(text="Hello", command=hello)
+    gui.bu(text="Quit", command=gui.quit)
     gui.endcol()
 
     gui.endrow()
@@ -1143,14 +1181,14 @@ def widget_demo():
     g.col()
 
     # a label
-    la1 = g.la(text='This is a label.')
+    la1 = g.la(text="This is a label.")
 
     # an entry
     en = g.en()
-    en.insert(END, 'This is an entry widget.')
+    en.insert(END, "This is an entry widget.")
 
     # another label
-    la2 = g.la(text='')
+    la2 = g.la(text="")
 
     def press_me():
         """Reads the text from the entry and display it as a label."""
@@ -1158,14 +1196,14 @@ def widget_demo():
         la2.configure(text=text)
 
     # a button
-    bu = g.bu(side=TOP, text='Press me', command=press_me)
+    bu = g.bu(side=TOP, text="Press me", command=press_me)
 
     g.endcol()
 
     # COLUMN 2
 
     g.col()
-    la = g.la(text='List of colors:')
+    la = g.la(text="List of colors:")
 
     def get_selection():
         """figure out which color is selected in the listbox"""
@@ -1198,23 +1236,23 @@ def widget_demo():
     # when the user raises the button after selecting a color,
     # print the new selection (if you bind to the button press
     # you get the _previous_ selection)
-    lb.bind('<ButtonRelease-1>', print_selection)
+    lb.bind("<ButtonRelease-1>", print_selection)
 
     # scrollbar
     sb = g.sb()
     g.endrow()
 
     # button
-    bu = g.bu(text='Apply color', command=apply_color)
+    bu = g.bu(text="Apply color", command=apply_color)
 
     # menubutton
-    mb = g.mb(text='Choose a color')
+    mb = g.mb(text="Choose a color")
 
     def set_color(color):
         item2.config(fill=color)
 
     # put some items in the menubutton
-    for color in ['red', 'green', 'blue']:
+    for color in ["red", "green", "blue"]:
         g.mi(mb, color, command=Callable(set_color, color))
 
     g.endcol()
@@ -1222,14 +1260,20 @@ def widget_demo():
     # fill the listbox with color names; if the X11 color list
     # is in the usual place, read it; otherwise use a short list.
     try:
-        colors = open('/usr/share/X11/rgb.txt')
+        colors = open("/usr/share/X11/rgb.txt")
         colors.readline()
     except:
-        colors = ['\t\t red', '\t\t orange', '\t\t yellow',
-                  '\t\t green', '\t\t blue', '\t\t purple']
-        
+        colors = [
+            "\t\t red",
+            "\t\t orange",
+            "\t\t yellow",
+            "\t\t green",
+            "\t\t blue",
+            "\t\t purple",
+        ]
+
     for line in colors:
-        t = line.split('\t')
+        t = line.split("\t")
         name = t[2].strip()
         lb.insert(END, name)
 
@@ -1246,11 +1290,11 @@ def widget_demo():
     ca = sc.canvas
 
     # make some items
-    item1 = ca.circle([0, 0], 70, 'red')
-    item2 = ca.rectangle([[0, 0], [60, 60]], 'blue')
-    item3 = ca.text([0, 0], 'This is a canvas.', 'white')
+    item1 = ca.circle([0, 0], 70, "red")
+    item2 = ca.rectangle([[0, 0], [60, 60]], "blue")
+    item3 = ca.text([0, 0], "This is a canvas.", "white")
 
-    photo = tkinter.PhotoImage(file='danger.gif')
+    photo = tkinter.PhotoImage(file="danger.gif")
     item4 = ca.create_image(200, 300, image=photo)
 
     g.endcol()
@@ -1263,32 +1307,40 @@ def widget_demo():
         """get the current settings from the font control widgets
         and configure item3 accordingly
         """
-        family = 'helvetica'
+        family = "helvetica"
         size = fontsize.get()
         weight = b1.swampy_var.get()
         slant = b2.swampy_var.get()
-        font = tkinter.font.Font(family=family, size=size, weight=weight,
-                           slant=slant)
+        font = tkinter.font.Font(family=family, size=size, weight=weight, slant=slant)
         print(font.actual())
         item3.config(font=font)
 
-    g.la(text='Font:')
+    g.la(text="Font:")
 
     # fontsize is the variable associated with the radiobuttons
     fontsize = tkinter.IntVar()
 
     # make the radio buttons
     for size in [10, 12, 14, 15, 17, 20]:
-        rb = g.rb(text=str(size), variable=fontsize, value=size,
-                  command=set_font)
+        rb = g.rb(text=str(size), variable=fontsize, value=size, command=set_font)
 
     # make the check buttons
-    b1 = g.cb(text='Bold', command=set_font, variable=tkinter.StringVar(),
-              onvalue=tkinter.font.BOLD, offvalue=tkinter.font.NORMAL)
+    b1 = g.cb(
+        text="Bold",
+        command=set_font,
+        variable=tkinter.StringVar(),
+        onvalue=tkinter.font.BOLD,
+        offvalue=tkinter.font.NORMAL,
+    )
     b1.deselect()
-    
-    b2 = g.cb(text='Italic', command=set_font, variable=tkinter.StringVar(),
-              onvalue=tkinter.font.ITALIC, offvalue=tkinter.font.ROMAN)
+
+    b2 = g.cb(
+        text="Italic",
+        command=set_font,
+        variable=tkinter.StringVar(),
+        onvalue=tkinter.font.ITALIC,
+        offvalue=tkinter.font.ROMAN,
+    )
     b2.deselect()
 
     # choose the initial font size
@@ -1296,7 +1348,6 @@ def widget_demo():
     set_font()
 
     g.endcol()
-
 
     # COLUMN 5
 
@@ -1320,12 +1371,11 @@ def widget_demo():
 
     g.endcol()
 
-
     # COLUMN 6
 
     g.col()
     # label
-    g.la(text='A grid of buttons:')
+    g.la(text="A grid of buttons:")
 
     # start a grid with three columns (the weights control how
     # the buttons expand if there is extra space)
@@ -1352,6 +1402,6 @@ def main(script, function=None, *args):
         function = eval(function)
         function()
 
-if __name__ == '__main__':
-    main(*sys.argv)
 
+if __name__ == "__main__":
+    main(*sys.argv)

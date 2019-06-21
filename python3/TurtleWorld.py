@@ -7,20 +7,21 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
 from tkinter import TOP, BOTTOM, LEFT, RIGHT, END, LAST, NONE, SUNKEN
 
-from Gui import Callable
-from World import World, Animal, wait_for_user
+from .Gui import Callable
+from .World import World, Animal, wait_for_user
 
 
 class TurtleWorld(World):
     """An environment for Turtles and TurtleControls."""
+
     def __init__(self, interactive=False):
         World.__init__(self)
-        self.title('TurtleWorld')
+        self.title("TurtleWorld")
 
         # the interpreter executes user-provided code
-        g = globals()
-        g['world'] = self
-        self.make_interpreter(g)
+        gs = globals()
+        gs["world"] = self
+        self.make_interpreter(gs)
 
         # make the GUI
         self.setup()
@@ -35,47 +36,45 @@ class TurtleWorld(World):
         self.ca_height = 400
 
         self.row()
-        self.canvas = self.ca(width=self.ca_width,
-                              height=self.ca_height,
-                              bg='white')
+        self.canvas = self.ca(width=self.ca_width, height=self.ca_height, bg="white")
 
     def setup_interactive(self):
         """Creates the right frame with the buttons for interactive mode."""
         # right frame
         self.fr()
 
-        self.gr(2, [1,1], [1,1], expand=0)
-        self.bu(text='Print canvas', command=self.canvas.dump)
-        self.bu(text='Quit', command=self.quit)
-        self.bu(text='Make Turtle', command=self.make_turtle)
-        self.bu(text='Clear', command=self.clear)
+        self.gr(2, [1, 1], [1, 1], expand=0)
+        self.bu(text="Print canvas", command=self.canvas.dump)
+        self.bu(text="Quit", command=self.quit)
+        self.bu(text="Make Turtle", command=self.make_turtle)
+        self.bu(text="Clear", command=self.clear)
         self.endgr()
 
         # run this code
-        self.bu(side=BOTTOM, text='Run code', command=self.run_text, expand=0)
+        self.bu(side=BOTTOM, text="Run code", command=self.run_text, expand=0)
 
         self.fr(side=BOTTOM)
         self.te_code = self.te(height=10, width=25, side=BOTTOM)
-        self.te_code.insert(END, 'world.clear()\n')
-        self.te_code.insert(END, 'bob = Turtle()\n')
+        self.te_code.insert(END, "world.clear()\n")
+        self.te_code.insert(END, "bob = Turtle()\n")
         self.endfr()
 
         # run file
-        self.row([0,1], pady=30, side=BOTTOM, expand=0)
-        self.bu(side=LEFT, text='Run file', command=self.run_file)
-        self.en_file = self.en(side=LEFT, text='turtle_code.py', width=5)
+        self.row([0, 1], pady=30, side=BOTTOM, expand=0)
+        self.bu(side=LEFT, text="Run file", command=self.run_file)
+        self.en_file = self.en(side=LEFT, text="turtle_code.py", width=5)
         self.endrow()
-        
+
         # leave the right frame open so that Turtles can add TurtleControls
         # self.endfr()
 
     def setup_run(self):
         """Adds a row of buttons for run, step, stop and clear."""
-        self.gr(2, [1,1], [1,1], expand=0)
-        self.bu(text='Run', command=self.run)
-        self.bu(text='Stop', command=self.stop)
-        self.bu(text='Step', command=self.step)
-        self.bu(text='Quit', command=self.quit)
+        self.gr(2, [1, 1], [1, 1], expand=0)
+        self.bu(text="Run", command=self.run)
+        self.bu(text="Stop", command=self.stop)
+        self.bu(text="Step", command=self.step)
+        self.bu(text="Quit", command=self.quit)
         self.endgr()
 
     def make_turtle(self):
@@ -92,11 +91,11 @@ class TurtleWorld(World):
         """
         for animal in self.animals:
             animal.undraw()
-            if hasattr(animal, 'control'):
+            if hasattr(animal, "control"):
                 animal.control.frame.destroy()
-                
+
         self.animals = []
-        self.canvas.delete('all')
+        self.canvas.delete("all")
 
 
 class Turtle(Animal):
@@ -110,13 +109,14 @@ class Turtle(Animal):
         pen: boolean, whether the pen is down
         color: string turtle color
     """
+
     def __init__(self, world=None):
-        Animal.__init__(self, world)        
+        Animal.__init__(self, world)
         self.r = 5
         self.heading = 0
         self.pen = True
-        self.color = 'red'
-        self.pen_color = 'blue'
+        self.color = "red"
+        self.pen_color = "blue"
         self.draw()
 
     def get_x(self):
@@ -143,9 +143,9 @@ class Turtle(Animal):
         if not self.world:
             return
 
-        self.tag = 'Turtle%d' % id(self)
-        lw = self.r/2
-        
+        self.tag = "Turtle%d" % id(self)
+        lw = self.r / 2
+
         # draw the line that makes the head and tail
         self._draw_line(2.5, 0, tags=self.tag, width=lw, arrow=LAST)
 
@@ -156,8 +156,7 @@ class Turtle(Animal):
         self._draw_line(1.8, -40, tags=self.tag, width=lw)
 
         # draw the shell
-        self.world.canvas.circle([self.x, self.y], self.r, self.color,
-                                 tags=self.tag)
+        self.world.canvas.circle([self.x, self.y], self.r, self.color, tags=self.tag)
 
         self.world.sleep()
 
@@ -167,7 +166,7 @@ class Turtle(Animal):
         Args:
             scale: length of the line relative to self.r
             dtheta: angle of the line relative to self.heading
-        """    
+        """
         r = scale * self.r
         theta = self.heading + dtheta
         head = self.polar(self.x, self.y, r, theta)
@@ -251,29 +250,28 @@ class TurtleControl(object):
     def setup(self):
         w = self.turtle.world
 
-        self.frame = w.fr(bd=2, relief=SUNKEN,
-                          padx=1, pady=1, expand=0)
-        w.la(text='Turtle Control')
+        self.frame = w.fr(bd=2, relief=SUNKEN, padx=1, pady=1, expand=0)
+        w.la(text="Turtle Control")
 
         # forward and back (and the entry that says how far)
         w.fr(side=TOP)
-        w.bu(side=LEFT, text='bk', command=Callable(self.move_turtle, -1))
-        self.en_dist = w.en(side=LEFT, fill=NONE, expand=0, width=5, text='10')
-        w.bu(side=LEFT, text='fd', command=self.move_turtle)
+        w.bu(side=LEFT, text="bk", command=Callable(self.move_turtle, -1))
+        self.en_dist = w.en(side=LEFT, fill=NONE, expand=0, width=5, text="10")
+        w.bu(side=LEFT, text="fd", command=self.move_turtle)
         w.endfr()
 
         # other buttons
         w.fr(side=TOP)
-        w.bu(side=LEFT, text='lt', command=self.turtle.lt)
-        w.bu(side=LEFT, text='rt', command=self.turtle.rt)
-        w.bu(side=LEFT, text='pu', command=self.turtle.pu)
-        w.bu(side=LEFT, text='pd', command=self.turtle.pd)
+        w.bu(side=LEFT, text="lt", command=self.turtle.lt)
+        w.bu(side=LEFT, text="rt", command=self.turtle.rt)
+        w.bu(side=LEFT, text="pu", command=self.turtle.pu)
+        w.bu(side=LEFT, text="pd", command=self.turtle.pd)
         w.endfr()
 
         # color menubutton
-        colors = 'red', 'orange', 'yellow', 'green', 'blue', 'violet'
-        w.row([0,1])
-        w.la('Color:')
+        colors = "red", "orange", "yellow", "green", "blue", "violet"
+        w.row([0, 1])
+        w.la("Color:")
         self.mb = w.mb(text=colors[0])
         for color in colors:
             w.mi(self.mb, text=color, command=Callable(self.set_color, color))
@@ -287,15 +285,15 @@ class TurtleControl(object):
         self.turtle.set_color(color)
 
     def move_turtle(self, sign=1):
-        """Reads the entry and moves the turtle.  
+        """Reads the entry and moves the turtle.
 
         Args:
             sign: +1 for fd or -1 for back.
         """
         dist = int(self.en_dist.get())
-        self.turtle.fd(sign*dist)
+        self.turtle.fd(sign * dist)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     tw = TurtleWorld(interactive=True)
     tw.wait_for_user()

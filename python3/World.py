@@ -16,7 +16,8 @@ import threading
 import sys
 
 import tkinter
-from Gui import Gui
+from .Gui import Gui
+
 
 class World(Gui):
     """Represents the environment where Animals live.
@@ -24,18 +25,19 @@ class World(Gui):
     A World usually includes a canvas, where animals are drawn, 
     and sometimes a control panel.
     """
+
     current_world = None
 
     def __init__(self, delay=0.5, *args, **kwds):
         Gui.__init__(self, *args, **kwds)
         self.delay = delay
-        self.title('World')
-        
+        self.title("World")
+
         # keep track of the most recent world
         World.current_world = self
 
         # set to False when the user presses quit.
-        self.exists = True    
+        self.exists = True
 
         # list of animals that live in this world.
         self.animals = []
@@ -48,7 +50,7 @@ class World(Gui):
         try:
             self.mainloop()
         except KeyboardInterrupt:
-            print('KeyboardInterrupt')
+            print("KeyboardInterrupt")
 
     def quit(self):
         """Shuts down the World."""
@@ -57,7 +59,7 @@ class World(Gui):
 
         # destroy closes the window
         self.destroy()
-        
+
         # quit terminates mainloop (but since mainloop can get called
         # recursively, quitting once might not be enough!)
         Gui.quit(self)
@@ -100,15 +102,15 @@ class World(Gui):
             animal.undraw()
         self.animals = []
         try:
-            self.canvas.delete('all')
+            self.canvas.delete("all")
         except AttributeError:
-            print('Warning: World.clear: World must have a canvas.')
+            print("Warning: World.clear: World must have a canvas.")
 
     def step(self):
         """Invoke the step method on every animal."""
         for animal in self.animals:
             animal.step()
-        
+
     def run(self):
         """Invoke step intermittently until the user presses Quit or Stop."""
         self.running = True
@@ -134,14 +136,14 @@ class World(Gui):
         Creates an attribute named inter.
         """
         self.inter = Interpreter(self, gs)
-        
+
     def run_text(self):
         """Executes the code from the TextEntry in the control panel.
 
         Precondition: self must have an Interpreter and a text entry.
         """
         source = self.te_code.get(1.0, tkinter.END)
-        self.inter.run_code(source, '<user-provided code>')
+        self.inter.run_code(source, "<user-provided code>")
 
     def run_file(self):
         """Read the code from the filename in the entry and runs it.
@@ -156,6 +158,7 @@ class World(Gui):
 
 class Interpreter(object):
     """Encapsulates the environment where user-provided code executes."""
+
     def __init__(self, world, gs=None):
         self.world = world
 
@@ -164,14 +167,14 @@ class Interpreter(object):
             self.globals = globals()
         else:
             self.globals = gs
-            
+
     def run_code_thread(self, *args):
         """Runs the given code in a new thread."""
         return MyThread(self.run_code, *args)
-        
+
     def run_code(self, source, filename):
         """Runs the given code in the saved environment."""
-        code = compile(source, filename, 'exec')
+        code = compile(source, filename, "exec")
         try:
             exec(code, self.globals)
         except KeyboardInterrupt:
@@ -185,6 +188,7 @@ class MyThread(threading.Thread):
 
     Improves the syntax for creating and starting threads.
     """
+
     def __init__(self, target, *args):
         threading.Thread.__init__(self, target=target, args=args)
         self.start()
@@ -198,6 +202,7 @@ class Animal(object):
         x: location in Canvas coordinates
         y: location in Canvas coordinates
     """
+
     def __init__(self, world=None):
         self.world = world or World.current_world
         if self.world:
@@ -235,7 +240,7 @@ class Animal(object):
 
     def undraw(self):
         """Undraws the animal."""
-        if self.world.exists and hasattr(self, 'tag'):
+        if self.world.exists and hasattr(self, "tag"):
             self.world.canvas.delete(self.tag)
 
     def die(self):
@@ -260,10 +265,10 @@ class Animal(object):
         Returns:
             tuple of x, y coordinates
         """
-        rad = theta * math.pi/180
+        rad = theta * math.pi / 180
         s = math.sin(rad)
         c = math.cos(rad)
-        return [ x + r * c, y + r * s ]         
+        return [x + r * c, y + r * s]
 
 
 def wait_for_user():
@@ -271,14 +276,14 @@ def wait_for_user():
     World.current_world.wait_for_user()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     # make a generic world
     world = World()
 
     # create a canvas and put a text item on it
     ca = world.ca()
-    ca.text([0,0], 'hello')
+    ca.text([0, 0], "hello")
 
     # wait for the user
     wait_for_user()

@@ -13,7 +13,6 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
 
-
 def structshape(ds, pending=None):
     """Returns a string that describes the shape of a data structure.
 
@@ -25,19 +24,19 @@ def structshape(ds, pending=None):
         pending = set()
 
     if id(ds) in pending:
-        return 'infinity'
+        return "infinity"
 
     pending = pending | set([id(ds)])
 
     typename = type(ds).__name__
 
     # handle sequences
-    sequence = (list, tuple, set, frozenset, type(iter('')))
+    sequence = (list, tuple, set, frozenset, type(iter("")))
     if isinstance(ds, sequence):
         t = []
         for i, x in enumerate(ds):
             t.append(structshape(x, pending))
-        rep = '%s of %s' % (typename, listrep(t))
+        rep = "%s of %s" % (typename, listrep(t))
         return rep
 
     # handle dictionaries
@@ -47,13 +46,12 @@ def structshape(ds, pending=None):
         for k, v in list(ds.items()):
             keys.add(structshape(k, pending))
             vals.add(structshape(v, pending))
-        rep = '%s of %d %s->%s' % (typename, len(ds), 
-                                   setrep(keys), setrep(vals))
+        rep = "%s of %d %s->%s" % (typename, len(ds), setrep(keys), setrep(vals))
         return rep
 
     # handle other types
     else:
-        if hasattr(ds, '__class__'):
+        if hasattr(ds, "__class__"):
             return ds.__class__.__name__
         else:
             return typename
@@ -67,7 +65,7 @@ def listrep(t):
     Returns: string
     """
     if len(t) == 0:
-        return 'empty'
+        return "empty"
 
     current = t[0]
     count = 0
@@ -90,12 +88,12 @@ def setrep(s):
 
     Returns: string
     """
-    rep = ', '.join(s)
+    rep = ", ".join(s)
     if len(s) == 1:
         return rep
     else:
-        return '(' + rep + ')'
-    return 
+        return "(" + rep + ")"
+    return
 
 
 def append(res, typestr, count):
@@ -112,21 +110,21 @@ def append(res, typestr, count):
     if count == 1:
         rep = typestr
     else:
-        rep = '%d %s' % (count, typestr)
+        rep = "%d %s" % (count, typestr)
     res.append(rep)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     t = []
     print(structshape(t))
 
-    t = [1,2,3]
+    t = [1, 2, 3]
     print(structshape(t))
 
-    t2 = [[1,2], [3,4], [5,6]]
+    t2 = [[1, 2], [3, 4], [5, 6]]
     print(structshape(t2))
 
-    t3 = [1, 2, 3, 4.0, '5', '6', [7], [8], 9]
+    t3 = [1, 2, 3, 4.0, "5", "6", [7], [8], 9]
     print(structshape(t3))
 
     class Point:
@@ -135,16 +133,16 @@ if __name__ == '__main__':
     t4 = [Point(), Point()]
     print(structshape(t4))
 
-    s = set('abc')
+    s = set("abc")
     print(structshape(s))
 
     lt = list(zip(t, s))
     print(structshape(lt))
 
-    d = dict(lt)        
+    d = dict(lt)
     print(structshape(d))
 
-    it = iter('abc')
+    it = iter("abc")
     print(structshape(it))
 
     t = []
