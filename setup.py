@@ -10,14 +10,14 @@ else:
 
 
 setup(name='swampy',
-      version='2.0.1',
+      version='3.0.1',
       description='Companion code for Think Python/Python for Software Design',
       license='GNU GPL 3.0',
       author='Allen Downey',
       author_email='downey@allendowney.com',
       url='http://allendowney.com/swampy',
-      packages=['swampy', 'swampy.sync_code'],
+      packages=['swampy'],
       package_dir=package_dir,
-      package_data={'swampy': ['*.html']},
-      data_files=[('swampy', ['danger.gif', 'words.txt'])],
+      #package_data={'swampy': ['*.html']},
+      data_files=[('swampy', ['python3/danger.gif', 'python3/words.txt'])],
      )
