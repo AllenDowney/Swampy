@@ -9,18 +9,13 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 
 """
 
-from swampy import World
 from swampy.TurtleWorld import TurtleWorld, Turtle
 
-from swampy import Lumpy
+# create the GUI
+world = TurtleWorld(interactive=True)
 
-lumpy = Lumpy.Lumpy()
-lumpy.opaque_class(World.Interpreter)
-lumpy.make_reference()
-
-world = TurtleWorld()
-bob = Turtle(world)
-
-lumpy.object_diagram()
-lumpy.class_diagram()
-
+# create the Turtle
+turtle = Turtle()
+    
+# wait for the user to do something
+world.mainloop()

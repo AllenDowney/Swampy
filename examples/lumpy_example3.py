@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import Lumpy
+from swampy import Lumpy
 lumpy = Lumpy.Lumpy()
 
 # if you don't make a reference after instantiating

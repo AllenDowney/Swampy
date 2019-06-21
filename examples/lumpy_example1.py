@@ -10,7 +10,7 @@ Distributed under the GNU General Public License at gnu.org/licenses/gpl.html.
 """
 
 # create a Lumpy object and capture reference state
-import Lumpy
+from swampy import Lumpy
 lumpy = Lumpy.Lumpy()
 lumpy.make_reference()
 
